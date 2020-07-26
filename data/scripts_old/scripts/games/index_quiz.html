@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+<style>
+
+.flashRed {
+	animation-name: flashRed;
+	animation-duration: 0.3s;
+}
+
+.flashGreen {
+	animation-name: flashGreen;
+	animation-duration: 0.3s;
+}
+
+@keyframes flashRed {
+	0% {background-color: #BBBBBF;}
+	50% {background-color: #BB5555;}
+	100% {background-color: #BBBBBF;}
+}
+
+@keyframes flashGreen {
+	0% {background-color: #BBBBBF;}
+	50% {background-color: #55BB55;}
+	100% {background-color: #BBBBBF;}
+}
+
+</style>
+
+	<link rel="stylesheet" type="text/css" href="/data/scripts/headerstyle.css">
+
+	<head>
+		<title>Yeah: TCG</title>
+	</head>
+	
+	
+	<body bgcolor="BBBBBF">
+	<title>hello</title>
+	<div class="documentOutline">
+	
+	<div><div class="menuItem"><p>Card Game</p>
+		<div class="dropDown">
+			<a href="/data/scripts/cardGame/index_card_display.html"><div>
+				<p>Display</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_gallery.html"><div>
+				<p>Gallery</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_maker.html"><div>
+				<p>Maker</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_deckbuilder.html"><div>
+				<p>Build A Deck</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_player.html"><div>
+				<p>Play</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Games</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/games/index_quiz.html"><div>
+				<p>Quiz</p>
+			</div></a>
+			
+			<a href="/data/scripts/games/index_platformer.html"><div>
+				<p>Platformer</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Tools</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/tools/index_political_alignment.html"><div>
+				<p>100 Axes</p>
+			</div></a>
+			
+			<a href="/data/scripts/tools/index_tierlistmaker.html"><div>
+				<p>Tierlist maker</p>
+			</div></a>
+		</div>
+	</div></div>
+
+	</div>
+	
+	
+	<br>
+	
+	
+	<div id="quizdiv">
+		<div id="questiondiv" align="center">		
+			<p class="quizText" id="questionText">Welcome to the official Quiz of Yeah(™)! Type 'start' to continue.</p>
+			<br>
+			<form name="quizForm" autocomplete="off" onsubmit="answerAttempt();return false;">
+			<input type="text" name="response">
+			<input type="submit" value="submit">
+			</form>
+		</div>
+		<div id="newquestiondiv" align="center" style="visibility: hidden">
+			<p class="quizText">You Finished! Now, make a new question!</p>
+			<br>
+			<form name="quizNewQuestionForm" autocomplete="off" onsubmit="submitNewQuestion();">
+			<p>Question: </p><input type="text" name="question" required>
+			<p>Answer: </p><input type="text" name="answer" required>
+			<br>
+			<input type="submit" value="submit">
+			</form>
+		</div>
+	</div>
+	
+	
+	</body>
+	
+	
+	<script src = "/socket.io/socket.io.js"></script>
+	<script>
+	
+		// communication init
+		const socket = io();
+		
+		
+		socket.on('ding', function(data){
+			socket.emit("dong", {beat: 1});
+		});
+		
+		socket.on("startQuiz", function(data) {
+			quizStarted = true;
+		});
+		
+		socket.on("quizRightAnswer", function(data) {
+			document.body.classList.add("flashGreen");
+			questionText.innerHTML = data.question;
+		});
+		
+		socket.on("quizWrongAnswer", function(data) {
+			document.body.classList.add("flashRed");
+		});
+		
+		socket.on("quizFinish", function(data) {
+			questiondiv.style.visibility = "hidden";
+			newquestiondiv.style.visibility = "visible";
+		});
+		
+		const questionText = document.getElementById("questionText");
+		const questiondiv = document.getElementById("questiondiv");
+		const newquestiondiv = document.getElementById("newquestiondiv");
+		document.body.onanimationend = function() {
+			document.body.classList.remove("flashRed");
+			document.body.classList.remove("flashGreen");
+		}
+		
+		var quizStarted = false;
+		
+		// card submit function
+		function answerAttempt(){
+			if(!quizStarted) {return;}
+			socket.emit('quizAttemptAnswer', {answer:document.forms['quizForm']['response'].value});
+			document.forms['quizForm']['response'].value = "";
+		}
+		
+		function submitNewQuestion(){
+			if(!quizStarted) {return;}
+			socket.emit('quizSubmitQuestion', {question:document.forms['quizNewQuestionForm']['question'].value, answer:document.forms['quizNewQuestionForm']['answer'].value});
+		}
+		
+		socket.emit("startQuiz", {});
+	</script>
+	
+</html>

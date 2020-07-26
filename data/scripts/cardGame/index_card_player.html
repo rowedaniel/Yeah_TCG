@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+<style>
+
+/* general styles */ 
+
+body {
+	
+	/* optional. Consider removing this later. */
+	user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+
+button {
+  display: inline-block;
+  background-color: #629D62;
+  border: none;
+  border-radius: 1vh;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  padding: 1vh 2vh;
+  font-size: 2vh;
+  
+  transition: all 0.1s;
+}
+
+button:hover {
+  background-color: #B0D8B0;
+  color: #424242;
+}
+
+
+
+
+
+
+
+/* Control Div Stuff */
+
+
+div#control {
+	position: static;
+	margin-top: 8vh;
+	margin-left: 8vw;
+	margin-right: 8vw;
+	transition: all 0.2s;
+}
+
+div#control div.subControl {
+	position: static;
+	width: 100%;
+	
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+	
+}
+
+div#control p.label{
+	position: absolute;
+	float: left;
+	margin-top: 8vh;
+	padding: 1vh;
+	font-size: 8vh;
+	transform: rotate(65deg);
+	z-index: 3;
+	
+	pointer-events: none;
+	
+	
+	background-color: #DFA5A5;
+	border: 4px solid black;
+	border-radius: 20px;
+	color: #000000;
+	
+	user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+   
+}
+
+
+
+
+div#controlText {
+	position: fixed;
+	z-index: 4;
+	top: 40px;
+	height: 8vh;
+	left: 0;
+	right: 0;
+	text-align: center;
+	
+	
+	transition: all 0.2s;
+	pointer-events: none;
+}
+
+div#controlText p {
+	font-size: 6vh;
+	background-color: #A5A5DF;
+	border: 4px solid black;
+	border-radius: 20px;
+	color: #000000;
+	
+	position :fixed;
+	left: 10vw;
+	right: 10vw;
+	
+	user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+button#submitButton {
+	position: fixed;
+	bottom: 8vh;
+	right: 8vw;
+	transition: all 0.2s;
+}
+
+
+
+
+
+
+
+
+
+/* Background Div Stuff */
+div.sidebar {
+	position: fixed;
+	
+	
+	width: 4vh;
+	height: 32vh;
+	
+	
+	transition: all 0.3s;
+}
+
+div.sidebar:hover {
+	width: 16vh;
+	height: 40vh;
+	overflow: visible;
+}
+
+
+div.topbar {
+	position: fixed;
+	
+	
+	left: 16vw;
+	right: 16vw;
+	height: 4vh;
+	
+	overflow-x: auto;
+	overflow-y: hidden;
+	
+	transition: all 0.3s;
+}
+
+div.topbar:hover {
+	height: 20vh;
+}
+	
+
+
+div.bottomLeft {
+	bottom: 0;
+	left: 0;
+	direction: rtl;
+}
+
+div.bottomRight {
+	bottom: 0;
+	right: 0;
+}
+
+div.topLeft {
+	top: 40px;
+	left: 0;
+	transform: scale(-1);
+}
+
+div.topRight {
+	top: 40px;
+	right: 0;
+	transform: scale(-1);
+	direction: rtl;
+}
+
+div.bottom {
+	bottom: 0;
+}
+
+div.top {
+	top: 40px;
+}
+
+div.sidebar > div {
+	height: 50%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+div.sidebar > div > div {
+	height: 93%;
+}
+
+div.topbar > div {
+	height: 20vh;
+}
+
+
+
+
+
+
+
+/* disp stuff */
+
+.dispDiv {
+	height: 100%;
+	display: inline-block;
+	transition: all 0.2s;
+}
+
+.dispDiv:hover {
+	transform: scale(1.1);
+	z-index: 10;
+}
+
+.dispDiv p {
+	
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 20%;
+	font-size: 80px;
+	z-index: 1;
+	
+	background-color: #A5DFA5;
+	border: 4px solid black;
+	border-radius: 20px;
+	color: #000000;
+	
+	user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+   
+   
+	opacity: 0%;
+	transition: all 0.3s;
+}
+
+.dispCard {
+	width: auto;
+	height: 100%;
+	
+	transition: all 0.3s;
+}
+
+.selected {
+}
+
+.selected img {
+	opacity: 50%;
+}
+
+.selected p {
+	opacity: 100%;
+}
+
+.uninteractable {
+	pointer-events: none;
+	opacity: 0;
+}
+
+
+div#mainDisplayDiv {
+	z-index: 11;
+	position: fixed;
+	left: 0;
+	right:0;
+	top: 40px;
+	bottom: 0;
+	
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	
+	pointer-events: none;
+	opacity: 0;
+}
+
+button#hideControlButton {
+	position: fixed;
+	bottom: 8vh;
+	left: 8vw;
+	
+}
+
+
+
+
+
+
+
+
+
+/* animations */
+
+.slidein {
+	left: 2000px;
+	animation-name: slidein;
+	animation-duration: 0.5s;
+	animation-delay: 0.2s;
+	animation-fill-mode: forwards;
+	position: relative;
+}
+
+.fadein {
+	opacity: 0%;
+	animation-name: fadein;
+	animation-duration: 0.5s;
+	animation-delay: 0.3s;
+	animation-fill-mode: forwards;
+}
+
+.fadeinthenout {
+	opacity: 0%;
+	animation-name: fadeinthenout;
+	animation-duration: 3s;
+	animation-delay: 0.5s;
+	animation-fill-mode: forwards;
+}
+
+
+@keyframes slidein {
+	0%   {left: 2000px;}
+	100% {left: 0;}
+}
+
+@keyframes fadein {
+	0%	 {opacity: 0%;}
+	100% {opacity: 100%;}
+}
+
+@keyframes fadeinthenout {
+	0%	 {opacity: 0%;}
+	20%  {opacity: 100%;}
+	80%  {opacity: 100%;}
+	100% {opacity: 30%;}
+}
+
+
+
+</style>
+
+	<link rel="stylesheet" type="text/css" href="/data/scripts/headerstyle.css">
+
+	<head>
+		<title>Yeah: TCG</title>
+	</head>
+	
+	
+	<body bgcolor="BBBBBF">
+	<title>hello</title>
+	<div class="documentOutline">
+	
+	<div><div class="menuItem"><p>Card Game</p>
+		<div class="dropDown">
+			<a href="/data/scripts/cardGame/index_card_display.html"><div>
+				<p>Display</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_gallery.html"><div>
+				<p>Gallery</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_maker.html"><div>
+				<p>Maker</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_deckbuilder.html"><div>
+				<p>Build A Deck</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_player.html"><div>
+				<p>Play</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Games</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/games/index_quiz.html"><div>
+				<p>Quiz</p>
+			</div></a>
+			
+			<a href="/data/scripts/games/index_platformer.html"><div>
+				<p>Platformer</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Tools</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/tools/index_political_alignment.html"><div>
+				<p>100 Axes</p>
+			</div></a>
+			
+			<a href="/data/scripts/tools/index_tierlistmaker.html"><div>
+				<p>Tierlist maker</p>
+			</div></a>
+		</div>
+	</div></div>
+
+	</div>
+	
+	<div id="deckformdiv" style="visibility: visible;">
+		<form name="cardForm" autocomplete="off" onsubmit="deckreq();return false;">
+		<p>Deck Name</p><input type="text" name="deckName">
+		<input type="submit" value="submit">
+		</form>
+	</div>
+	
+	<div id="gamediv" style="visibility: hidden">
+	
+		<div id="mainBackgroundDiv">
+			<div class="bottomLeft sidebar"><div id="player1"></div><div id="player2"></div></div>
+			<div class="bottomRight sidebar"><div id="player3"></div><div id="player4"></div></div>
+			<div class="bottom topbar" id="player5"></div>
+			<div class="topLeft sidebar"><div id="opponent1"></div><div id="opponent2"></div></div>
+			<div class="topRight sidebar"><div id="opponent3"></div><div id="opponent4"></div></div>
+			<div class="top topbar" id="opponent5"></div>
+		</div>
+		
+		
+		<div id="mainControlDiv">
+			<div id="controlText"></div>
+			<div id="control"></div>
+			<button id="submitButton" class="uninteractable" onclick="resGetCards();return false;">submit</button>
+		</div>
+		
+		
+
+		<button id="hideControlButton" onclick="toggleControl(this);return false;">hide control</button>
+		
+		
+		<div id="mainDisplayDiv"></div>
+	
+	</div>
+	
+	
+	<script src = "/socket.io/socket.io.js"></script>
+	<script src = "/data/scripts/cardGame/CardObjects.js"></script>
+	<script src = "/data/scripts/cardGame/GameUtils.js"></script>
+	<script>
+	
+		// communication init
+		const socket = io();
+		
+		socket.on('ding', function(data){
+			socket.emit("dong", {beat: 1});});
+		
+		// player connection+setup stuff
+		
+		socket.on("resAllCards", resAllCards);
+		socket.on("beginGame", beginGame);
+		socket.on("playerGetCards", getCards);
+		socket.on("updateCollection", updateCollection);
+		
+		
+		
+		
+		
+		
+		
+		// socket stuff
+		function resAllCards(data) {
+			for(let card of data) {
+				cards[card.name] = Card([], 0, 0, card.name, card.cost, card.img, card.move, card.txtcolor, card.cardType, card.cardAction);
+			}
+		}
+		
+		
+		function beginGame(data) {
+			console.log('in beginGame', data);
+			for(let card of data['hand']) {
+				dispBGCard(card, playerHand);
+			}
+			for(let card of data['activeGoals']) {
+				dispBGCard(card, playerActiveGoals);
+			}
+			
+			dispBGCard('cardBack', playerDeck);
+			dispBGCard('cardBack', playerGoals);
+			dispBGCard('cardBack', opponentDeck);
+			dispBGCard('cardBack', opponentGoals);
+		}
+		
+		function getCards(data) {
+			
+			authToken = data['authToken'];
+			delete data['authToken'];
+			let msg = data['msg'];
+			delete data['msg'];
+			
+			clearControl();
+			
+			
+			
+			
+			const p = document.createElement("p");
+			p.innerHTML = msg;
+			p.classList.add("fadein");
+			controlTextDiv.appendChild(p);
+			
+			controlSubmitButton.classList.remove("uninteractable");
+			
+			
+			
+			for(let name in data) {
+				makeNewControlArea(name);
+				controlNames.push(name);
+			}
+			setTimeout(function() {
+				for(let i=0; i<controlNames.length; ++i) {
+					for(let cindex=0; cindex < data[controlNames[i]].length; ++cindex) {
+						console.log(data[controlNames[i]][cindex], cindex, i);
+						dispControlCard(data[controlNames[i]][cindex], cindex, i);
+					}
+				}
+			}, 1000);
+		}
+		
+		function updateCollection(data) {
+			console.log('in updateCollection', data);
+			if(data['add']) {
+				if(data['collection'] == 'discard') {
+					if(data['yours']) {
+						for(let card of data['cards']) {
+							dispBGCard(card, playerDiscard);
+						}
+					} else {
+						for(let card of data['cards']) {
+							dispBGCard(card, opponentDiscard);
+						}
+					}
+				}
+			}
+		}
+
+		
+		
+		
+		
+		
+		
+		// init values
+		cards = {};
+		const control = [];
+		const controlNames = [];
+		let authToken = 0;
+		
+		const controlDiv = document.getElementById("control");
+		const controlTextDiv = document.getElementById("controlText");
+		const controlSubmitButton = document.getElementById("submitButton");
+		
+		
+		const mainDisplayDiv = document.getElementById('mainDisplayDiv');
+		
+		const playerDiscard = document.getElementById('player1');
+		const playerDeck = document.getElementById('player2');
+		const playerActiveGoals = document.getElementById('player3');
+		const playerGoals = document.getElementById('player4');
+		const playerHand = document.getElementById('player5');
+		
+		
+		const opponentDiscard = document.getElementById('opponent1');
+		const opponentDeck = document.getElementById('opponent2');
+		const opponentActiveGoals = document.getElementById('opponent3');
+		const opponentGoals = document.getElementById('opponent4');
+		const opponentHand = document.getElementById('opponent5');
+		
+		
+		
+		// other stuff
+		
+		
+		
+		
+		function makeNewControlArea(name) {
+			const newArea = document.createElement('div');
+			newArea.classList.add('subControl');
+			//newArea.innerHTML = name;
+			
+			
+			const p = document.createElement('p');
+			p.innerHTML = name;
+			p.classList.add("label");
+			p.classList.add("fadeinthenout");
+			
+			newArea.appendChild(p);
+			
+			controlDiv.appendChild(newArea);
+			control.push(newArea);
+			
+			
+			
+			for(let area of control) {
+				area.style.height = (70/control.length)+"vh";
+			}
+		}
+		
+		function clearControl() {
+			for(let area of control) {
+				controlDiv.removeChild(area);
+			}
+			while(controlTextDiv.firstChild) {
+				controlTextDiv.removeChild(controlTextDiv.firstChild);
+			}
+			control.splice(0,control.length);
+			controlNames.splice(0,controlNames.length);
+			selected.splice(0,selected.length);
+			
+			controlSubmitButton.classList.add('uninteractable');
+		}
+		
+		function dispControlCard(cardName, i, section) {
+			const c = new GameCard(cardName, i, controlNames[section]);
+			c.addTo(control[section]);
+		}
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// background stuff
+		function dispBGCard(cardName, container) {
+			const c = new BGCard(cardName);
+			c.addTo(container);
+		}
+		
+		function removeBGCard(i, container) {
+			container.removeChild(container.children[i]);
+		}
+		
+		
+		
+		
+		// disp stuff
+		mainDisplayDiv.addEventListener('click', function() {
+			clearMainDisplay();
+		},false);
+		function dispCard(cardName) {
+			clearMainDisplay();
+			mainDisplayDiv.classList.add("fadein");
+			mainDisplayDiv.style.pointerEvents = "auto";
+			const c = new DispCard(cardName);
+			c.addTo(mainDisplayDiv);
+		}
+		
+		function clearMainDisplay() {
+			while(mainDisplayDiv.firstChild) {
+				mainDisplayDiv.removeChild(mainDisplayDiv.firstChild);
+			}
+			mainDisplayDiv.classList.remove("fadein");
+			mainDisplayDiv.style.pointerEvents = "none";
+		}
+		
+		
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// testing
+		/*
+		setTimeout(function() {
+			getCards({'authToken':0,
+					  'msg': 'MESSAGEEEEJJ JEK JKJE',
+					  'attack':["Call of Hades","Breath User Jaycob","Lucifer the Demon King",
+							  "Call of Hades","Breath User Jaycob","Lucifer the Demon King",
+							  "Call of Hades","Breath User Jaycob","Lucifer the Demon King",],
+					  'discard':["Breath User Jaycob","Breath User Jaycob","Breath User Jaycob",
+								 "Breath User Jaycob","Breath User Jaycob","Breath User Jaycob",
+								 "Breath User Jaycob","Breath User Jaycob","Breath User Jaycob",],
+					  });
+		}, 2000);
+		
+		setTimeout(function() {
+			dispBGCard('cardBack', playerDeck);
+			dispBGCard('Breath User Jaycob', playerDiscard);
+			dispBGCard('Breath User Jaycob', playerDiscard);
+			dispBGCard('Breath User Jaycob', playerDiscard);
+			dispBGCard('Breath User Jaycob', playerDiscard);
+			dispBGCard('Breath User Jaycob', playerDiscard);
+			dispBGCard('Overwhelming Attack', playerActiveGoals);
+			dispBGCard('cardBack', playerGoals);
+			dispBGCard('King Arthur', playerHand);
+			dispBGCard('Excalibur', playerHand);
+			dispBGCard('Tyranny', playerHand);
+			dispBGCard('Call of Hades', playerHand);
+			dispBGCard('Tyranny', playerHand);
+		}, 1000);*/
+		
+		
+		
+		
+		
+		
+		
+		
+		// button interaction functions
+		function deckreq(){
+			socket.emit('clientReqDeck', {name : document.forms['cardForm']['deckName'].value});
+			document.getElementById("deckformdiv").style.visibility = "hidden";
+			document.getElementById("gamediv").style.visibility = "visible";
+		}
+		
+		function resGetCards() {
+			out = [];
+			for(let c of selected) {
+				out.push([c.category, c.origNumber]);
+			}
+			socket.emit('playerGetCards', {'authToken':authToken, order:out});
+			console.log('in playerGetCards', out);
+			clearControl();
+		}
+		
+		function toggleControl(button) {
+			console.log(button);
+			if(controlDiv.classList.contains("uninteractable")) {
+				controlDiv.classList.remove('uninteractable');
+				controlTextDiv.classList.remove('uninteractable');
+				controlSubmitButton.classList.remove('uninteractable');
+				button.innerHTML = 'hide control';
+			} else {
+				controlDiv.classList.add('uninteractable');
+				controlTextDiv.classList.add('uninteractable');
+				controlSubmitButton.classList.add('uninteractable');
+				button.innerHTML = 'show control';
+			}
+			
+		}
+		
+		
+		
+		
+		
+		socket.emit("reqAllCards", {});
+		
+		
+		
+		
+	</script>
+	
+	</body>
+</html>

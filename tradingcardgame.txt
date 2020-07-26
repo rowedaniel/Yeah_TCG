@@ -1,0 +1,45 @@
+Ideas:
+
+Art:
+- bad jason art
+	- Shinobi
+	- gender bender
+- rare cards full art
+
+
+Basic Structure of Game:
+	- Deck
+	- Hand
+	- Battlefield
+	- Death pile
+
+Passive cards
+	- goal is to play a win condition card
+		- class based
+		- satisfy quests
+	- quest cards
+		- class based
+		- unlockable special abilities
+	- lung cards
+		- recital cost/limit per turn
+		- increase lung capacity (starts at 3)
+		- breath (J) income starts at 1 bpt (breath/turn)
+		- breath (J) carries over between turns
+		- breath (J) counter
+
+Active cards:
+	- all have recital cost
+	- different classes
+
+	- call cards
+		- recite during your turn
+	- response cards
+		- recite during opponent turn
+		- no u (vose neou)
+	- speaker cards
+		- Jaycob/Jacob
+			- provide breath (energy)
+
+Goal:
+	- Be ridiculously expensive
+

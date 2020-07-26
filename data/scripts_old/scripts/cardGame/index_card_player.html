@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+<style>
+
+div.cardCollectionContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+	width: 0;
+	height: 0;
+}
+
+div.cardCollection {
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+}
+
+div.playerHandContainer {
+	position: fixed;
+	left: 50vw;
+	bottom: 0;
+	z-index: 4;
+}
+
+div.playerHand {
+	position: fixed;
+	max-width: 80vw;
+	height: 14vh;
+	transition: height 0.3s;
+}
+
+div.playerHand:hover {
+	height:41vh;
+}
+
+div.opponentHandContainer {
+	align-items: flex-start;
+	position: fixed;
+	left: 50vw;
+	top: 40px;
+	z-index: 0;
+}
+
+div.opponentHand {
+	position: fixed;
+	max-width: 80vw;
+	height: 14vh;
+	transition: height 0.3s;
+	transform: scale(-1);
+}
+
+div.playerDeck {
+	position: fixed;
+	right: 10px;
+	bottom: 27vh;
+	width: auto;
+	height: 24vh;
+	z-index: 3;
+}
+
+div.opponentDeck {
+	position: fixed;
+	left: 10px;
+	top: 31vh;
+	width: auto;
+	height: 24vh;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.playerGoal {
+	position: fixed;
+	right: 10px;
+	bottom: 20px;
+	width: auto;
+	height: 24vh;
+	z-index: 3;
+}
+
+div.opponentGoal {
+	position: fixed;
+	left: 10px;
+	top: 60px;
+	width: auto;
+	height: 24vh;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.playerDiscard {
+	position: fixed;
+	left: 10px;
+	bottom: 20px;
+	width: auto;
+	height: 24vh;
+	z-index: 3;
+}
+
+div.opponentDiscard {
+	position: fixed;
+	right: 10px;
+	top: 20px;
+	width: auto;
+	height: 24vh;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.playerCounters {
+	position: fixed;
+	left: 10px;
+	bottom: 27vh;
+	width: 160px;
+	height: auto;
+	font-size: 30px;
+	z-index: 2;
+}
+
+div.opponentCounters {
+	position: fixed;
+	right: 10px;
+	top: 306px;
+	width: 160px;
+	height: auto;
+	font-size: 30px;
+	text-align: left;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.playerPlayContainer {
+	position: fixed;
+	left: 50vw;
+	bottom: 28vh;
+	z-index: 0;
+}
+
+div.playerPlay {
+	position: fixed;
+	max-width: 60vw;
+	height: 24vh;
+	transition: all 0.3s;
+}
+
+div.opponentPlayContainer {
+	position: fixed;
+	left: 50vw;
+	top: 32vh;
+	z-index: 0;
+}
+
+div.opponentPlay {
+	position: fixed;
+	max-width: 60vw;
+	height: 24vh;
+	transition: all 0.3s;
+	transform: scale(-1);
+}
+
+div.announcementContainer {
+	position: fixed;
+	left: 50vw;
+	top: 50vh;
+	z-index: 2;
+}
+
+div.announcement {
+	align-items: stretch;
+	
+	max-width: 100vw;
+	height: 64vh;
+	
+	position: fixed;
+	
+	overflow-y: visible;
+	
+	visibility: hidden;
+	
+	font-size: 60px;
+}
+
+div.buttonTextDiv {
+	position: relative;
+	border: 2px solid #66EE66;
+	background-color: #229922;
+	width: 60px;
+	height: auto;
+	font-size: 20px;
+	margin: auto;
+	cursor: pointer;
+	z-index: 10;
+}
+
+.hand {
+	width: auto;
+	height: 31vh;
+	top: 10vh;
+	
+	transition: all 0.3s;
+}
+
+.hand:hover {
+	height: 40vh;
+	left: -4vh;
+	z-index: 2;
+}
+
+.play {
+	width: auto;
+	height: 24vh;
+	object-fit: contain;
+	position: relative;
+	transition: all 0.3s;
+}
+
+.play:hover {
+	height: 28vh;
+	z-index:2;
+}
+
+div.dispContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: stretch;
+	
+}
+
+.disp {
+	position: relative;
+	height: 80%;
+	width: auto;
+	z-index: 2;
+}
+
+.faceUpCard {
+	position: relative;
+}
+
+.faceDownCard {
+	position: relative;
+}
+
+
+.slidein {
+	opacity: 0;
+	animation-name: slidein;
+	animation-duration: 0.5s;
+	animation-delay: 0.2s;
+	animation-fill-mode: forwards;
+	position: relative;
+}
+
+.slideout {
+	opacity: 100%;
+	animation-name: slideout;
+	animation-duration: 0.5s;
+	animation-delay: 0.2s;
+	animation-fill-mode: forwards;
+}
+
+.slideby {
+	position: relative;
+	animation-name: slideby;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+	animation-delay: inherit;
+}
+
+@keyframes fadein {
+	from {opacity: 0%}
+	to {opacity: 100%;}
+}
+
+@keyframes slidein {
+	0%   {left: 2000px; opacity: 100%;}
+	100% {left: 0; opacity: 100%;}
+}
+
+@keyframes slideout {
+	0%   {left: 0px;}
+	100% {left: -2000px;}
+}
+
+@keyframes slideby {
+	0%   {left: 2000px;}
+	25%  {left: 0;}
+	50%  {left: 0;}
+	100% {left: -2000px;}
+}
+
+
+</style>
+
+	<link rel="stylesheet" type="text/css" href="/data/scripts/headerstyle.css">
+
+	<head>
+		<title>Yeah: TCG</title>
+	</head>
+	
+	
+	<body bgcolor="BBBBBF">
+	<title>hello</title>
+	<div class="documentOutline">
+	
+	<div><div class="menuItem"><p>Card Game</p>
+		<div class="dropDown">
+			<a href="/data/scripts/cardGame/index_card_display.html"><div>
+				<p>Display</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_gallery.html"><div>
+				<p>Gallery</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_maker.html"><div>
+				<p>Maker</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_deckbuilder.html"><div>
+				<p>Build A Deck</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_player.html"><div>
+				<p>Play</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Games</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/games/index_quiz.html"><div>
+				<p>Quiz</p>
+			</div></a>
+			
+			<a href="/data/scripts/games/index_platformer.html"><div>
+				<p>Platformer</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Tools</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/tools/index_political_alignment.html"><div>
+				<p>100 Axes</p>
+			</div></a>
+			
+			<a href="/data/scripts/tools/index_tierlistmaker.html"><div>
+				<p>Tierlist maker</p>
+			</div></a>
+		</div>
+	</div></div>
+
+	</div>
+	
+	
+	<div id="deckformdiv">
+		<form name="cardForm" autocomplete="off" onsubmit="deckreq();return false;">
+		<p>Deck Name</p><input type="text" name="deckName">
+		<input type="submit" value="submit">
+		</form>
+	</div>
+	
+	<div id="gamediv" style="visibility: hidden">
+		<div class="cardCollectionContainer announcementContainer"><div id="announcementdiv" class="cardCollection announcement"></div></div>
+		<div id="playerdiv" style="visibility: hidden">
+			<div id="playerdeck" class="playerDeck"></div>
+			<div id="playergoal" class="playerGoal"></div>
+			<div class="cardCollectionContainer playerHandContainer"><div id="playerhand" class="cardCollection playerHand"></div></div>
+			<div id="playerdiscard" class="playerDiscard"></div>
+			<div id="playercounters" class="playerCounters">
+				<p id="playerhealth"></p>
+				<p id="playerbreath"></p>
+				<div id="passbutton" class="buttonTextDiv" onclick="passTurn();">pass</div>
+				<div id="phasebutton" class="buttonTextDiv" onclick="reqAdvancePhase();">attack</div>
+			</div>
+			<div class="cardCollectionContainer playerPlayContainer"><div id="playerplay" class="cardCollection playerPlay"></div></div>
+		</div>
+		<div id="opponentdiv" style="visibility: hidden">
+			<div id="opponentdeck" class="opponentDeck"></div>
+			<div id="opponentgoal" class="opponentGoal"></div>
+			<div class="cardCollectionContainer opponentHandContainer"><div id="opponenthand" class="cardCollection opponentHand"></div></div>
+			<div id="opponentdiscard" class="opponentDiscard"></div>
+			<div id="opponentcounters" class="opponentCounters">
+				<p id="opponenthealth"></p>
+				<p id="opponentbreath"></p>
+			</div>
+			<div class="cardCollectionContainer opponentPlayContainer"><div id="opponentplay" class="cardCollection opponentPlay"></div></div>
+		</div>
+	</div>
+	
+	
+	<script src = "/socket.io/socket.io.js"></script>
+	<script src = "/data/scripts/cardGame/CardObjects.js"></script>
+	<script src = "/data/scripts/cardGame/GameUtils.js"></script>
+	<script src = "/data/scripts/cardGame/executeCard.js"></script>
+	<script>
+	
+		// communication init
+		const socket = io();
+		
+		socket.on('ding', function(data){
+			socket.emit("dong", {beat: 1});});
+		
+		// player connection+setup stuff
+		
+		socket.on("resAllCards", resAllCards);
+		socket.on("playerDisconnect", playerDisconnect);
+		socket.on("clientDeal", clientDeal);
+		socket.on("yourMove", yourMove);
+		socket.on("opponentsMove", opponentsMove);
+		socket.on("advancePhase", setPhase);
+		socket.on("dealCard", dealCard);
+		socket.on("playCard", playCard);
+		socket.on("useCard", useCard);
+		socket.on("resSearchDeck", resSearchDeck);
+		
+		
+		
+		const cards = {};
+		
+		const disp = new Disp(cards, "announcementdiv");
+		
+		const player = new Player("player", disp);
+		const opponent = new Opponent("opponent", disp);
+		
+		var yourMove = false;
+		var phase = 1;
+		
+		var targetLimit = 0;
+		var targetFuncs = {"dealTargetMe":function(cardName) {
+											if(--targetLimit >= 0) {
+												reqDealSpecificCard('me', cardName);
+												if(targetLimit === 0) {
+													disp.hide();
+												}
+											} else {
+												disp.hide();
+											}
+									  	},
+							"specialplayTargetMe":function(cardName) {
+											if(--targetLimit >= 0) {
+												reqDealSpecificCard('me', cardName);
+												if(targetLimit === 0) {
+													disp.hide();
+												}
+											} else {
+												disp.hide();
+											}
+									  	},
+		};
+		
+		const phasebutton = document.getElementById("phasebutton");
+		
+		
+		
+		
+		
+		
+		// initial setup stuff
+		function resAllCards(data) {	
+			for(let card of data) {
+				cards[card.name] = Card([], 0, 0, card.name, card.cost, card.img, card.move, card.txtcolor, card.cardType, card.cardAction);
+			}
+		}
+		
+		// request Deck
+		function deckreq(){
+			socket.emit('clientReqDeck', {name : document.forms['cardForm']['deckName'].value});
+			document.getElementById("deckformdiv").style.visibility = "hidden";
+			document.getElementById("gamediv").style.visibility = "visible";
+			document.getElementById("playerdiv").style.visibility = "visible";
+			document.getElementById("opponentdiv").style.visibility = "visible";
+		}
+		
+		
+		
+		
+		// disconnect stuff
+		function playerDisconnect(data) {			
+			//not sure what to do... for now refresh page.
+			disp.flashText("A player disconnected :(");
+			setTimeout(function() {location.reload();}, 2000);
+		}
+		
+		
+		
+		
+		function clientDeal(data) {
+			
+			//delay slightly to let stuff load
+			setTimeout(function() {
+				
+				disp.flashText("Game Start!");
+				
+				
+				player.deck.deal();
+				player.goal.deal([data.goal]);
+				
+				opponent.deck.deal();
+				opponent.goal.deal();
+				
+				let cardDelay = 1000;
+				let animationDelay = 0;
+				for(let cardName of data.hand) {
+					player.hand.addCard(cardName);
+					opponent.hand.addCard();
+					animationDelay += 100;
+				}
+			}, 500);
+		}
+		
+		function yourMove(data) {
+			disp.flashText("Your move!");
+			//player.hand.addCard(data.cardName);
+			player.play.refreshCards();
+			player.counters.increaseBreath(2);
+			yourMove = true;
+			
+		}
+		
+		function opponentsMove(data) {
+			opponent.counters.increaseBreath(2);
+			disp.flashText("Opponent's move!");
+		}
+		
+		function setPhase(data) {
+			disp.flashText(["Defense Phase", "Play Phase", "Attack Phase"][data.phase]);
+			phasebutton.innerHTML = ["play", "attack", "defend"][data.phase];
+			phase = data.phase;
+		}
+		
+		function dealCard(data) {
+			if(data.yours) {
+				player.hand.addCard(data.cardName);
+			} else {
+				opponent.hand.addCard();
+			}
+		}
+		
+		function playCard(data) {
+			//dispCards([data.name], false, false, false);
+			if(cards && data.hasOwnProperty("name") && cards.hasOwnProperty(data.name) && cards[data.name] && cards[data.name].cardType) {
+				if(cards[data.name].cardType !== "default") {
+					// send to play
+					console.log("play!");
+					if(data.yours) {
+						if(!data.specialPlay) {
+							player.counters.decreaseBreath(cards[data.name].cost);
+						}
+						player.hand.removeCard(data.name, data.index);
+						player.play.addCard(data.name);
+					} else {
+						if(!data.specialPlay) {
+							opponent.counters.decreaseBreath(cards[data.name].cost);
+						}
+						opponent.hand.removeCard();
+						opponent.play.addCard(data.name);
+					}
+				} else if(cards[data.name].cardType === "default") {
+					// send to discard
+					console.log("discard! Card name:", data.name);
+					if(data.yours) {
+						player.counters.decreaseBreath(cards[data.name].cost);
+						player.hand.removeCard(data.name, data.index);
+						player.discard.addCard(data.name);
+					} else {
+						opponent.counters.decreaseBreath(cards[data.name].cost);
+						opponent.hand.removeCard();
+						opponent.discard.addCard(data.name);
+					}
+					executeCardAction(data.name, cards[data.name].cardAction, data.index, yourMove?player:opponent, yourMove?opponent:player);
+				}
+			}
+		}
+		
+		function useCard(data) {
+			setTimeout(function() {
+				if(cards && data.hasOwnProperty("name") && cards.hasOwnProperty(data.name) && cards[data.name] && cards[data.name].cardAction) {
+					if(data.yours && player.play.hasCard(data.name) && player.play.filterCards((x => ((x.name==data.name)&&!x.used))).length > 0) {
+						player.play.filterCards((x => ((x.name==data.name)&&!x.used)))[0].used = true;
+						executeCardAction(data.name, cards[data.name].cardAction, data.index, yourMove?player:opponent, yourMove?opponent:player);
+					} else {
+						executeCardAction(data.name, cards[data.name].cardAction, data.index, yourMove?player:opponent, yourMove?opponent:player);
+					}
+				}
+			}, 1400);
+		}
+		
+		function reqPlayCard(cardName, cardIndex) {
+			disp.hide();
+			socket.emit("playCard", {"name":cardName, "index":cardIndex, "specialPlay":false});
+		}
+		
+		function reqSpecialPlayCard(cardName, cardIndex) {
+			socket.emit("playCard", {"name":cardName, "index":cardIndex, "specialPlay":false});	
+		}
+
+		function reqUseCard(cardName, cardIndex) {
+			disp.hide();
+			socket.emit("useCard", {name:cardName, index:cardIndex});
+		}
+		
+		function reqAttackWithCard(cardName, cardIndex) {
+			disp.hide();
+			console.log("attack with card,", cardName, cardIndex);
+		}
+		
+		function reqSearchDeckCategory(target, amount, category1, category2, action="dealTargetMe") {
+			// search the deck for something, and add it to your hand
+			console.log({"category": [category1, category2]});
+			socket.emit("reqSearchDeck", {"mine":target==="me", "category": category1+" "+category2, "amount": amount, "action":action});
+		}
+		
+		function resSearchDeck(data) {
+			//dispCards(data.cards, false, false, false);
+			const searchResCards = [];
+			console.log("in resSearchDeck, data is:", data);
+			let i = 0;
+			for(let cardName of data.cards) {
+				searchResCards.push(new FaceUpPlayCard(++i, cardName, cards, disp, "target"));
+			}
+			targetLimit = data.amount;
+			disp.show(searchResCards, extraButtonArgs=[data.action]);
+		}
+		
+		function reqDealCard(target) {
+			console.log("============== in reqDealCard", target);
+			socket.emit("reqDealCard", {"mine":target==="me"});
+		}
+		
+		function reqDealSpecificCard(target, cardName) {
+			console.log("in reqDealSpecificCard");
+			socket.emit("reqDealSpecificCard", {"mine":target==="me", "cardName":cardName});
+		}
+		
+		
+		
+		
+		
+		function passTurn() {
+			if(yourMove) {
+				socket.emit("passTurn", {});
+				yourMove = false;
+			}
+		}
+		
+		function reqAdvancePhase() {
+			if(yourMove) {
+				socket.emit("reqAdvancePhase", {});
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		socket.emit("reqAllCards", {});
+		
+		
+		
+		
+		
+	</script>
+	
+	</body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+<style>
+
+canvas.gameCanvas {
+	position: fixed;
+	left: 0;
+	top: 40px;
+	background-color: #707070;
+}
+
+@keyframes flashRed {
+	0% {background-color: #BBBBBF;}
+	50% {background-color: #BB5555;}
+	100% {background-color: #BBBBBF;}
+}
+
+@keyframes flashGreen {
+	0% {background-color: #BBBBBF;}
+	50% {background-color: #55BB55;}
+	100% {background-color: #BBBBBF;}
+}
+
+</style>
+
+	<link rel="stylesheet" type="text/css" href="/data/scripts/headerstyle.css">
+
+	<head>
+		<title>Yeah: TCG</title>
+	</head>
+	
+	
+	<body bgcolor="BBBBBF">
+	<title>hello</title>
+	<div class="documentOutline">
+	
+	<div><div class="menuItem"><p>Card Game</p>
+		<div class="dropDown">
+			<a href="/data/scripts/cardGame/index_card_display.html"><div>
+				<p>Display</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_gallery.html"><div>
+				<p>Gallery</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_maker.html"><div>
+				<p>Maker</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_deckbuilder.html"><div>
+				<p>Build A Deck</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_player.html"><div>
+				<p>Play</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Games</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/games/index_quiz.html"><div>
+				<p>Quiz</p>
+			</div></a>
+			
+			<a href="/data/scripts/games/index_platformer.html"><div>
+				<p>Platformer</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Tools</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/tools/index_political_alignment.html"><div>
+				<p>100 Axes</p>
+			</div></a>
+			
+			<a href="/data/scripts/tools/index_tierlistmaker.html"><div>
+				<p>Tierlist maker</p>
+			</div></a>
+		</div>
+	</div></div>
+
+	</div>
+	
+	
+	<canvas id="gamecanvas" width=1000 height=600 class="gameCanvas"></canvas>
+	
+	
+	
+	
+	
+	</body>
+	
+	
+	<script src = "/socket.io/socket.io.js"></script>
+	<script>
+	
+		// communication init
+		const socket = io();
+		
+		
+		socket.on('ding', function(data){
+			socket.emit("dong", {beat: 1});
+		});
+		
+		
+		
+		
+		function addOtherPlayer(data) {
+			const newPlayer = new OtherPlayer({x:data.x,y:data.y},data.c,data.id);
+			OTHERPLAYERS[data.id] = (newPlayer);
+			ENTITIES.push(newPlayer);
+		}
+		
+		function removeOtherPlayer(playerid) {
+			if(!OTHERPLAYERS.hasOwnProperty(playerid) || !OTHERPLAYERS[playerid] || ENTITIES.indexOf(OTHERPLAYERS[playerid]) === -1) {
+				return false;
+			}
+			ENTITIES.splice(ENTITIES.indexOf(OTHERPLAYERS[playerid]),1);
+			delete OTHERPLAYERS[playerid];
+		}
+		
+		function reqRemoveOtherPlayer(id) {
+			socket.emit('platformerRemovePlayer', {id:id});
+		}
+		
+		socket.on('platformerNewPlayer', function(data) {
+			addOtherPlayer(data);
+		});
+		
+		socket.on('platformerMovePlayer', function(data) {
+			if(!OTHERPLAYERS.hasOwnProperty(data.id)) {
+				addOtherPlayer(data);
+			}
+			OTHERPLAYERS[data.id].updatePos(data);
+		});
+		
+		socket.on('platformerChangePlayerColor', function(data) {
+			PLAYER.color = data.c;
+		});
+		
+		socket.on('platformerRemovePlayer', function(data) {
+			removeOtherPlayer(data.id);
+		});
+		
+		socket.on('removeMe', function(data) {
+			location.reload();
+		});
+		
+		
+		
+		
+		
+		class GameObject {
+			pos = {};
+			size = {};
+			color;
+			
+			constructor(pos,size,c) {
+				this.pos.x = pos.x;
+				this.pos.y = pos.y;
+				this.size.x = size.x;
+				this.size.y = size.y;
+				this.color = c;
+			}
+			update() {}
+			lateUpdate(){}
+			draw(c) {
+				c.save();
+				c.fillStyle = this.color;
+				c.fillRect(this.pos.x, this.pos.y, this.size.x, this.size.y);
+				c.restore();
+			}
+		}
+		
+		class CollisionObject extends GameObject {
+			collide(other) {
+				if(other.pos.x+other.size.x > this.pos.x && other.pos.x < this.pos.x+this.size.x && 
+				   other.pos.y+other.size.y > this.pos.y && other.pos.y < this.pos.y+this.size.y) {
+					return true;
+				}
+				return false;
+			}
+		}
+		
+		class PhysicsObject extends CollisionObject {
+			vel = {};
+			collisions = {};
+			
+			constructor(pos,size,c) {
+				super(pos,size,c);
+				for(let dim in this.pos) {
+					this.vel[dim] = 0;
+					this.collisions[dim] = 0;
+				}
+			}
+			
+			update() {
+				super.update();
+				
+				this.vel.y += 0.01*delta;
+				
+				var deltaV;
+				for(let dim in this.vel) {
+				
+					deltaV = 0.002*this.vel[dim]*delta;
+					for(let dim2 in this.collisions) {
+						if(dim2 === dim) {
+							continue;
+						}
+						if(this.collisions[dim2] !== 0) {
+							deltaV += 0.01*this.vel[dim]*delta;
+						}
+					}
+					
+					
+					if(Math.abs(deltaV) > Math.abs(this.vel[dim])) {
+						this.vel[dim] = 0;
+					} else {
+						this.vel[dim] = this.vel[dim] - deltaV;
+					}
+				}
+				
+				for(let dim in this.collisions) {
+					this.collisions[dim] = 0;
+				}
+				
+				
+			}
+			
+			lateUpdate() {
+				for(let dim in this.vel) {
+					this.pos[dim] += this.vel[dim]*delta;
+				}
+			}
+			
+			collide(other) {
+				
+				var tmpPos = {};
+				var tmpSize = {};
+				var minDiff = -1;
+				
+				//if(other.collide(this)) {
+				//	//alert("AAAAH");
+				//}
+				
+				// cast a new rect out to check for potential collisions
+				for(let dim in this.pos) {
+					for(let tmpDim in this.pos) {
+						tmpPos[tmpDim] = this.pos[tmpDim];
+						tmpSize[tmpDim] = this.size[tmpDim];
+					}
+					tmpSize[dim] = Math.abs(this.vel[dim]*delta);
+					tmpPos[dim]  += this.vel[dim]*delta>0 ? this.size[dim]: this.vel[dim]*delta;
+					
+					const thisdimonly = new CollisionObject(tmpPos, tmpSize, "#E0E0E0");
+					if(thisdimonly.collide(other)) {
+						
+						// collide in this dimension
+						this.collisionResponse(other, dim);
+					}
+				}
+				
+				
+				
+			}
+			
+			collisionResponse(other, dim) {
+				if(this.vel[dim] > 0) {
+					this.pos[dim] = other.pos[dim]-this.size[dim];
+					this.collisions[dim] = 1;
+				} else if(this.vel[dim] < 0){
+					this.pos[dim] = other.pos[dim]+other.size[dim];
+					this.collisions[dim] = -1;
+				}
+				this.vel[dim] = 0;
+			}
+		}
+		
+		class Player extends PhysicsObject {
+			LEFT  = false;
+			UP    = false;
+			RIGHT = false;
+			DOWN  = false;
+			
+			constructor(pos, color) {
+				super(pos, {x:32,y:32}, color);
+			}
+			
+			update() {
+				
+				if(this.LEFT) {
+					if(this.collisions.y===1) { // move faster on ground
+						this.vel.x -= 0.004*delta;
+					} else {
+						this.vel.x -= 0.001*delta;
+					}
+				} else if(this.RIGHT) {
+					if(this.collisions.y===1) { // move faster on ground
+						this.vel.x += 0.004*delta;
+					} else {
+						this.vel.x += 0.001*delta;
+					}
+				}
+
+					
+				if(this.UP) {
+					if(this.collisions.y===1) {
+						this.vel.y -= 1.5;
+					} else {
+						this.vel.y -= 0.003*delta;
+					}
+				} else if(this.DOWN) {
+					this.vel.y += 0.003*delta;
+				}
+				super.update();
+				
+				if(this.pos.y>4000) {
+					this.pos.x = 0;
+					this.pos.y = 0;
+					this.vel.x = 0;
+					this.vel.y = 0;
+				}
+			}
+		}
+		
+		
+		
+		class OtherPlayer extends PhysicsObject {
+			id;
+			
+			constructor(pos, color, id) {
+				super(pos, {x:32,y:32}, color);
+				this.id = id;
+			}
+			
+			updatePos(pos) {
+				this.pos.x = pos.x;
+				this.pos.y = pos.y;
+			}
+			
+			update() {
+			}
+		}
+		
+		class Bullet extends PhysicsObject {
+			time;
+			
+			constructor(pos, target) {
+				super(pos, {x:10,y:10}, "#8888FF");
+				this.time = 10000;
+				
+			}
+			
+			update() {
+				super.update();
+				
+				this.time -= delta;
+				if(this.pos.y>4000 || this.time<0) {
+					this.remove();
+				}
+			}
+			
+			remove() {
+				if(ENTITIES.indexOf(this) === -1) {
+					return false;d
+				}
+				ENTITIES.splice(ENTITIES.indexOf(this),1);
+			}
+			
+			collisionResponse(other, dim) {
+				if(other instanceof OtherPlayer) {
+					reqRemoveOtherPlayer(other.id);
+				}
+				this.remove();
+			}
+		}
+		
+		
+		
+		
+		function init() {
+			// fps init
+			lastFrameTimeMs = 0;
+			delta = 0;
+			fps = 60;
+			framesThisSecond = 0;
+			lastFpsUpdate = 0;
+		
+			// screen init
+			CANVAS.width = window.innerWidth;
+			CANVAS.height = window.innerHeight-40;
+			window.onresize = function() {
+				CANVAS.width = window.innerWidth;
+				CANVAS.height = window.innerHeight-40;
+			}
+			
+			
+			// gameinit
+			PLAYER = new Player({x:0,y:0}, "000000");
+			ENTITIES.push(PLAYER);
+			socket.emit("platformerNewPlayer", {x:PLAYER.pos.x, y:PLAYER.pos.y});
+			
+			document.onkeydown = function(e) {
+				if(e.key === "w") {
+					PLAYER.UP = true;
+				} else if(e.key === "a") {
+					PLAYER.LEFT = true;
+				} else if(e.key === "s") {
+					PLAYER.DOWN = true;
+				} else if(e.key === "d") {
+					PLAYER.RIGHT = true;
+				} else if(e.key === ' ') {
+					location.reload();
+				} else {
+					console.log(e.key);
+				}
+			}
+			document.onkeyup = function(e) {
+				if(e.key === "w") {
+					PLAYER.UP = false;
+				} else if(e.key === "a") {
+					PLAYER.LEFT = false;
+				} else if(e.key === "s") {
+					PLAYER.DOWN = false;
+				} else if(e.key === "d") {
+					PLAYER.RIGHT = false;
+				} else {
+					console.log(e.key);
+				}
+			}
+			
+			document.onclick = function(e) {
+				ENTITIES.push(new Bullet({'x':e.clientX, y:e.clientY-40}));
+			}
+			
+			ENTITIES.push(new CollisionObject({x:0,y:500},{x:440,y:32},"#A0A0A0"));
+			ENTITIES.push(new CollisionObject({x:100,y:200},{x:54,y:32},"#A0A0A0"));
+			ENTITIES.push(new CollisionObject({x:500,y:500},{x:32,y:128},"#A0A0A0"));
+			ENTITIES.push(new CollisionObject({x:600,y:600},{x:32,y:32},"#A0A0A0"));
+			ENTITIES.push(new CollisionObject({x:800,y:0},{x:32,y:440},"#A0A0A0"));
+			
+		}
+		
+		function updateLogic() {
+			
+			// update
+			for(let e of ENTITIES) {
+				e.update();
+			}
+			
+			// collide
+			for(let e1 of ENTITIES) {
+				for(let e2 of ENTITIES) {
+					if(e1 && e2 && e1 !== e2 && e1 instanceof PhysicsObject && e2 instanceof CollisionObject) {
+						e1.collide(e2);
+					}
+				}
+			}
+			
+			// update
+			for(let e of ENTITIES) {
+				e.lateUpdate();
+			}
+		
+			
+		}
+		
+		function updateScreen() {
+			CTX.clearRect(0,0,CANVAS.width, CANVAS.height);
+			for(let e of ENTITIES) {
+				e.draw(CTX);
+			}
+		}
+		
+		
+		function mainLoop(timestamp) {
+			if (timestamp < (lastFrameTimeMs + timestep)) { //(1000 / maxFPS)) {
+				window.requestAnimationFrame(mainLoop);
+				return false;
+			}
+			delta += timestamp - lastFrameTimeMs;
+			lastFrameTimeMs = timestamp;
+
+			if (timestamp > lastFpsUpdate + 1000) {
+				fps = 0.25 * framesThisSecond + 0.75 * fps;
+
+				lastFpsUpdate = timestamp;
+				framesThisSecond = 0;
+			}
+			framesThisSecond++;
+
+			
+			updateScreen();
+			
+			
+			var numUpdateSteps = 0;
+			while (delta >= timestep) {
+				updateLogic();
+				delta -= timestep;
+				if (++numUpdateSteps >= 240) {
+					delta = 0;
+					console.log('aaahhh');
+					break;
+				}
+			}
+			
+			socket.emit("platformerMovePlayer", {x:PLAYER.pos.x, y:PLAYER.pos.y});
+			window.requestAnimationFrame(mainLoop);
+		
+		
+			/*
+			//deltaT = timestep-prevTimestep;
+			//prevTimestep = timestep;
+			
+			//framerates.push(deltaT);
+			
+			updateScreen(17);//deltaT);
+			updateLogic(17);//deltaT);
+			
+			socket.emit("platformerMovePlayer", {x:PLAYER.pos.x, y:PLAYER.pos.y});
+			
+			window.requestAnimationFrame(mainLoop);*/
+		}
+		
+		
+		function main() {
+			CANVAS = document.getElementById("gamecanvas");
+			CTX = CANVAS.getContext("2d");
+			
+			init();
+			mainLoop(0);
+		
+			
+			
+		}
+		
+		
+		var CANVAS;
+		var CTX;
+		var ENTITIES = [];
+		var PLAYER;
+		var OTHERPLAYERS = {};
+		
+		
+		const maxFPS = 60;
+		const timestep = 1000 / 60;
+		var lastFrameTimeMs;
+		var delta;
+		var fps;
+		var framesThisSecond;
+		var lastFpsUpdate;
+		
+		
+		main();
+		
+	</script>
+	
+</html>

@@ -1,0 +1,13 @@
+||/data/cards/cardbackground.png||#000000
+Sharpen Swords|2||Discard a sword warrior card currently in play. Search your deck for a sword knight card|
+Golden Claws|2||Target demon card on your field gains +2 damage for the rest of the game.|
+Call of Hades|1||Reveal up to 3 cards from your discard pile. Your opponent returns 2 to your discard pile. The third is added to your hand.|
+Hero's Chant|1||Pick up the top 3 cards of your deck. Reveal them to your opponent and let them choose 2. The 2 are sent back into your deck and shuffled. The third is added to your hand.|
+ROID RAGE|X||Increase all damage dealing units on the field by amount of breath sacrificed.|
+Power of the Church|0||When your opponent threatens to destroy a card (including their own). It's effect is negated.|
+Soul Bond|0||Activate when a card you control is about to be destroyed. Select one card on your opponents side of the field and destroy it.|
+Metamorphosis |3||Discard 2 cards from your hand. Then, search your deck for a servant of Hades level card or below and add it to your hand.|
+Swordsmen Unity|3||Discard 2 cards from your hand. Search your deck for a Knight level card or below and add it to your hand.|
+Ouija Board|1||Choose 2 Sinner Demons from your deck. Reveal them to your opponent and have them pick one. Add the chosen card to your hand and shuffle the other back into your deck.|
+Recruitment|1||Choose 1 Warrior Swordsmen from your deck. Reveal it to your opponent and add it to your hand. Shuffle your deck afterwards.|
+Roar of Cerberus|4||Send up to 3 cards from your opponent's side of the field to their hand. Then, Call one Sinner Demon from your discard pile.|

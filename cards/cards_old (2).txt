@@ -1,0 +1,2 @@
+Breath User Jaycob|2|/data/cards/cardbackground.png|Gain +1 Breath. Then, decrease this card's cost by 1. If the cost of this card reaches 0, discard it.|#000000
+Simpin Holidays|5|/data/cards/simpinholidays.png|Attach one simp counter to every opponent.|Daniel's card|100||Is exceedingly competitive|
