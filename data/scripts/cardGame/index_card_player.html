@@ -173,6 +173,18 @@ div.topbar {
 div.topbar:hover {
 	height: 20vh;
 }
+
+div.midbar {
+	position: fixed;
+	
+	
+	left: 16vw;
+	right: 16vw;
+	height: 20vh;
+	
+	overflow-x: auto;
+	overflow-y: hidden;
+}
 	
 
 
@@ -190,14 +202,15 @@ div.bottomRight {
 div.topLeft {
 	top: 40px;
 	left: 0;
-	transform: scale(-1);
+	/*transform: scale(-1);*/
+	direction: rtl;
 }
 
 div.topRight {
 	top: 40px;
 	right: 0;
-	transform: scale(-1);
-	direction: rtl;
+	/*transform: scale(-1);
+	direction: rtl; */
 }
 
 div.bottom {
@@ -207,6 +220,28 @@ div.bottom {
 div.top {
 	top: 40px;
 }
+
+div.midLeft {
+	left: 3vh;
+	bottom: 30vh;
+}
+
+div.midRight {
+	right: 3vh;
+	top: 30vh;
+	/*transform: scale(-1);*/
+}
+
+div.topMid {
+	margin-top: 40px;
+	top: 20vh;
+	/*transform: scale(-1);*/
+}
+
+div.bottomMid {
+	bottom: 20vh;
+}
+
 
 div.sidebar > div {
 	height: 50%;
@@ -222,7 +257,30 @@ div.topbar > div {
 	height: 20vh;
 }
 
+div#mainBackgroundDiv div#counterDivs {
+	opacity: 0;
+}
 
+div#mainBackgroundDiv div.counterDiv {
+	position: fixed;
+	padding: 1vh;
+	font-size: 2vh;
+	z-index: 10;
+	
+	pointer-events: none;
+	
+	
+	background-color: #A5DFDF;
+	border: 2px solid black;
+	border-radius: 10px;
+	color: #000000;
+	
+	user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+} 
 
 
 
@@ -445,9 +503,15 @@ button#hideControlButton {
 			<div class="bottomLeft sidebar"><div id="player1"></div><div id="player2"></div></div>
 			<div class="bottomRight sidebar"><div id="player3"></div><div id="player4"></div></div>
 			<div class="bottom topbar" id="player5"></div>
+			<div class="bottomMid midbar" id="player6"></div>
 			<div class="topLeft sidebar"><div id="opponent1"></div><div id="opponent2"></div></div>
 			<div class="topRight sidebar"><div id="opponent3"></div><div id="opponent4"></div></div>
 			<div class="top topbar" id="opponent5"></div>
+			<div class="topMid midbar" id="opponent6"></div>
+			<div id="counterDivs">
+				<div class="midLeft counterDiv"><p id="playerHealth">Health: 40</p><p id="playerBreath">Breath: 3</p></div>
+				<div class="midRight counterDiv"><p id="opponentHealth">Health: 40</p><p id="opponentBreath">Breath: 3</p></div>
+			</div>
 		</div>
 		
 		
@@ -484,6 +548,7 @@ button#hideControlButton {
 		socket.on("beginGame", beginGame);
 		socket.on("playerGetCards", getCards);
 		socket.on("updateCollection", updateCollection);
+		socket.on("updateCounters", updateCounters);
 		
 		
 		
@@ -493,6 +558,7 @@ button#hideControlButton {
 		
 		// socket stuff
 		function resAllCards(data) {
+			console.log("in resAllCards");
 			for(let card of data) {
 				cards[card.name] = Card([], 0, 0, card.name, card.cost, card.img, card.move, card.txtcolor, card.cardType, card.cardAction);
 			}
@@ -501,17 +567,19 @@ button#hideControlButton {
 		
 		function beginGame(data) {
 			console.log('in beginGame', data);
-			for(let card of data['hand']) {
+			/*for(let card of data['hand']) {
 				dispBGCard(card, playerHand);
 			}
 			for(let card of data['activeGoals']) {
 				dispBGCard(card, playerActiveGoals);
-			}
+			}*/
 			
 			dispBGCard('cardBack', playerDeck);
 			dispBGCard('cardBack', playerGoals);
 			dispBGCard('cardBack', opponentDeck);
 			dispBGCard('cardBack', opponentGoals);
+			
+			counterDiv.classList.add('fadein');
 		}
 		
 		function getCards(data) {
@@ -546,22 +614,73 @@ button#hideControlButton {
 						dispControlCard(data[controlNames[i]][cindex], cindex, i);
 					}
 				}
-			}, 1000);
+			}, 0);
 		}
 		
 		function updateCollection(data) {
 			console.log('in updateCollection', data);
-			if(data['add']) {
-				if(data['collection'] == 'discard') {
-					if(data['yours']) {
-						for(let card of data['cards']) {
-							dispBGCard(card, playerDiscard);
-						}
-					} else {
-						for(let card of data['cards']) {
-							dispBGCard(card, opponentDiscard);
-						}
+			let cardFunc;
+			if(data['operation'] == 'add') {
+				cardFunc = dispBGCard;
+			} else if(data['operation']=='remove'){
+				cardFunc = removeBGCard;
+			}
+			
+			if(data['collection'] == 'discard') {
+				if(data['yours']) {
+					for(let card of data['cards']) {
+						cardFunc(card, playerDiscard);
 					}
+				} else {
+					for(let card of data['cards']) {
+						cardFunc(card, opponentDiscard);
+					}
+				}
+			} else if(data['collection'] == 'hand') {
+				if(data['yours']) {
+					for(let card of data['cards']) {
+						cardFunc(card, playerHand);
+					}
+				} else {
+					for(let card of data['cards']) {
+						cardFunc(card, opponentHand);
+					}
+				}
+			} else if(data['collection'] == 'activeGoals') {
+				if(data['yours']) {
+					for(let card of data['cards']) {
+						cardFunc(card, playerActiveGoals);
+					}
+				} else {
+					for(let card of data['cards']) {
+						cardFunc(card, opponentActiveGoals);
+					}
+				}
+			} else if(data['collection'] == 'play') {
+				if(data['yours']) {
+					for(let card of data['cards']) {
+						cardFunc(card, playerPlay);
+					}
+				} else {
+					for(let card of data['cards']) {
+						cardFunc(card, opponentPlay);
+					}
+				}
+			}
+		}
+		
+		function updateCounters(data) {
+			if(data['yours']) {
+				if(data['counter'] === 'health') {
+					playerHealth.innerHTML = 'Health: '+data['amount'];
+				} else if(data['counter'] === 'breath') {
+					playerBreath.innerHTML = 'Breath: '+data['amount'];
+				}
+			} else {
+				if(data['counter'] === 'health') {
+					opponentHealth.innerHTML = 'Health: '+data['amount'];
+				} else if(data['counter'] === 'breath') {
+					opponentBreath.innerHTML = 'Breath: '+data['amount'];
 				}
 			}
 		}
@@ -585,11 +704,18 @@ button#hideControlButton {
 		
 		const mainDisplayDiv = document.getElementById('mainDisplayDiv');
 		
+		const counterDiv = document.getElementById("counterDivs");
+		const playerHealth = document.getElementById("playerHealth");
+		const playerBreath = document.getElementById("playerBreath");
+		const opponentHealth = document.getElementById("opponentHealth");
+		const opponentBreath = document.getElementById("opponentBreath");
+		
 		const playerDiscard = document.getElementById('player1');
 		const playerDeck = document.getElementById('player2');
 		const playerActiveGoals = document.getElementById('player3');
 		const playerGoals = document.getElementById('player4');
 		const playerHand = document.getElementById('player5');
+		const playerPlay = document.getElementById('player6');
 		
 		
 		const opponentDiscard = document.getElementById('opponent1');
@@ -597,6 +723,7 @@ button#hideControlButton {
 		const opponentActiveGoals = document.getElementById('opponent3');
 		const opponentGoals = document.getElementById('opponent4');
 		const opponentHand = document.getElementById('opponent5');
+		const opponentPlay = document.getElementById('opponent6');
 		
 		
 		
@@ -693,46 +820,6 @@ button#hideControlButton {
 		}
 		
 		
-			
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		// testing
-		/*
-		setTimeout(function() {
-			getCards({'authToken':0,
-					  'msg': 'MESSAGEEEEJJ JEK JKJE',
-					  'attack':["Call of Hades","Breath User Jaycob","Lucifer the Demon King",
-							  "Call of Hades","Breath User Jaycob","Lucifer the Demon King",
-							  "Call of Hades","Breath User Jaycob","Lucifer the Demon King",],
-					  'discard':["Breath User Jaycob","Breath User Jaycob","Breath User Jaycob",
-								 "Breath User Jaycob","Breath User Jaycob","Breath User Jaycob",
-								 "Breath User Jaycob","Breath User Jaycob","Breath User Jaycob",],
-					  });
-		}, 2000);
-		
-		setTimeout(function() {
-			dispBGCard('cardBack', playerDeck);
-			dispBGCard('Breath User Jaycob', playerDiscard);
-			dispBGCard('Breath User Jaycob', playerDiscard);
-			dispBGCard('Breath User Jaycob', playerDiscard);
-			dispBGCard('Breath User Jaycob', playerDiscard);
-			dispBGCard('Breath User Jaycob', playerDiscard);
-			dispBGCard('Overwhelming Attack', playerActiveGoals);
-			dispBGCard('cardBack', playerGoals);
-			dispBGCard('King Arthur', playerHand);
-			dispBGCard('Excalibur', playerHand);
-			dispBGCard('Tyranny', playerHand);
-			dispBGCard('Call of Hades', playerHand);
-			dispBGCard('Tyranny', playerHand);
-		}, 1000);*/
 		
 		
 		
@@ -779,6 +866,7 @@ button#hideControlButton {
 		
 		
 		socket.emit("reqAllCards", {});
+		
 		
 		
 		

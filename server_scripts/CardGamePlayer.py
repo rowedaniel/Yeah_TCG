@@ -44,25 +44,40 @@ class CardGamePlayer:
 
 
 
-    async def begin_game(self, room, pids, data):
-        for i in range(len(pids)):
-            print('sending beginGame to', pids[i])
-            await self.sio.emit('beginGame', data[i], room=pids[i])
+    async def begin_game(self, game):
+        await self.sio.emit('beginGame', {}, room=game.room)
 
-    async def add_to_discard(self, game, sid, cards):
+    async def update_collection(self, game, sid, collection, operation, cards):
+        # TODO: let players know how many cards in goal
         for p in game.players:
-            await self.sio.emit('updateCollection', {'add': True,
-                                                     'collection':'discard',
+            # TODO: prbly a better place to do the following check:
+            tmpCards = cards
+            if collection in ('hand','activeGoals') and \
+               p.socketId != sid and operation=='add':
+                print('submiting blank data to',p.socketId,
+                      'comparing to',sid)
+                tmpCards = ["cardBack" for i in cards]
+            await self.sio.emit('updateCollection', {'operation': operation,
+                                                     'collection':collection,
                                                      'yours':p.socketId == sid,
-                                                     'cards':cards},
+                                                     'cards':tmpCards},
                                 room=p.socketId)
+
+    async def update_counters(self, game, sid, counter, amount):
+        for p in game.players:
+            await self.sio.emit('updateCounters', {  'counter':counter,
+                                                     'yours':p.socketId == sid,
+                                                     'amount':amount},
+                                room=p.socketId)
+        
+    
 
     async def add_player(self, sid, deck):
         for g in self.games:
             if not g.active:
                 self.players[sid] = g
-                await g.add_player(sid, deck)
                 self.sio.enter_room(sid, g.room)
+                await g.add_player(sid, deck)
                 break
 
 
@@ -166,13 +181,16 @@ class Game:
         self.waitingPlayers[sid] = deck
 
         if len(self.waitingPlayers) == 2:
+            # TODO: figure out this whole sleep business
+            #await asyncio.sleep(10)
+            
             id1,id2 = self.waitingPlayers.keys()
             deck1 = self.waitingPlayers[id1]
             deck2 = self.waitingPlayers[id2]
             await self.start_new(id1, id2, deck1, deck2)
 
-        # actually start game?
-        await self.run_until_finished()
+            # actually start game?
+            await self.run_until_finished()
 
     async def remove_player(self, sid):
         del self.waitingPlayers[sid]
@@ -196,12 +214,7 @@ class Game:
             await p.first_deal()
 
 
-        await self.cardGamePlayer.begin_game(self.room,
-                [p.socketId for p in self.players],
-                [{'hand':p.hand,
-                  'activeGoals':p.activeGoals} \
-                         for p in self.players]
-                                       )
+        await self.cardGamePlayer.begin_game(self)
 
 
         self.turn = random.randint(0,len(self.players)-1)
@@ -406,7 +419,7 @@ class Game:
 
     async def run_turn(self):
         print('\n\n\nstarting player', self.turn,'turn.\n')
-        await self.players[self.turn].increase_breath(2)
+        await self.players[self.turn].update_breath(2)
         await self.players[self.turn].deal_cards(1)
         print('health:', self.players[self.turn].health,
               ' breath:', self.players[self.turn].breath)
@@ -471,16 +484,76 @@ class Player:
         await self.deal_goal_cards(1)
 
 
-    async def pull_cards_from(self, count, collection):
-        return [collection.pop() for i in range(min(count,len(collection)))]
 
-    async def discard_cards(self, cards):
-        await self.game.cardGamePlayer.add_to_discard(self.game,
-                                                      self.socketId,
-                                                      cards)
-        for c in cards:
-            self.discard.append(self.tempPlay.pop(0))
 
+
+    async def update_health(self, amount):
+        self.health += amount
+        await self.game.cardGamePlayer.update_counters(self.game,
+                                                     self.socketId,
+                                                     'health',
+                                                     self.health)
+        print('health is now:',self.health)
+
+    async def update_breath(self,amount):
+        self.breath += amount
+        await self.game.cardGamePlayer.update_counters(self.game,
+                                                       self.socketId,
+                                                       'breath',
+                                                       self.breath)
+        print('breath is now:',self.breath)
+
+
+    
+
+    # TODO: make all of these only take collectionName, and not collection
+    # (by default)
+    async def remove_cards_from(self, cards, collectionName, collection):
+        if collectionName in ('play','hand','discard','activeGoals'):
+            await self.game.cardGamePlayer.update_collection(self.game,
+                                                    self.socketId,
+                                                    collectionName,
+                                                    'remove',
+                                                    cards)
+        
+        return [collection.pop(i) for i in cards]
+
+    async def pull_cards_from(self, count, collectionName, collection):
+        print('in pull_cards_from')
+        count = min(count, len(collection))
+        print(count,len(collection), [len(collection)-i-1 \
+                                      for i in range(count)])
+        return await self.remove_cards_from(
+                                     [len(collection)-i-1 \
+                                      for i in range(count)],
+                                     collectionName,
+                                     collection)
+        
+
+    async def add_cards_to(self, cards, collectionName, collection):
+        if collectionName in ('hand','discard','activeGoals'):
+            await self.game.cardGamePlayer.update_collection(self.game,
+                                                        self.socketId,
+                                                        collectionName,
+                                                        'add',
+                                                        cards)
+        elif collectionName == 'play':
+            await self.game.cardGamePlayer.update_collection(self.game,
+                                                        self.socketId,
+                                                        collectionName,
+                                                        'add',
+                                                [c.data['name'] for c in cards])
+            
+        
+        print('in add_cards_to', cards,
+              'current collection len is',len(collection))
+        for c in range(len(cards)):
+            collection.append(cards.pop(0))
+
+
+
+
+    # sort/access card collections
     async def filter_cards(self, func, collection):
         return list(filter(func, enumerate(collection)))
 
@@ -517,16 +590,22 @@ class Player:
             admg = c.rp
             print(c.data['name'], 'takes',admg)
             print(a.data['name'], 'takes',cdmg)
-            c.rp -= admg
-            a.rp -= cdmg
+            await c.update_rp(-admg)
+            await a.update_rp(-cdmg)
 
             # TODO: move cards to discard when destroyed
             if c.rp <= 0:
                 print(c.data['name'], 'was destroyed')
                 self.play[i] = None
+                await self.add_cards_to([c.data['name']],
+                                        'discard',
+                                        self.discard)
             if a.rp <= 0:
                 print(a.data['name'], 'was destroyed')
                 opponent.play[i] = None
+                await opponent.add_cards_to([a.data['name']],
+                                            'discard',
+                                            opponent.discard)
             
             c.hasActivated = True
             return True
@@ -535,9 +614,8 @@ class Player:
     async def take_card(self, opponent):
         if len(self.attackers) > 0:
             a = self.attackers.pop(0)
-            self.health -= a.rp
-            print('took',a.rp,'from',a.data['name'],
-                  ' health is now:',self.health)
+            print('took',a.rp,'from',a.data['name'])
+            await self.update_health(-a.rp)
             return True
         return False
 
@@ -572,7 +650,7 @@ class Player:
 
         else:
             # it's an action care
-            self.play.append(c)
+            await self.add_cards_to([c], 'play', self.play)
             return True
         return False
 
@@ -582,9 +660,11 @@ class Player:
             self.play.remove(None)
 
     async def end_play_phase(self):
-        await self.discard_cards(self.tempPlay)
+        await self.add_cards_to(self.tempPlay, 'discard', self.discard)
         while None in self.hand:
-            self.hand.remove(None)
+            await self.remove_cards_from((self.hand.index(None),),
+                                   'hand',
+                                   self.hand)
         if self.firstTurn:
             self.firstTurn = False
             for c in self.play:
@@ -600,22 +680,17 @@ class Player:
 
 
     # all functions called by cards must be async.
-    async def increase_breath(self, amount):
-        self.breath += amount
-
     async def deal_cards(self, count):
-        cards = await self.pull_cards_from(count, self.deck)
-        for c in cards:
-            self.hand.append(c)
-            print('dealt:',c)
+        cards = await self.pull_cards_from(count, 'deck', self.deck)
+        print('in deal_cards, dealing',len(cards),'cards.')
+        await self.add_cards_to(cards, 'hand', self.hand)
         if self.game.inPlayPhase and \
            self.game.players[self.game.turn] is self:
             self.game.updateCardOrder = True
             
     async def deal_goal_cards(self, count):
-        cards = await self.pull_cards_from(count, self.goals)
-        for c in cards:
-            self.activeGoals.append(c)
+        cards = await self.pull_cards_from(count, 'goals', self.goals)
+        await self.add_cards_to(cards, 'activeGoals', self.activeGoals)
 
 
     async def normal_play_card(self, i, opponent, sacrificePoints=-1):
@@ -633,7 +708,9 @@ class Player:
                (sacrificePoints > 0 and sacrificePoints < int(c.rp)):
                 return False
             
-            self.breath -= c.rp
+            await self.update_breath(-c.rp)
+
+            # TODO:  remove from hand
             self.hand[i] = None
 
             return await self.play_card(c, i, opponent)
@@ -656,8 +733,9 @@ class PlayCard:
         self.hasAttacked = False
 
     # all functions called by cards must not be async.
-    async def increase_rp(self, amount):
+    async def update_rp(self, amount):
         self.rp += amount
+        print('in update_rp, rp is:', self.rp)
 
 
     async def reset_all(self):

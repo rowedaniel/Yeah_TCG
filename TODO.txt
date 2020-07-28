@@ -1,10 +1,6 @@
-TODO:
-
-1. Add Player Damage
-2. Add Changed RP visual
-3. Fix Target Button so it removes the card when pressed
-4. Fix Target Button so it limits the number (like it should)
-5. Add SpecialPlay redirect for SearchDeck
-6. Make SearchDeck more general
-7. Make SearchDeck and SearchDiscard be part of SearchContainer or smthing
-8. Make disp.flashText work resonably (queueing)
+[DONE] Finish code to update card collections
+[DONE] Finish code to update counters
+[DONE] Add a play section to the client
+[DONE] Check for bugs
+Add code for cards
+Check for bugs
