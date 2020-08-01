@@ -2,5 +2,14 @@
 [DONE] Finish code to update counters
 [DONE] Add a play section to the client
 [DONE] Check for bugs
-Add code for cards
-Check for bugs
+[DONE] Add code for cards
+[DONE] Check for bugs
+choose number/text system
+cost=X' system
+implement every card unit/action card
+response cards
+reset game on disconnect
+winning
+goal cards
+Go through every card and make the phrasing consistent/better
+make the system to load card data on client better
