@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+<style>
+
+
+
+
+div.tierDiv {
+	display: flex;
+	height: 80px;
+	background-color: #404040;
+	border: 1px solid #000000;
+}
+
+div.tierLabelDiv {
+	width: 80px;
+	height: 80px;
+	text-align: center;
+	line-height: 80px;
+	 font: Calibri, sans-serif;
+}
+
+.item {
+	height: 80px;
+	width: auto;
+}
+
+div.itemContainer {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	min-height: 80px;
+	width: 100%;
+}
+
+</style>
+
+	<link rel="stylesheet" type="text/css" href="/data/scripts/headerstyle.css">
+
+	<head>
+		<title>Yeah: TCG</title>
+	</head>
+	
+	
+	<body bgcolor="BBBBBF">
+	<title>hello</title>
+	<div class="documentOutline">
+	
+	<div><div class="menuItem"><p>Card Game</p>
+		<div class="dropDown">
+			<a href="/data/scripts/cardGame/index_card_display.html"><div>
+				<p>Display</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_gallery.html"><div>
+				<p>Gallery</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_maker.html"><div>
+				<p>Maker</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_deckbuilder.html"><div>
+				<p>Build A Deck</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_player.html"><div>
+				<p>Play</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Games</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/games/index_quiz.html"><div>
+				<p>Quiz</p>
+			</div></a>
+			
+			<a href="/data/scripts/games/index_platformer.html"><div>
+				<p>Platformer</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Tools</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/tools/index_political_alignment.html"><div>
+				<p>100 Axes</p>
+			</div></a>
+			
+			<a href="/data/scripts/tools/index_tierlistmaker.html"><div>
+				<p>Tierlist maker</p>
+			</div></a>
+		</div>
+	</div></div>
+
+	</div>
+	
+	
+
+
+	
+	</div>
+	
+	
+	<form style="visibility: hidden"name="newItemForm" autocomplete="off" onsubmit="addNewItem();return false;">
+	<p>Link to Image:</p>
+	<input type="text" name="link" required></input>
+	<input type="submit" value="submit"></input>
+	</form>
+	
+
+	</body>
+	
+	
+	<script>
+
+	
+
+	
+
+	function allowDrop(ev) {
+		if(ev.target.nodeName === "IMG") {return;}
+		ev.preventDefault();
+	}
+
+	function drag(ev) {
+	  ev.dataTransfer.setData("text", ev.target.id);
+	}
+
+	function drop(ev) {
+		if(ev.target.nodeName === "IMG") {return;}
+		ev.preventDefault();
+		var data = ev.dataTransfer.getData("text");
+		ev.target.appendChild(document.getElementById(data));
+	}
+	
+	function addNewItem() {
+		const src = document.forms["newItemForm"]["link"].value;
+		const img = new Image();
+		img.src = src;
+		img.classList.add("item");
+		img.draggable = true;
+		img.ondragstart = function(event){drag(event);};
+		document.getElementById("itemContainer").appendChild(img);
+	}
+	
+	</script>
+	
+</html>
