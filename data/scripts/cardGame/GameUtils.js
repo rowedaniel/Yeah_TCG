@@ -85,12 +85,18 @@ class GameCard extends BaseCard {
 
 
 class BGCard extends BaseCard {
+	counter = 0;
+	counterText = document.createElement('p');
 	
 	constructor(cardName) {
 		super(cardName);
 		
+		this.counterText.classList.add('counter');
+		this.div.appendChild(this.counterText);
+		
+		const counterText = this.counterText;
 		this.div.addEventListener('click', function() {
-			dispCard(cardName);
+			dispCard(cardName, counterText.innerHTML);
 		},false);
 	}
 	
@@ -101,11 +107,13 @@ class BGCard extends BaseCard {
 
 class DispCard extends BaseCard{
 	
-	constructor(cardName) {
+	counterText = document.createElement('p');
+	
+	constructor(cardName, counter) {
 		super(cardName);
-		
-		const card = this;
-		
-		
+		this.counterText.innerHTML = counter;
+		this.counterText.classList.add('counter');
+		this.counterText.classList.add('dispCounter');
+		this.div.appendChild(this.counterText);
 	}
 }

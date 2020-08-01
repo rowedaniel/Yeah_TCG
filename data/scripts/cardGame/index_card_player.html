@@ -167,6 +167,8 @@ div.topbar {
 	overflow-x: auto;
 	overflow-y: hidden;
 	
+	white-space: nowrap;
+	
 	transition: all 0.3s;
 }
 
@@ -181,6 +183,9 @@ div.midbar {
 	left: 16vw;
 	right: 16vw;
 	height: 20vh;
+	
+	
+	white-space: nowrap;
 	
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -324,6 +329,23 @@ div#mainBackgroundDiv div.counterDiv {
 	transition: all 0.3s;
 }
 
+.dispDiv p.counter {
+	
+	left: 50%;
+	width: 3vh;
+	font-size: 3vh;
+
+	border: none;
+	border-radius: 100%;
+	opacity: 100%;
+}
+
+.dispDiv p.dispCounter {
+	left:50%;
+	width: 20vh;
+	font-size: 20vh;
+}
+
 .dispCard {
 	width: auto;
 	height: 100%;
@@ -356,10 +378,11 @@ div#mainDisplayDiv {
 	top: 40px;
 	bottom: 0;
 	
+	/*
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: center;
+	justify-content: center;*/
 	
 	pointer-events: none;
 	opacity: 0;
@@ -504,8 +527,8 @@ button#hideControlButton {
 			<div class="bottomRight sidebar"><div id="player3"></div><div id="player4"></div></div>
 			<div class="bottom topbar" id="player5"></div>
 			<div class="bottomMid midbar" id="player6"></div>
-			<div class="topLeft sidebar"><div id="opponent1"></div><div id="opponent2"></div></div>
-			<div class="topRight sidebar"><div id="opponent3"></div><div id="opponent4"></div></div>
+			<div class="topLeft sidebar"><div id="opponent4"></div><div id="opponent3"></div></div>
+			<div class="topRight sidebar"><div id="opponent2"></div><div id="opponent1"></div></div>
 			<div class="top topbar" id="opponent5"></div>
 			<div class="topMid midbar" id="opponent6"></div>
 			<div id="counterDivs">
@@ -549,6 +572,7 @@ button#hideControlButton {
 		socket.on("playerGetCards", getCards);
 		socket.on("updateCollection", updateCollection);
 		socket.on("updateCounters", updateCounters);
+		socket.on("dispCards", dispCards);
 		
 		
 		
@@ -605,7 +629,6 @@ button#hideControlButton {
 			
 			for(let name in data) {
 				makeNewControlArea(name);
-				controlNames.push(name);
 			}
 			setTimeout(function() {
 				for(let i=0; i<controlNames.length; ++i) {
@@ -670,19 +693,50 @@ button#hideControlButton {
 		}
 		
 		function updateCounters(data) {
+			console.log('in updateCounters', data);
 			if(data['yours']) {
 				if(data['counter'] === 'health') {
 					playerHealth.innerHTML = 'Health: '+data['amount'];
 				} else if(data['counter'] === 'breath') {
 					playerBreath.innerHTML = 'Breath: '+data['amount'];
+				} else if(data['counter'] === 'rp') {
+					playerPlay.children[data['amount'][0]].children[1].innerHTML = data['amount'][1];
 				}
 			} else {
 				if(data['counter'] === 'health') {
 					opponentHealth.innerHTML = 'Health: '+data['amount'];
 				} else if(data['counter'] === 'breath') {
 					opponentBreath.innerHTML = 'Breath: '+data['amount'];
+				} else if(data['counter'] === 'rp') {
+					opponentPlay.children[data['amount'][0]].children[1].innerHTML = data['amount'][1];
 				}
 			}
+		}
+		
+		
+		
+		
+		function dispCards(data) {
+			console.log('in dispCards', data);
+			authToken = -1;
+			
+			clearControl();
+			
+			const p = document.createElement("p");
+			p.innerHTML = "Revealed Cards";
+			p.classList.add("fadein");
+			controlTextDiv.appendChild(p);
+			controlSubmitButton.classList.remove("uninteractable");
+			
+			
+			
+			makeNewControlArea("cards");
+			setTimeout(function() {
+				for(let cindex=0; cindex < data['cards'].length; ++cindex) {
+					console.log(data['cards'][cindex], cindex, 0);
+					dispControlCard(data['cards'][cindex], cindex, 0);
+				}
+			}, 0);
 		}
 
 		
@@ -747,6 +801,7 @@ button#hideControlButton {
 			
 			controlDiv.appendChild(newArea);
 			control.push(newArea);
+			controlNames.push(name);
 			
 			
 			
@@ -803,11 +858,11 @@ button#hideControlButton {
 		mainDisplayDiv.addEventListener('click', function() {
 			clearMainDisplay();
 		},false);
-		function dispCard(cardName) {
+		function dispCard(cardName, counter) {
 			clearMainDisplay();
 			mainDisplayDiv.classList.add("fadein");
 			mainDisplayDiv.style.pointerEvents = "auto";
-			const c = new DispCard(cardName);
+			const c = new DispCard(cardName, counter);
 			c.addTo(mainDisplayDiv);
 		}
 		

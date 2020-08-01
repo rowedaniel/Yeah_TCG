@@ -1,16 +1,16 @@
-Sharpen Swords|0|/data/cards/sharpensword.png|Send a common swordsman card to the discard pile. Search your deck for a rare swordsman card, and place it onto the field.|||
-Golden Claws|0|/data/cards/goldenclaws.png|Target demon card on your field gains +2 RP for the rest of the game.|||
-Call of Hades|1|/data/cards/callofhades.png|Reveal up to 3 cards from your discard pile. Your opponent returns 2 to your discard pile. The third is added to your hand.|||searchDeckCategory me 1 rare demon
-Hero's Chant|1|/data/cards/heroschant.png|Pick up the top 3 cards of your deck. Reveal them to your opponent and let them choose 2. The 2 are sent back into your deck and shuffled. The third is added to your hand.|||
+Sharpen Swords|0|/data/cards/sharpensword.png|Discard a common swordsman card from your hand. Search your deck for a rare swordsman card, and special play it.|||searchCollection me hand common swordsman 0 checkCardsTag me hand 1 0 searchCollection me deck rare swordsman 0 choose me me hand 1 0 1 moveCards me hand discard 1 choose me me deck 1 0 1 moveCards me deck play 1
+Golden Claws|0|/data/cards/goldenclaws.png|Target demon card on your field gains +2 RP for the rest of the game.|||searchCollection me play any demon 0 choose me me play 1 0 1 increaseRP me 2 1
+Call of Hades|1|/data/cards/callofhades.png|Reveal up to 3 cards from your discard pile. Your opponent returns 2 to your discard pile. The third is added to your hand.|||spyCollection me discard 0 0 choose me me discard 3 0 1 choose you me discard 2 1 2 removeTag me discard 2 1 moveCards me discard hand 1 
+Hero's Chant|1|/data/cards/heroschant.png|Pick up the top 3 cards of your deck. Reveal them to your opponent and let them choose 2. The 2 are sent back into your deck and shuffled. The third is added to your hand.|||spyCollection me deck 0 0 choose me me deck 3 0 1 choose you me deck 2 1 2 removeTag me deck 2 1 moveCards me deck hand 1
 ROID RAGE|X|/data/cards/roidrage.png|Increase the RP of all units on the field by X for the rest of the game.|||
-Power of the Church|0|/data/cards/powerofthechurch.png|When your opponent threatens to destroy a card (including their own). It's effect is negated.|||
+Power of the Church|0|/data/cards/powerofthechurch.png|When your opponent threatens to destroy a card (including their own). Its effect is negated.|||
 Soul Bond|0|/data/cards/soulbond.png|Activate when a card you control is about to be destroyed. Destroy the card that would have distroyed this card as well.|||
-Metamorphosis |2|/data/cards/metamorphosis.png|Discard 2 cards from your hand. Then, search your deck for a rare demon card or a common demon card and special play it.|||
-Swordsmen Unity|2||Discard 2 cards from your hand. Search your deck for 2 rare swordsman cards and special play them.|||
-Ouija Board|0||Search your deck for 2 Common Demons. Reveal them to your opponent and have them pick one. Add the one they chose to your hand. The other is shuffled back into your deck.|||
-Recruitment|0||Search your deck for 1 common Swordsmen. Reveal it to your opponent and special play it. Shuffle your deck afterwards.|||searchDeckCategory me 1 common swordsman
+Metamorphosis |2|/data/cards/metamorphosis.png|Discard 2 cards from your hand. Then, search your deck for a common demon card and special play it.|||spyCollection me hand 0 0 checkCardsTag me hand 2 0 searchCollection me deck common demon 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 1 0 1 moveCards me deck play 1
+Swordsmen Unity|2||Discard 3 cards from your hand. Search your deck for 3 common swordsman cards and special play them.|||spyCollection me hand 0 0 checkCardsTag me hand 3 0 searchCollection me deck rare swordsman 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 3 0 1 moveCards me deck play 1
+Ouija Board|0||Search your deck for 2 Common Demons. Reveal them to your opponent and have them pick one. Add the one they chose to your hand. The other is sent to discard.|||
+Recruitment|0||Search your deck for 1 common Swordsmen. Reveal it to your opponent and special play it. Shuffle your deck afterwards.|||
 Roar of Cerberus|2||Send up to 3 cards from your opponent's side of the field to their hand. Then, Call one Common Demon from your discard pile.|||
-Chad Squire|3|/data/cards/chadsquire.png|Your basic common swordsman in training. Once during your turn, you may draw a card.||common swordsman unit|
+Chad Squire|3|/data/cards/chadsquire.png|Your basic common swordsman in training. Once during your turn, you may draw a card.||common swordsman fullart|
 Julius Caesar|3||An intern for the king. Sacrifice this card to search your deck for a legendary swordsman card, and add it to your hand. Shuffle your deck after.||common swordsman unit|
 Baseball Lad|2|/data/cards/baseballlad.png|Random Kid who likes to swing his bat. Hit his head, and thinks his bat is Excalibur.||common swordsman unit|
 Mr. Deffrey Javis|3||Random guy who stumbled onto the battle. Joined the fight when a demon drank his coffee. Reveal your opponent's goal card.||common swordsman unit|
@@ -26,7 +26,7 @@ Overwhelming Attack|||Goal: Attack with a combined total of 25 RP in a turn.||go
 Overwhelming Defense|||Goal: Have combined total of 40 RP at the end of your turn.||goal card fullart|
 Overwhelming Numbers|||Goal: End your turn with 9 unit cards in play.||goal card fullart|
 Dragon King Hades|8|/data/cards/dragonkinghades.png|The lord of the... what did he do again? Not sure. This card gains +4 RP when you play it.||rare demon fullart|
-Lucifer the Demon King|10||The king of Demons. He had his home invaded by people with pointy sticks. This card gains +2 RP every turn.||legendary demon fullart|increaseRP this 2
+Lucifer the Demon King|10||The king of Demons. He had his home invaded by people with pointy sticks. This card gains +2 RP every turn.||legendary demon fullart|
 King Arthur|10||The King of all the Swordsmen. Loved by his subjects, and hated by his enemies. When you play this card, search your deck for up to 3 common or rare swordsman cards, and special play them. Shuffle your deck after.||legendary swordsman fullart|
 Sweaty Homunculus|*||Used to be a great general. Now is a sweaty general. Its RP is equal to the number of cards in your discard pile.||rare demon unit|
 Baby Demon|3||Pesty little demon who loves pulling tricks on people. Once per turn, search your discard pile for a card of your choice, and add it to your hand.||common demon unit|
@@ -45,7 +45,7 @@ The flaming sword of Lucifer|0||Equip this card to a rare or legendary demon. It
 Excalibur|0||Equip this card to a rare or legendary swordsman. It gains +15 RP for the rest of the game. If the equipped swordsman is about to be destroyed, send this card to your hand.||fullart|
 Você Não|2||Activate when your opponent uses any effect. Its effect is negated and reversed back to them.||default|
 Life's Greed|0||Draw 2 cards.||default|
-Tyranny|0||Draw 2 cards.||default|drawCards me 2
+Tyranny|0||Draw 2 cards, reveal them to your opponent, and then add them to your hand.||default|spyCollection me deck 2 0 reveal you me deck 0 moveCards me deck hand 0
 Dig a Grave|1||Search your discard pile for a card of your choice, and add it to your hand.||default|
 Soul Snatcher|1||Search your discard pile for one card a card of your choice, and add it to your hand.||default|
 Book of Demons|0||Add one rare or below type demon to your hand.||default|
