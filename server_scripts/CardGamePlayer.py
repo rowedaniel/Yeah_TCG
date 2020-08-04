@@ -965,7 +965,7 @@ class PlayCard(Card):
         super().__init__(player)
         self.data = card.data
         # TODO: make this work with Roid Rage
-        self.rp = await self.parse_rp(self.data['cost'])
+        self.rp = self.parse_rp(self.data['cost'])
 
         
         self.hasDefended = False
@@ -973,12 +973,12 @@ class PlayCard(Card):
         self.hasAttacked = False
 
 
-    async def parse_rp(self, coststr):
+    def parse_rp(self, coststr):
         return int(coststr)
 
     # all functions called by cards must not be async.
     async def set_rp(self, amount):
-        self.rp = await self.parse_rp(amount)
+        self.rp = self.parse_rp(amount)
         print('in set_rp, rp is:', self.rp)
         await self.player.game.cardGamePlayer.update_counters(
             self.player.game,
@@ -989,11 +989,11 @@ class PlayCard(Card):
 
     async def reset_rp(self):
         # TODO: make this work with Roid Rage
-        self.rp = await self.parse_rp(self.data['cost'])
+        self.rp = self.parse_rp(self.data['cost'])
             
                                                                                              
     async def update_rp(self, amount):
-        await self.set_rp(self.rp + await self.parse_rp(amount))
+        await self.set_rp(self.rp + self.parse_rp(amount))
 
     async def activate_cooldown(self, amount):
         print('set activate cooldown for:',amount)
