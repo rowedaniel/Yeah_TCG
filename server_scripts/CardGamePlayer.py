@@ -129,30 +129,35 @@ class CardGamePlayer:
     async def get_cards(self, sid, msg, cardgroups):
         print(msg)
 
-
-
-
-        # TODO: send message more than once
+        # set authToken, to prevent cheating
         self.authTokens[sid] = random.random()
         cardgroups['authToken'] = self.authTokens[sid]
+
+        # set misc message properties
+        cardgroups['msgId'] = random.random()
         cardgroups['msg'] = msg
+
         print('sent socket.io msg to',sid, cardgroups)
-        await self.sio.emit('playerGetCards', cardgroups, room=sid)
+
+
+        # loop until we have a result, remaking authToken every once in a while
+        self.getCardsRes[sid] = '-1'
+        while self.getCardsRes[sid] == '-1':
+            # remake authTokn, and send message
+            self.authTokens[sid] = random.random()
+            cardgroups['authToken'] = self.authTokens[sid]
+            await self.sio.emit('playerGetCards', cardgroups, room=sid)
+
+            # check 10 times for response, before refreshing authToken again.
+            for i in range(10):
+                await asyncio.sleep(1)
+                if self.getCardsRes[sid] != '-1':
+                    break
+            
         del cardgroups['authToken']
         del cardgroups['msg']
-
-
+        del cardgroups['msgId']
         
-        
-        self.getCardsRes[sid] = '-1'
-
-        while self.getCardsRes[sid] == '-1':
-            await asyncio.sleep(1)
-##        while not all([(o in [(cgn+'-'+str(i)) for cgn in cardgroups \
-##                              for i in range(len(cardgroups[cgn]))]) \
-##                       for o in out.split()]):
-##            #out = input('  > ')
-##            pass
         out = self.getCardsRes[sid]['order']
         del self.getCardsRes[sid]
         print(out)

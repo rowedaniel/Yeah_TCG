@@ -615,6 +615,12 @@ button#hideControlButton {
 			
 			authToken = data['authToken'];
 			delete data['authToken'];
+			
+			if(messageId==data['msgId']) {
+				return;
+			}
+			messageId = data['msgId'];
+			delete data['msgId'];
 			let msg = data['msg'];
 			delete data['msg'];
 			
@@ -743,6 +749,7 @@ button#hideControlButton {
 		const control = [];
 		const controlNames = [];
 		let authToken = 0;
+		let messageId = 0;
 		
 		const controlDiv = document.getElementById("control");
 		const controlTextDiv = document.getElementById("controlText");
