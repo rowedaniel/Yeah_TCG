@@ -89,7 +89,7 @@ cmdTable = {
     
     # returns this card
     'this':(
-                'card.tag(',
+                'card.add_tag(',
                 1,
                 (lambda x: x in tags,
                 lambda x,y: x+y+')'),
@@ -125,6 +125,15 @@ cmdTable = {
                 lambda x,y: y+'.'+x),
                 (lambda x: x in [str(i) for i in range(1,40)],
                 lambda x,y: x+y+','),
+                (lambda x: x in tags,
+                lambda x,y: x+y+')'),
+            ),
+    # reset rp to default
+    'resetRP':(
+                'reset_rp(',
+                3,
+                (lambda x: x in ('me','you'),
+                lambda x,y: y+'.'+x),
                 (lambda x: x in tags,
                 lambda x,y: x+y+')'),
             ),
@@ -258,6 +267,13 @@ async def execute_card_action(card, index, me, you):
     skipCommand = False
     currentArgIndex = 0
 
+
+    await me.remove_card_tags()
+    await you.remove_card_tags()
+    if any([len(c.tags)>0 for c in me.play]):
+        print('tags not reset!!')
+
+    
     while i < len(c):
 
         print('new arg/command:', c[i])

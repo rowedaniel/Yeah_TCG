@@ -96,7 +96,7 @@ class BGCard extends BaseCard {
 		
 		const counterText = this.counterText;
 		this.div.addEventListener('click', function() {
-			dispCard(cardName, counterText.innerHTML);
+			clearAndDispCard(cardName, counterText.innerHTML);
 		},false);
 	}
 	

@@ -1,0 +1,68 @@
+Sharpen Swords|1|/data/cards/sharpensword.png|Discard a common swordsman card from your hand. Search your deck for a rare swordsman card, and special play it.|||searchCollection me hand common swordsman 0 checkCardsTag me hand 1 0 searchCollection me deck rare swordsman 0 choose me me hand 1 0 1 moveCards me hand discard 1 choose me me deck 1 0 1 moveCards me deck play 1
+Golden Claws|0|/data/cards/goldenclaws.png|Target demon card on your field gains +2 RP for the rest of the game.|||searchCollection me play any demon 0 choose me me play 1 0 1 increaseRP me 2 1
+Call of Hades|0|/data/cards/callofhades.png|Reveal up to 3 cards from your discard pile. Your opponent returns 2 to your discard pile. The third is added to your hand.|||spyCollection me discard 0 0 choose me me discard 3 0 1 choose you me discard 2 1 2 removeTag me discard 2 1 moveCards me discard hand 1 
+Hero's Chant|1|/data/cards/heroschant.png|Pick up the top 4 cards of your deck. Choose one, reveal it to your opponent, and add it to your hand. The rest are shuffled back into your deck.|||spyCollection me deck 4 0 choose me me deck 1 0 1 reveal you me deck 1 moveCards me deck hand 1
+ROID RAGE|X|/data/cards/roidrage.png|Increase the RP of all units on the field by X for the rest of the game.|||
+Power of the Church|0|/data/cards/powerofthechurch.png|When your opponent threatens to destroy a card (including their own). Its effect is negated.|||
+Soul Bond|0|/data/cards/soulbond.png|Activate when a card you control is about to be destroyed. Destroy the card that would have distroyed this card as well.|||
+Metamorphosis |2|/data/cards/metamorphosis.png|Discard 2 cards from your hand. Then, search your deck for a common or rare demon card and special play it.|||spyCollection me hand 0 0 checkCardsTag me hand 2 0 searchCollection me deck common demon 0 checkCardsTag me hand 2 0 searchCollection me deck rare demon 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 1 0 1 moveCards me deck play 1
+Swordsmen Unity|2||Discard 3 cards from your hand. Search your deck for 3 common swordsman cards and special play them.|||spyCollection me hand 0 0 checkCardsTag me hand 3 0 searchCollection me deck rare swordsman 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 3 0 1 moveCards me deck play 1
+Ouija Board|0||Search your deck for 2 Common Demons. Reveal them to your opponent and have them pick one. Add the one they chose to your hand. The other is sent to discard.|||searchCollection me deck common demon 0 choose me me deck 2 0 1 choose you me deck 1 1 2 moveCards me deck hand 2
+Recruitment|1||Search your deck for 1 common Swordsman. Reveal it to your opponent and special play it. Shuffle your deck afterwards.|||searchCollection me deck common swordsman 0 choose me me deck 1 0 1 reveal you me deck 1 moveCards me deck play 1
+Roar of Cerberus|2||Send 3 cards from your opponent's side of the field to their hand. Then, Call one Common Demon from your discard pile.|||spyCollection you play 0 0 choose me you play 3 0 1 moveCards you play hand 0 spyCollection me discard 0 0 choose me me discard 1 0 0 moveCards me discard hand 0
+Chad Squire|3|/data/cards/chadsquire.png|Your basic common swordsman in training. Once during your turn, you may draw a card.||common swordsman fullart|spyCollection me deck 1 0 reveal you me deck 0 moveCards me deck hand 0
+Julius Caesar|3||An intern for the king. Sacrifice this card to search your deck for a legendary swordsman card, and add it to your hand. Shuffle your deck after.||common swordsman unit|searchCollection me deck legendary swordsman 0 choose me me deck 1 0 1 moveCards me deck hand 1
+Baseball Lad|2|/data/cards/baseballlad.png|Random Kid who likes to swing his bat. Hit his head, and thinks his bat is Excalibur.||common swordsman unit|
+Mr. Deffrey Javis|3||Random guy who stumbled onto the battle. Joined the fight when a demon drank his coffee. Reveal your opponent's goal card.||common swordsman unit|spyCollection you activeGoals 0 0 reveal me you activeGoals 0
+Ajax the Spearman|6||A well known spear-man whose spear craves demon blood.||rare swordsman unit|
+Jason the Hero|6||One of the most popular heros in the kingdom. After 2 turns, this card gains +1 RP each turn.||rare swordsman unit|
+Breath User Jaycob|3|/data/cards/breathuserjaycob.png|*This card cannot attack*     While this card is on the field, gain +1 breath each turn.||rare Jaycob fullart|increaseBreath me 1
+Dead Shinubo|4|/data/cards/deadshinobu.png|Everyone's simpin' for her! Discard the top 3 cards of your opponent's deck||fullart|spyCollection you deck 3 0 moveCards you deck discard 0
+Scout the Scout|6||He is a scout named scout. He likes long walks on the beach.||common swordsman unit|
+Dance of Metal|||Goal: summon a legendary swordsman card, and equip Excalibur.||goal card fullart|
+Sir Lancelot |8||The King's Personal Protector. He is the 2nd strongest Swordsman. When you play this card, search your deck for 2 common swordsman cards, and special play them. Shuffle your deck after.||rare swordsman fullart|
+Achilles the mythical Swordsman |7||The strongest swordsman in the kingdom. This card gains +5 RP when you play it.||rare swordsman fullart|
+Overwhelming Attack|||Goal: Attack with a combined total of 25 RP in a turn.||goal card fullart|
+Overwhelming Defense|||Goal: Have combined total of 40 RP at the end of your turn.||goal card fullart|
+Overwhelming Numbers|||Goal: End your turn with 9 unit cards in play.||goal card fullart|
+Dragon King Hades|8|/data/cards/dragonkinghades.png|The lord of the... what did he do again? Not sure. This card gains +4 RP when you play it.||rare demon fullart|
+Lucifer the Demon King|10||The king of Demons. He had his home invaded by people with pointy sticks. This card gains +2 RP every turn.||legendary demon fullart|this 0 increaseRP me 2 0
+King Arthur|10||The King of all the Swordsmen. Loved by his subjects, and hated by his enemies. When you play this card, search your deck for up to 3 common or rare swordsman cards, and special play them. Shuffle your deck after.||legendary swordsman fullart|
+Sweaty Homunculus|X||Used to be a great general. Now is a sweaty general. Once, during your play phase, you may reset this cards RP to the number of cards in your discard pile.||rare demon unit|
+Baby Demon|3||Pesty little demon who loves pulling tricks on people. Once per turn, search your discard pile for a card of your choice, and add it to your hand.||common demon unit|spyCollection me discard 0 0 choose me me discard 1 0 1 moveCards me discard hand 1
+Jack the Ripper|7||His hunger for power is becoming known to more and more people. Gain +1 RP whenever this card destroy an opponent's card.||rare demon unit|
+Flesh Blade|4||For some reason, gives the impression of a musician. You may discard the top card of your deck when you attack to deal +3RP.||common demon unit|
+Lucifer's Servant|4||Hums constantly, so it's very annoying to fight with her. This card gains +1 RP whenever a demon unit you control is destroyed.||common demon unit|
+Messenger of Hades|2||Mail time! Search your deck for a common demon card, and place it into your hand. Shuffle your deck after.||common demon unit|searchCollection me deck common demon 0 choose me me deck 1 0 1 moveCards me deck hand 1
+Skinny Jaycob|0||He's weak, but he can still breathe! Gain +1 breath|||increaseBreath me 1
+Jaycob's inner demon|0||Search your discard pile for a rare Jaycob card, and place it in your hand. Shuffle your deck after.|||searchCollection me discard rare Jaycob 0 choose me me discard 1 0 1 moveCards me discard hand 1
+Surprise Attack |1||Activate only when your opponent special plays a unit. Send it back to their deck. ||default|
+Demonic Possession|1||Take Control of an enemy swordsman till the end of your next turn. It cannot perform attacks or be attacked. ||default|
+Achilles's Shield |2||Stop your opponent from performing any assaults to any of your cards for 2 turns. ||default|
+Total Annihilation |0||Flip a coin. If heads, every card on the field is destroyed. If tails the user of this card must discard 1 card.|||
+Kiss of Death|1||Destroy target card which has less than 10 RP.|||
+The flaming sword of Lucifer|0||Target rare or legendary demon gains +15 RP for the rest of the game.||fullart|searchCollection me play rare demon 0 searchCollection me play legendary demon 0 choose me me play 1 0 1 increaseRP me 15 1
+Excalibur|0||Target rare or legendary swordsman gains +15 RP for the rest of the game.||fullart|searchCollection me play rare demon 0 searchCollection me play legendary demon 0 choose me me play 1 0 1 increaseRP me 15 1
+Você Não|2||Activate when your opponent uses any effect. Its effect is negated and reversed back to them.||default|
+Life's Greed|2||Draw 4 cards, reveal them to your opponent, and then add them to your hand.||default|spyCollection me deck 5 0 reveal you me deck 0 moveCards me deck hand 0
+Tyranny|0||Draw 2 cards, reveal them to your opponent, and then add them to your hand.||default|spyCollection me deck 2 0 reveal you me deck 0 moveCards me deck hand 0
+Dig a Grave|2||Search your discard pile for a card of your choice, and add it to your hand.||default|spyCollection me discard 0 0 choose me me discard 1 0 1 reveal you me discard 1 moveCards me discard hand 1
+Soul Snatcher|4||Search your discard pile for 3 cards of your choice, and add it to your hand.||default|spyCollection me discard 0 0 choose me me discard 3 0 1 reveal you me discard 1 moveCards me discard hand 1
+Book of Demons|0||Search your discard pile for a common demon card of your choice, and add it to your hand.||default|searchCollection me discard common swordsman 0 choose me me discard 1 0 1 reveal you me discard 1 moveCards me discard hand 1
+The Book of Jaycob|0||Search your deck for a Breath User Jaycob card, and add it to your hand. Shuffle your deck after.|||searchCollection me deck rare Jaycob 0 choose me me deck 1 0 1 moveCards me deck hand 1
+Swords Man|2|/data/cards/swordsman.png|A man who spent his life studying the art of the sword. This card gains +2 RP when you play it.||common swordsman unit|
+Swordsman's Final Shot|0||Activate only when your opponent's Unit is about to deal damage to you directly. Negate the attack but destroy one swordsman on your side of the field. Gain Health equal to it's original RP||default|
+Greedy Jacob|4||Steal 1 of your opponent's rare Jaycob cards and bring it to your side of the field.||default|
+Jacob's Revenge|3|/data/cards/devilsjacob.png|His desire to become the one true Jacob is fulfilled! Destroy every rare Jaycob card on your opponent's side of the field.|||searchCollection you play rare Jaycob 0 moveCards you play discard 0
+Charlotte the witch|4||A evil witch who assists the demon army. When called to the field add one Action card from your discard pile to your hand.||common demon unit|
+Malfunction|0||Activate when your opponent uses an effect. Its new effect is it does nothing and your opponent loses 2 health.||default|
+Aegis|0||Once per turn when an opponent's unit declares an attack. Stop the attack then set this card facedown again. This effect can only be used once per turn.||default|
+Piercing Power|0||Equip to a Swordsman card. Reset its RP. Its attacks can no longer be blocked by enemy units.||default|
+Rust Cleaner|0||Equip this card to a unit card. Reset its RP. Its RP can not be lowered.||default|
+Banji's Scream|2||Destroy 1 card on your opponent's side of the field.||default|spyCollection me play 0 0 choose me you play 1 0 1 moveCards you play discard 1
+Black Market|2||Pick one win condition card from your pile. This is now another way for you to win.||default|spyCollection me goals 0 0 choose me me goals 1 0 1 moveCards me goals activeGoals 1
+Friends Close Enemies Closer|0||All player search their deck for a rare Jaycob card, and add it to their hand.||default|searchCollection me deck rare Jaycob 0 choose me me deck 1 0 1 moveCards me deck hand 0 searchCollection you deck rare Jaycob 0 choose you you deck 1 0 1 moveCards you deck hand 0
+Miyamoto Musashi|8||This card gains +2 RC for every unit your opponent controls.||default|
+Demon's Rebirth|3||Special call 2 Demon Unit cards from your discard pile.||default|searchCollection me discard any demon 0 choose me me discard 2 0 1 moveCards me discard play 1
+Full Counter|4||Activate when your opponent declares an attack. Negate it and deal damage equal to the Unit's original RP as direct damage.||default|
+Kchau|11||The Queen went too far. Search your deck for every swordsman card, and special play it.|#2A182A||searchCollection me deck any swordsman 0 moveCards me deck play 0

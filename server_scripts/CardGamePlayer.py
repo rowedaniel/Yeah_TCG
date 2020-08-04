@@ -338,6 +338,15 @@ class Game:
                             p.socketId, msg, collectionMap)
             print('\n\nNow playing in the following order:',cardOrder)
 
+
+            # reveal cards to other player
+            await self.cardGamePlayer.disp_cards(
+                o.socketId,
+                [collectionMap[a][b] for a,b in cardOrder]
+                )
+
+            
+
             self.updateCardOrder = False
 
 
@@ -647,7 +656,7 @@ class Player:
                 print(len(opponent.play))
                 opponent.play[opponent.play.index(a)] = None
 
-            c.hasActivated = True
+            c.hasAttacked = True
             return True
         return False
 
@@ -747,7 +756,7 @@ class Player:
         # [have action in the name for action]
         # [have reponse in the name for response]
         # TODO: convert from cardName to card
-        if len(c.data['cardType']) == 0 or c.data['cardType']=='default':
+        if 'action' in c.data['cardType']:
             # it's an action card
             await CardExecutor.execute_card_action(c, i, self, opponent)
             await self.add_cards_to('discard',[c])
@@ -756,10 +765,16 @@ class Player:
             del c
             return True
 
-        else:
-            # it's a unit card
+        elif 'unit' in c.data['cardType']:
             await self.add_cards_to('play',[c])
             return True
+        elif 'response' in c.data['cardType']:
+            return True
+        else:
+            # shouldn't get here
+            print('cardType without unit, action, or response in it! Bad!')
+            print(c.data['name'])
+            return False
         return False
 
 
@@ -770,10 +785,11 @@ class Player:
 
     # things that get used by things that get used by cards
 
-    async def remove_card_tags(self, collectionName, tag):
-        for c in self.collections[collectionName]:
-            if c is not None:
-                await c.remove_tag(tag)
+    async def remove_card_tags(self):
+        for collectionName in self.collections:
+            for c in self.collections[collectionName]:
+                if c is not None:
+                    await c.reset_tags()
 
     async def get_cards_with_tag(self, collectionName, tag):
         return list(filter(
@@ -786,7 +802,6 @@ class Player:
 
     async def spy_cards_from(self, collectionName, count, tag):
         """returns the top <count> cards from the specified collection"""
-        await self.remove_card_tags(collectionName, tag)
         if count == 0:
             count = len(self.collections[collectionName])
         for c in filter(lambda x: x is not None,
@@ -794,7 +809,6 @@ class Player:
             await c.add_tag(tag)
 
     async def search_cards_in(self, collectionName, rarity, unitType, tag):
-        await self.remove_card_tags(collectionName, tag)
         print('in search_cards_in')
         collection = self.collections[collectionName]
 
@@ -804,14 +818,15 @@ class Player:
         
         print(cardTypes)
         for i in range(len(collection)):
-            ctype = cardTypes[i]
-            if len(ctype) >= 2 and \
-               ' ' in ctype:
-                ctypes = ctype.split(' ')
-                if len(ctypes) >= 2 and \
-                   (rarity=='any' or rarity==ctypes[0]) and \
-                   (unitType=='any' or unitType==ctypes[1]):
-                    await collection[i].add_tag(tag)
+            ctypes = cardTypes[i].split(' ')
+            print('ctypes:',ctypes)
+            if len(ctypes) >= 3 and \
+               'unit' in ctypes and \
+               (rarity=='any' or rarity==ctypes[0]) and \
+               (unitType=='any' or unitType==ctypes[1]):
+                print('added', ctypes)
+                await collection[i].add_tag(tag)
+        
 
     async def check_cards_tag(self, collectionName, count, tag):
         cards = await self.get_cards_with_tag(collectionName, tag)
@@ -829,25 +844,32 @@ class Player:
 
     async def choose_cards(self, player, collectionName,
                            limit, intag, outtag):
-        await player.remove_card_tags(collectionName, outtag)
         cards = await player.get_cards_with_tag(collectionName, intag)
+
+        print('in choose_cards')
+        print('choosing out of:',cards)
         
         limit = min(limit, len(cards))
-        
-        out = await self.game.cardGamePlayer.get_cards(self.socketId,
-                                           'Choose '+str(limit),
-                                {'cards':[c.data['name'] for c in cards]}
-                                                        )
-        while len(out) != limit:
+
+        if limit > 0:
             out = await self.game.cardGamePlayer.get_cards(self.socketId,
-                                           'Choose '+str(limit),
-                                {'cards':[c.data['name'] for c in cards]}
-                                                        )
-        print('in choose_cards')
-        print('out',out)
+                                               'Choose '+str(limit),
+                                    {'cards':[c.data['name'] for c in cards]}
+                                                            )
+            while len(out) != limit:
+                out = await self.game.cardGamePlayer.get_cards(self.socketId,
+                                               'Choose '+str(limit),
+                                    {'cards':[c.data['name'] for c in cards]}
+                                                            )
+        else:
+            out = []
         print('chosen',[cards[b] for a,b in out])
         for a,b in out:
             await cards[b].add_tag(outtag)
+
+        # shuffle deck after player gets to see it
+        if collectionName == 'deck':
+            random.shuffle(self.collections[collectionName])
 
     async def remove_card_tags_with_tag(self, collectionName, intag, outtag):
         cards = await self.get_cards_with_tag(collectionName, intag)
@@ -877,7 +899,12 @@ class Player:
     async def set_rp(self, amount, tag):
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
-            await c.update_rp(amount)
+            await c.set_rp(amount)
+
+    async def reset_rp(self, tag):
+        cards = await self.get_cards_with_tag('play', tag)
+        for c in cards:
+            await c.reset_rp(amount)
         
     async def increase_rp(self, amount, tag):
         cards = await self.get_cards_with_tag('play', tag)
@@ -916,6 +943,9 @@ class Card:
         if tag in self.tags:
             self.tags.remove(tag)
 
+    async def reset_tags(self):
+        self.tags = []
+
         
     async def load_data(self, cardName):
         
@@ -934,14 +964,21 @@ class PlayCard(Card):
     def __init__(self, player, card):
         super().__init__(player)
         self.data = card.data
-        self.rp = int(self.data['cost'])
+        # TODO: make this work with Roid Rage
+        self.rp = await self.parse_rp(self.data['cost'])
+
+        
         self.hasDefended = False
         self.hasActivated = True # can't activate on first turn played
         self.hasAttacked = False
 
+
+    async def parse_rp(self, coststr):
+        return int(coststr)
+
     # all functions called by cards must not be async.
     async def set_rp(self, amount):
-        self.rp = amount
+        self.rp = await self.parse_rp(amount)
         print('in set_rp, rp is:', self.rp)
         await self.player.game.cardGamePlayer.update_counters(
             self.player.game,
@@ -949,10 +986,14 @@ class PlayCard(Card):
             'rp',
             [self.player.play.index(self), self.rp]
             )
+
+    async def reset_rp(self):
+        # TODO: make this work with Roid Rage
+        self.rp = await self.parse_rp(self.data['cost'])
             
                                                                                              
     async def update_rp(self, amount):
-        await self.set_rp(self.rp+amount)
+        await self.set_rp(self.rp + await self.parse_rp(amount))
 
     async def activate_cooldown(self, amount):
         print('set activate cooldown for:',amount)

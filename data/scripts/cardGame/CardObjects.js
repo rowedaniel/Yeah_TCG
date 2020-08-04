@@ -77,16 +77,17 @@ const Card = function(entities, x, y, name, cost, imgsrc, movetext, textcolor, c
 	
 	let cardoutline = "/data/cards/cardtemplate_outline_default.png";
 	cardType = cardType.split(" ");
-	let cardTypeText = "";
+	let cardTypeText = '';
 	if((cardType) && ((cardType.indexOf("unit") !== -1) || (cardType.indexOf("fullart") !== -1))){
 		cardoutline = "/data/cards/cardtemplate_outline_" + cardType[cardType.length-1] + ".png";
-		for(let i=0; i<cardType.length-1; ++i) {
-			cardTypeText += cardType[i]+" ";
-		}
-	} else {
-		cardType = "default";
 	}
 	entity.cardType = cardType;
+	for(let word of cardType){
+		if(word === 'fullart') {
+			break;
+		}
+		cardTypeText += word+' ';
+	}
 	
 	let costText = "";
 	if(cost && cost !== "" && cost.toString) {
@@ -102,17 +103,24 @@ const Card = function(entities, x, y, name, cost, imgsrc, movetext, textcolor, c
 	
 
 	// subentity stuff
-	const subentityOffsets = [[0, 0], 
-						[0, 0], 
-						[20, 80, fontscale(name, 200, 60)], 
-						[480, 88, fontscale(costText, 60, 60)], 
-						[60, 110, fontscale(cardTypeText, 100, 60)]];
+	const imgOffsets =  [
+						 [0, 0, imgsrc], 
+						 [0, 0, cardoutline], 
+						]
+	const textOffsets = [
+						[60, 110, fontscale(cardTypeText, 140, 35), cardTypeText],
+						[20, 80, fontscale(name, 200, 60), name], 
+						[480, 88, fontscale(costText, 60, 60), costText], 
+						];
 	const subentities = [];
-	GameObject(subentities, x+subentityOffsets[1][0], y+subentityOffsets[1][1], 606, 890, 1, 1, imgsrc);
-	GameObject(subentities, x+subentityOffsets[1][0], y+subentityOffsets[1][1], 606, 890, 1, 1, cardoutline);
-	Text(subentities, x+subentityOffsets[2][0], y+subentityOffsets[2][1], subentityOffsets[2][2]+"px Shintaku", textcolor, name);
-	Text(subentities, x+subentityOffsets[3][0], y+subentityOffsets[3][1], subentityOffsets[3][2]+"px Shintaku", textcolor, costText);
-	Text(subentities, x+subentityOffsets[4][0], y+subentityOffsets[4][1], subentityOffsets[4][2]+"px Shintaku", textcolor, cardTypeText); 
+	
+	for(let i = 0; i<imgOffsets.length; ++i) {
+		GameObject(subentities, x+imgOffsets[i][0], y+imgOffsets[i][1], 606, 890, 1, 1, imgOffsets[i][2]);
+	}
+	
+	for(let i = 0; i<textOffsets.length; ++i) {
+		Text(subentities, x+textOffsets[i][0], y+textOffsets[i][1], textOffsets[i][2]+"px Shintaku", textcolor, textOffsets[i][3]);
+	}
 
 	
 	// bottom text
@@ -126,7 +134,7 @@ const Card = function(entities, x, y, name, cost, imgsrc, movetext, textcolor, c
 		}
 	}
 	for(let txt of lines) {
-		subentityOffsets.push([movetextX, movetextY, bottomtextsize]);
+		textOffsets.push([movetextX, movetextY, bottomtextsize]);
 		Text(subentities, x+movetextX, y+movetextY, bottomtextsize+"px Shintaku", textcolor, txt);
 		movetextY += bottomtextsize*1.2;
 	}
@@ -145,7 +153,7 @@ const Card = function(entities, x, y, name, cost, imgsrc, movetext, textcolor, c
 		let tmpCtx = tmpCanvas.getContext("2d");
 		entity.draw(tmpCtx);
 		for(let i in subentities) {
-			setSubentityPosition(i);
+			//setSubentityPosition(i);
 			subentities[i].draw(tmpCtx);
 		}
 		entity.img.src = tmpCanvas.toDataURL("image/png");

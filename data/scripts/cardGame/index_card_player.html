@@ -378,6 +378,11 @@ div#mainDisplayDiv {
 	top: 40px;
 	bottom: 0;
 	
+	
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+	
 	/*
 	display: flex;
 	flex-direction: row;
@@ -722,21 +727,9 @@ button#hideControlButton {
 			
 			clearControl();
 			
-			const p = document.createElement("p");
-			p.innerHTML = "Revealed Cards";
-			p.classList.add("fadein");
-			controlTextDiv.appendChild(p);
-			controlSubmitButton.classList.remove("uninteractable");
-			
-			
-			
-			makeNewControlArea("cards");
-			setTimeout(function() {
-				for(let cindex=0; cindex < data['cards'].length; ++cindex) {
-					console.log(data['cards'][cindex], cindex, 0);
-					dispControlCard(data['cards'][cindex], cindex, 0);
-				}
-			}, 0);
+			for(let cindex=0; cindex < data['cards'].length; ++cindex) {
+				dispCard(data['cards'][cindex], "");
+			}
 		}
 
 		
@@ -858,8 +851,13 @@ button#hideControlButton {
 		mainDisplayDiv.addEventListener('click', function() {
 			clearMainDisplay();
 		},false);
-		function dispCard(cardName, counter) {
+		
+		function clearAndDispCard(cardName, counter) {
 			clearMainDisplay();
+			dispCard(cardName, counter);
+		}
+		
+		function dispCard(cardName, counter) {
 			mainDisplayDiv.classList.add("fadein");
 			mainDisplayDiv.style.pointerEvents = "auto";
 			const c = new DispCard(cardName, counter);

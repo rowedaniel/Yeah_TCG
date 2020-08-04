@@ -1,30 +1,13 @@
-
-
+CARDPATH = './cards/cards.txt'
+import json
 
 def loadCards():
-    cards = []
-    with open('./cards/cards.txt') as f:
-        for line in f.readlines():
-            args = line.split('|')
-            cards.append({'name':args[0],
-                          'cost':args[1],
-                          'img':args[2],
-                          'move':args[3],
-                          'txtcolor':args[4],
-                          'cardType':args[5],
-                          'cardAction':args[6]})
-    return cards
+    with open(CARDPATH) as f:
+        return json.loads(f.read())
 
-def saveCard(card):
-    with open('./cards/cards.txt', 'a') as f:
-        f.write('|'.join([
-                      card['name'],
-                      card['cost'],
-                      card['img'],
-                      card['move'],
-                      card['txtcolor'],
-                      card['cardType'],
-                      card['cardAction']])+'\n')
+def saveCards(cards):
+    with open(CARDPATH, 'w') as f:
+        f.write(json.dumps(cards, indent=4))
 
 def loadDecks():
     decks = {'k':{ 'deck': ['Dragon King Hades',
@@ -80,9 +63,99 @@ def loadDecks():
                   'goals': ['Overwhelming Attack',
                             'Overwhelming Numbers',
                             'Overwhelming Defense']},
+             
+             'hello':{'deck': ['Call of Hades',
+                               "Hero's Chant",
+                               'Ouija Board',
+                               'Skinny Jaycob',
+                               'Skinny Jaycob',
+                               'Skinny Jaycob',
+                               'Messenger of Hades',
+                               "Lucifer's Servant",
+                               'Flesh Blade',
+                               'Jack the Ripper',
+                               'Jack the Ripper',
+                               'Baby Demon',
+                               'Sweaty Homunculus',
+                               'Lucifer the Demon King',
+                               'Dragon King Hades',
+                               'Breath User Jaycob',
+                               'Breath User Jaycob',
+                               'Breath User Jaycob',
+                               'Golden Claws',
+                               'Golden Claws',
+                               'Golden Claws'],
+                      'goals': ['Overwhelming Numbers',
+                                'Overwhelming Defense',
+                                'Overwhelming Attack']},
+             'virginia':{'deck': ['Sharpen Swords',
+                                  'Sharpen Swords',
+                                  'Sharpen Swords',
+                                  'Chad Squire',
+                                  'Chad Squire',
+                                  'Chad Squire',
+                                  'Recruitment',
+                                  'Recruitment',
+                                  'Recruitment',
+                                  'Julius Caesar',
+                                  'Julius Caesar',
+                                  'Julius Caesar',
+                                  'Baseball Lad',
+                                  'Baseball Lad',
+                                  'Baseball Lad',
+                                  'Mr. Deffrey Javis',
+                                  'Mr. Deffrey Javis',
+                                  'Mr. Deffrey Javis',
+                                  'Ajax the Spearman',
+                                  'Ajax the Spearman',
+                                  'Ajax the Spearman',
+                                  'Jason the Hero',
+                                  'Jason the Hero',
+                                  'Jason the Hero',
+                                  'Breath User Jaycob',
+                                  'Breath User Jaycob',
+                                  'Breath User Jaycob',
+                                  'Scout the Scout',
+                                  'Scout the Scout',
+                                  'Scout the Scout',
+                                  'Sir Lancelot ',
+                                  'Sir Lancelot ',
+                                  'Sir Lancelot ',
+                                  'Achilles the mythical Swordsman ',
+                                  'Achilles the mythical Swordsman ',
+                                  'Achilles the mythical Swordsman ',
+                                  'King Arthur',
+                                  'Skinny Jaycob',
+                                  'Skinny Jaycob',
+                                  'Skinny Jaycob',
+                                  'Excalibur',
+                                  'Swords Man',
+                                  'Swords Man',
+                                  'Swords Man'],
+                         'goals': ['Dance of Metal',
+                                   'Overwhelming Numbers',
+                                   'Overwhelming Attack']},
+             'dame dame':{'deck': ['Baseball Lad', 'Baseball Lad', 'Baseball Lad', 'Breath User Jaycob', 'Breath User Jaycob', 'Breath User Jaycob', 'Excalibur', 'Excalibur', 'Excalibur', 'King Arthur', 'King Arthur', 'King Arthur', 'Skinny Jaycob', 'Skinny Jaycob', 'Skinny Jaycob', "Jaycob's inner demon", "Jaycob's inner demon", "Jaycob's inner demon", 'Sir Lancelot ', 'Achilles the mythical Swordsman ', 'Sharpen Swords', 'Sharpen Swords', 'Sharpen Swords', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis'],
+                          'goals': ['Overwhelming Numbers', 'Overwhelming Attack', 'Dance of Metal']
+                          },
              }
     return decks
 
-def saveDecks(deck):
+def saveDeck(deck):
     return
 
+
+
+
+
+def main():
+    cards = loadCards()
+
+    
+    
+    saveCards(cards)
+
+
+if __name__ == '__main__':
+    CARDPATH = '../cards/cards.txt'
+    main()
