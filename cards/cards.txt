@@ -420,7 +420,7 @@
         "move": "Draw 4 cards, reveal them to your opponent, and then add them to your hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me deck 5 0 reveal you me deck 0 moveCards me deck hand 0"
+        "cardAction": "spyCollection me deck 4 0 reveal you me deck 0 moveCards me deck hand 0"
     },
     {
         "name": "Tyranny",

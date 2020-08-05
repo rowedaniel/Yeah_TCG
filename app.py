@@ -69,6 +69,7 @@ async def connect(sid, environ):
 
 @sio.on('disconnect')
 async def disconnect(sid):
+    await cardGamePlayer.remove_player(sid)
     print('disconnect')
 
 # We bind our aiohttp endpoint to our app

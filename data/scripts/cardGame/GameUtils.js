@@ -16,7 +16,14 @@ class BaseCard {
 		if(cardName === 'cardBack') {
 			this.img.src = "/data/cards/cardback.png";
 		} else {
-			this.img.src = cards[cardName].img.src;
+			const card = this;
+			const setImage = function() {
+				card.img.src = cards[cardName].img.src;
+				if(card.img.src === 'http://localhost:3000/data/cards/cardtemplate.png') {
+					setTimeout(setImage, 100);
+				}
+			}
+			setImage();			
 		}
 		this.img.classList.add("dispCard");
 

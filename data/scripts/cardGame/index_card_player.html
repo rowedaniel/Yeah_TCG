@@ -393,6 +393,14 @@ div#mainDisplayDiv {
 	opacity: 0;
 }
 
+div#mainDisplayDiv > p {
+	font-size: 20vh;
+	background-color: #923535;
+	border: 8px solid black;
+	border-radius: 8vh;
+	white-space: normal;
+}
+
 button#hideControlButton {
 	position: fixed;
 	bottom: 8vh;
@@ -574,6 +582,7 @@ button#hideControlButton {
 		
 		socket.on("resAllCards", resAllCards);
 		socket.on("beginGame", beginGame);
+		socket.on("endGame", endGame);
 		socket.on("playerGetCards", getCards);
 		socket.on("updateCollection", updateCollection);
 		socket.on("updateCounters", updateCounters);
@@ -607,8 +616,21 @@ button#hideControlButton {
 			dispBGCard('cardBack', playerGoals);
 			dispBGCard('cardBack', opponentDeck);
 			dispBGCard('cardBack', opponentGoals);
+			clearMainDisplay();
 			
 			counterDiv.classList.add('fadein');
+		}
+		
+		function endGame(data) {
+			console.log('in endGame');
+			
+			for(let container of [playerPlay, playerHand, playerActiveGoals, opponentPlay, opponentHand, opponentActiveGoals]) {
+				while(container.firstChild) {
+					removeBGCard(0, container);
+				}
+			}
+			clearControl();
+			dispText(data['msg']);
 		}
 		
 		function getCards(data) {
@@ -641,14 +663,12 @@ button#hideControlButton {
 			for(let name in data) {
 				makeNewControlArea(name);
 			}
-			setTimeout(function() {
-				for(let i=0; i<controlNames.length; ++i) {
-					for(let cindex=0; cindex < data[controlNames[i]].length; ++cindex) {
-						console.log(data[controlNames[i]][cindex], cindex, i);
-						dispControlCard(data[controlNames[i]][cindex], cindex, i);
-					}
+			for(let i=0; i<controlNames.length; ++i) {
+				for(let cindex=0; cindex < data[controlNames[i]].length; ++cindex) {
+					console.log(data[controlNames[i]][cindex], cindex, i);
+					dispControlCard(data[controlNames[i]][cindex], cindex, i);
 				}
-			}, 0);
+			}
 		}
 		
 		function updateCollection(data) {
@@ -731,7 +751,7 @@ button#hideControlButton {
 			console.log('in dispCards', data);
 			authToken = -1;
 			
-			clearControl();
+			clearMainDisplay();
 			
 			for(let cindex=0; cindex < data['cards'].length; ++cindex) {
 				dispCard(data['cards'][cindex], "");
@@ -869,6 +889,14 @@ button#hideControlButton {
 			mainDisplayDiv.style.pointerEvents = "auto";
 			const c = new DispCard(cardName, counter);
 			c.addTo(mainDisplayDiv);
+		}
+		
+		function dispText(msg) {
+			mainDisplayDiv.classList.add("fadein");
+			mainDisplayDiv.style.pointerEvents = "auto";
+			const p = document.createElement('p');
+			p.innerHTML = msg;
+			mainDisplayDiv.appendChild(p);
 		}
 		
 		function clearMainDisplay() {

@@ -2,6 +2,9 @@ import random
 import asyncio
 from server_scripts import CardExecutor
 
+
+
+
 class CardGamePlayer:
 
     __slots__ = ('sio', 'cardManager',
@@ -46,6 +49,9 @@ class CardGamePlayer:
 
     async def begin_game(self, game):
         await self.sio.emit('beginGame', {}, room=game.room)
+
+    async def end_game(self, game, msg):
+        await self.sio.emit('endGame', {'msg':msg}, room=game.room)
 
     async def update_collection(self, game, sid, collection, operation, cards):
         # TODO: let players know how many cards in goal
@@ -93,6 +99,7 @@ class CardGamePlayer:
     async def remove_player(self, sid):
         if sid not in self.players:
             return
+        await self.end_game(self.players[sid], 'A player has disconnected.')
         await self.players[sid].remove_player(sid)
         del self.players[sid]
         if sid in self.authTokens:
@@ -127,6 +134,10 @@ class CardGamePlayer:
 
     # TODO: actually make this online
     async def get_cards(self, sid, msg, cardgroups):
+
+        if sid not in self.players:
+            return []
+
         print(msg)
 
         # set authToken, to prevent cheating
@@ -142,7 +153,8 @@ class CardGamePlayer:
 
         # loop until we have a result, remaking authToken every once in a while
         self.getCardsRes[sid] = '-1'
-        while self.getCardsRes[sid] == '-1':
+        while sid in self.getCardsRes and \
+              self.getCardsRes[sid] == '-1':
             # remake authTokn, and send message
             self.authTokens[sid] = random.random()
             cardgroups['authToken'] = self.authTokens[sid]
@@ -151,7 +163,10 @@ class CardGamePlayer:
             # check 10 times for response, before refreshing authToken again.
             for i in range(10):
                 await asyncio.sleep(1)
-                if self.getCardsRes[sid] != '-1':
+                if sid not in self.players:
+                    return []
+                if sid not in self.getCardsRes or \
+                   self.getCardsRes[sid] != '-1':
                     break
             
         del cardgroups['authToken']
@@ -207,8 +222,9 @@ class Game:
             await self.run_until_finished()
 
     async def remove_player(self, sid):
-        del self.waitingPlayers[sid]
         self.active = False
+        if sid in self.waitingPlayers:
+            del self.waitingPlayers[sid]
         
     async def start_new(self, id1, id2, deck1, deck2):
         self.active = True
@@ -234,12 +250,16 @@ class Game:
 
 
     async def switch_turn(self):
+        if not self.active:
+            return
         self.turn = (self.turn + 1) % 2
 
 
 
 
     async def defense_phase(self):
+        if not self.active:
+            return
         
         self.inDefensePhase = True
         print('\n\ndefense phase for player', self.turn,'\n')
@@ -309,6 +329,8 @@ class Game:
 
 
     async def play_phase(self):
+        if not self.active:
+            return
         self.inPlayPhase = True
         
         # TODO: implement sacrifice to play cards
@@ -388,6 +410,8 @@ class Game:
 
 
     async def attack_phase(self):
+        if not self.active:
+            return
         self.inAttackPhase = True
         print('\n\n\nattack phase for player', self.turn,'\n')
 
@@ -441,6 +465,8 @@ class Game:
 
 
     async def run_turn(self):
+        if not self.active:
+            return
         print('\n\n\nstarting player', self.turn,'turn.\n')
         await self.players[self.turn].update_breath(2)
         await self.players[self.turn].deal_cards(1)
@@ -449,14 +475,24 @@ class Game:
         await self.defense_phase()
         await self.play_phase()
         await self.attack_phase()
-        await self.players[self.turn].end_turn()
+        if len(self.players)>self.turn:
+            await self.players[self.turn].end_turn()
         await self.switch_turn()
 
 
     async def run_until_finished(self):
-        while self.active:
-            await self.run_turn()
-
+        try:
+            while self.active:
+                await self.run_turn()
+        except:
+            print('there was an error :(')
+        
+        while len(self.players) > 0:
+            p = self.players[0]
+            await self.cardGamePlayer.remove_player(p.socketId)
+            if p in self.players:
+                await self.remove_player(p)
+            self.players.pop(0)
 
 
 
@@ -492,6 +528,8 @@ class Player:
      
 
     async def first_deal(self, deck):
+        if not self.game.active:
+            return
         self.deck = [Card(self) for i in deck['deck']]
         for i in range(len(self.deck)):
             await self.deck[i].load_data(deck['deck'][i])
@@ -524,14 +562,23 @@ class Player:
 
 
     async def update_health(self, amount):
+        if not self.game.active:
+            return
         self.health += amount
         await self.game.cardGamePlayer.update_counters(self.game,
                                                      self.socketId,
                                                      'health',
                                                      self.health)
         print('health is now:',self.health)
+        if self.health <= 0:
+            # lost! game over
+            self.game.active = False
+            await self.game.cardGamePlayer.end_game(self.game,
+                                              'Health is 0! Game Over!')
 
     async def update_breath(self,amount):
+        if not self.game.active:
+            return
         self.breath += amount
         await self.game.cardGamePlayer.update_counters(self.game,
                                                        self.socketId,
@@ -544,6 +591,8 @@ class Player:
     # this only exists because of weird card stuff
            
     async def remove_cards_from(self, collectionName, cards):
+        if not self.game.active:
+            return
         """ removes every index in cards from the specified collection """
         if collectionName in self.collections:
             await self.game.cardGamePlayer.update_collection(self.game,
@@ -556,6 +605,8 @@ class Player:
         return out
 
     async def pull_cards_from(self, collectionName, count):
+        if not self.game.active:
+            return
         """ removes the top <count> cards from the specified collection. """
         print('in pull_cards_from')
         collection = self.collections[collectionName]
@@ -569,6 +620,8 @@ class Player:
                                       for i in range(count)],)
 
     async def add_cards_to(self, collectionName, cards):
+        if not self.game.active:
+            return
         print('in add_cards_to, cards:',cards)
         await self.game.cardGamePlayer.update_collection(self.game,
                                                     self.socketId,
@@ -610,30 +663,44 @@ class Player:
 
     # sort/access card collections
     async def filter_cards(self, func, collection):
+        if not self.game.active:
+            return
         return list(filter(func, enumerate(collection)))
 
     async def get_play_cards(self, func):
+        if not self.game.active:
+            return
         return await self.filter_cards(func, self.play)
 
     async def get_unattacked_play_cards(self):
+        if not self.game.active:
+            return
         return await self.get_play_cards(
             lambda x: x[1] is not None and not x[1].hasAttacked)
     
     async def get_unactivated_play_cards(self):
+        if not self.game.active:
+            return
         return await self.get_play_cards(
             lambda x: x[1] is not None and not x[1].hasActivated)
 
     async def get_undefended_play_cards(self):
+        if not self.game.active:
+            return
         return await self.get_play_cards(
             lambda x: x[1] is not None and not x[1].hasDefended)
 
     async def get_usable_hand(self):
+        if not self.game.active:
+            return
         return await self.filter_cards(lambda x: x[1] is not None, self.hand)
     
 
 
     
     async def defend_with_card(self, i, opponent):
+        if not self.game.active:
+            return
         if i < len(self.play) and self.play[i] is not None and \
            len(self.attackers) > 0:
             c = self.play[i]
@@ -666,6 +733,8 @@ class Player:
         return False
 
     async def take_card(self, opponent):
+        if not self.game.active:
+            return
         if len(self.attackers) > 0:
             a = self.attackers.pop(0)
             print('took',a.rp,'from',a.data['name'])
@@ -674,6 +743,8 @@ class Player:
         return False
 
     async def activate_card(self, i, opponent):
+        if not self.game.active:
+            return
         if i < len(self.play):
             c = self.play[i]
             await CardExecutor.execute_card_action(c, i, self, opponent)
@@ -682,6 +753,8 @@ class Player:
         return False
 
     async def attack_with_card(self, i, opponent):
+        if not self.game.active:
+            return
         if i < len(self.play):
             c = self.play[i]
             opponent.attackers.append(c)
@@ -692,16 +765,22 @@ class Player:
 
 
     async def remove_none(self):
+        if not self.game.active:
+            return
         for collectionName in self.collections:
             while None in self.collections[collectionName]:
                 await self.remove_cards_from(collectionName,
                         (self.collections[collectionName].index(None),))
 
     async def end_defense_phase(self):
+        if not self.game.active:
+            return
 ##        await self.add_cards_to('discard', self.tempPlay)
         await self.remove_none()
 
     async def end_play_phase(self):
+        if not self.game.active:
+            return
 ##        await self.add_cards_to('discard', self.tempPlay)
         await self.remove_none()
             
@@ -712,6 +791,8 @@ class Player:
         
 
     async def end_turn(self):
+        if not self.game.active:
+            return
         for c in self.play:
             await c.reset_all()
         await self.remove_none()
@@ -723,16 +804,22 @@ class Player:
     # all functions called by cards must be async.
     # TODO: reexamine deal_cards function, and decide if it's nececelery
     async def deal_cards(self, count):
+        if not self.game.active:
+            return
         cards = await self.pull_cards_from('deck', count)
         print('in deal_cards, dealing',len(cards),'cards.')
         await self.add_cards_to('hand', cards)
             
     async def deal_goal_cards(self, count):
+        if not self.game.active:
+            return
         cards = await self.pull_cards_from('goals', count)
         await self.add_cards_to('activeGoals', cards)
 
 
     async def normal_play_card(self, i, opponent, sacrificePoints=-1):
+        if not self.game.active:
+            return
         if i >= len(self.hand) or self.hand[i] is None:
             return False
 
@@ -791,12 +878,16 @@ class Player:
     # things that get used by things that get used by cards
 
     async def remove_card_tags(self):
+        if not self.game.active:
+            return
         for collectionName in self.collections:
             for c in self.collections[collectionName]:
                 if c is not None:
                     await c.reset_tags()
 
     async def get_cards_with_tag(self, collectionName, tag):
+        if not self.game.active:
+            return
         return list(filter(
                     lambda x: x is not None and tag in x.tags,
                     self.collections[collectionName]
@@ -806,6 +897,8 @@ class Player:
     # things that get used by cards
 
     async def spy_cards_from(self, collectionName, count, tag):
+        if not self.game.active:
+            return
         """returns the top <count> cards from the specified collection"""
         if count == 0:
             count = len(self.collections[collectionName])
@@ -814,6 +907,8 @@ class Player:
             await c.add_tag(tag)
 
     async def search_cards_in(self, collectionName, rarity, unitType, tag):
+        if not self.game.active:
+            return
         print('in search_cards_in')
         collection = self.collections[collectionName]
 
@@ -834,12 +929,16 @@ class Player:
         
 
     async def check_cards_tag(self, collectionName, count, tag):
+        if not self.game.active:
+            return
         cards = await self.get_cards_with_tag(collectionName, tag)
         print('in check_cards_tag, len(cards) is:',len(cards))
         return len(cards) >= count
                 
 
     async def disp_cards(self, player, collectionName, tag):
+        if not self.game.active:
+            return
         cards = await player.get_cards_with_tag(collectionName, tag)
         cardNames = [c.data['name'] for c in cards]
         print('in disp cards', cardNames)
@@ -849,6 +948,8 @@ class Player:
 
     async def choose_cards(self, player, collectionName,
                            limit, intag, outtag):
+        if not self.game.active:
+            return
         cards = await player.get_cards_with_tag(collectionName, intag)
 
         print('in choose_cards')
@@ -877,6 +978,8 @@ class Player:
             random.shuffle(self.collections[collectionName])
 
     async def remove_card_tags_with_tag(self, collectionName, intag, outtag):
+        if not self.game.active:
+            return
         cards = await self.get_cards_with_tag(collectionName, intag)
         for c in cards:
             if c is not None:
@@ -885,6 +988,8 @@ class Player:
             
 
     async def move_cards(self, inCollection, outCollection, tag):
+        if not self.game.active:
+            return
         cards = await self.get_cards_with_tag(inCollection, tag)
         cardIndex = [self.collections[inCollection].index(c) for c in cards]
         cardIndex.sort()
@@ -902,26 +1007,36 @@ class Player:
 
     
     async def set_rp(self, amount, tag):
+        if not self.game.active:
+            return
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
             await c.set_rp(amount)
 
     async def reset_rp(self, tag):
+        if not self.game.active:
+            return
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
             await c.reset_rp(amount)
         
     async def increase_rp(self, amount, tag):
+        if not self.game.active:
+            return
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
             await c.update_rp(amount)
             
     async def set_activate_cooldown(self, amount, tag):
+        if not self.game.active:
+            return
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
             await c.activate_cooldown(amount)
 
     async def set_attack_cooldown(self, amount, tag):
+        if not self.game.active:
+            return
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
             c.attack_cooldown(amount)
@@ -941,18 +1056,26 @@ class Card:
         self.tags = []
 
     async def add_tag(self,tag):
+        if not self.player.game.active:
+            return
         if tag not in self.tags:
             self.tags.append(tag)
 
     async def remove_tag(self,tag):
+        if not self.player.game.active:
+            return
         if tag in self.tags:
             self.tags.remove(tag)
 
     async def reset_tags(self):
+        if not self.player.game.active:
+            return
         self.tags = []
 
         
     async def load_data(self, cardName):
+        if not self.player.game.active:
+            return
         
         self.data = await self.player.game.cardManager.getCardByName(cardName)
 
@@ -983,6 +1106,8 @@ class PlayCard(Card):
 
     # all functions called by cards must not be async.
     async def set_rp(self, amount):
+        if not self.player.game.active:
+            return
         self.rp = self.parse_rp(amount)
         print('in set_rp, rp is:', self.rp)
         await self.player.game.cardGamePlayer.update_counters(
@@ -993,20 +1118,30 @@ class PlayCard(Card):
             )
 
     async def reset_rp(self):
+        if not self.player.game.active:
+            return
         # TODO: make this work with Roid Rage
         self.rp = self.parse_rp(self.data['cost'])
             
                                                                                              
     async def update_rp(self, amount):
+        if not self.player.game.active:
+            return
         await self.set_rp(self.rp + self.parse_rp(amount))
 
     async def activate_cooldown(self, amount):
+        if not self.player.game.active:
+            return
         print('set activate cooldown for:',amount)
     async def attack_cooldown(self, amount):
+        if not self.player.game.active:
+            return
         print('set attack cooldown for:',amount)                                  
 
 
     async def reset_all(self):
+        if not self.player.game.active:
+            return
         self.hasDefended = False
         self.hasActivated = False
         self.hasAttacked = False

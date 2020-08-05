@@ -13,12 +13,14 @@
 [DONE] recruitment broken?
 [DONE] baby demon broken?
 [DONE] golden claws broken.
+[DONE] make the system to load card data on client better
+[DONE] reset game on disconnect
+[DONE] put try/except in to catch errors
+[IN PROGRESS] winning
 [IN PROGRESS] cost=X system
-attacking broken?
-reset game on disconnect
-winning
 goal cards
 choose number/text system
+attacking broken?
 onPlay system for unit cards
 onAttack system for unit cards
 onKill system for unit cards
@@ -28,4 +30,3 @@ response cards
 implement every response card
 make it so people see buffness of cards
 Go through every card and make the phrasing consistent/better
-make the system to load card data on client better
