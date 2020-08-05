@@ -99,9 +99,11 @@ class CardGamePlayer:
     async def remove_player(self, sid):
         if sid not in self.players:
             return
+        g = self.players[sid]
+        del self.players[sid]
+        
         await self.end_game(self.players[sid], 'A player has disconnected.')
         await self.players[sid].remove_player(sid)
-        del self.players[sid]
         if sid in self.authTokens:
             del self.authTokens[sid]
         if sid in self.getCardsRes:
@@ -902,8 +904,14 @@ class Player:
         """returns the top <count> cards from the specified collection"""
         if count == 0:
             count = len(self.collections[collectionName])
-        for c in filter(lambda x: x is not None,
-                self.collections[collectionName][::-1][:count]):
+        for c in self.collections[collectionName][::-1][:count]:
+            if c is not None:
+                print(c.data['name'])
+            else:
+                print(c)
+        for c in list(filter(lambda x: x is not None,
+                self.collections[collectionName][::-1]))[:count]:
+            print('added tag',tag,'to',c.data['name'])
             await c.add_tag(tag)
 
     async def search_cards_in(self, collectionName, rarity, unitType, tag):
