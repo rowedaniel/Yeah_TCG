@@ -18,6 +18,7 @@
 [DONE] put try/except in to catch errors
 [IN PROGRESS] winning
 [IN PROGRESS] cost=X system
+mill win condition
 goal cards
 choose number/text system
 attacking broken?
