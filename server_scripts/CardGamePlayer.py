@@ -1,6 +1,7 @@
 import random
 import asyncio
 from server_scripts import CardExecutor
+from server_scripts.Cards import *
 
 
 
@@ -97,44 +98,25 @@ class CardGamePlayer:
 
 
     async def remove_player(self, sid):
+        g = await self.remove_player_data(sid)
+        if g is not None:
+            await self.end_game(g, 'A player has disconnected.')
+
+    async def remove_player_data(self, sid):
         if sid not in self.players:
-            return
+            return None 
         g = self.players[sid]
         del self.players[sid]
-        
-        await self.end_game(self.players[sid], 'A player has disconnected.')
-        await self.players[sid].remove_player(sid)
+        await g.remove_player(sid)
         if sid in self.authTokens:
             del self.authTokens[sid]
         if sid in self.getCardsRes:
             del self.getCardsRes[sid]
-
-
-
-        
-##        await asyncio.sleep(1)
-##        self.authTokens[sid] = random.random()
-##        print(self.authTokens[sid])
-##        await self.sio.emit(
-##            'playerGetCards', {'hand':['Breath User Jaycob'],
-##                               'deck':['Call of Hades'],
-##                               'authToken':self.authTokens[sid],},
-##            room=sid)
-##
-##    async def chooseCards(self,sid,data):
-##        print('in chooseCards',data, data['authToken'], self.authTokens[sid])
-##        if not sid in self.authTokens or \
-##           data['authToken'] != self.authTokens[sid]:
-##            return
-##        # TODO: delete the rest of these eventually
-##        del self.authTokens[sid]
-##        del data['authToken']
-##        print(data['order'])
+        return g
 
 
 
 
-    # TODO: actually make this online
     async def get_cards(self, sid, msg, cardgroups):
 
         if sid not in self.players:
@@ -212,9 +194,6 @@ class Game:
         self.waitingPlayers[sid] = deck
 
         if len(self.waitingPlayers) == 2:
-            # TODO: figure out this whole sleep business
-            #await asyncio.sleep(10)
-            
             id1,id2 = self.waitingPlayers.keys()
             deck1 = self.waitingPlayers[id1]
             deck2 = self.waitingPlayers[id2]
@@ -250,6 +229,16 @@ class Game:
         self.turn = random.randint(0,len(self.players)-1)
 
 
+    async def check_goal_cards(self, phase):
+        for pindex in range(len(self.players)):
+            p = self.players[pindex]
+            o = self.players[(pindex+1)%2]
+            if await p.check_goal_cards(phase, o):
+                self.active = False
+                await self.cardGamePlayer.end_game(self,
+                                            'Goal Card Satisfied! Game Over!')
+                return
+
 
     async def switch_turn(self):
         if not self.active:
@@ -262,13 +251,18 @@ class Game:
     async def defense_phase(self):
         if not self.active:
             return
-        
         self.inDefensePhase = True
+        
         print('\n\ndefense phase for player', self.turn,'\n')
 
         # shortcut
         p = self.players[self.turn]
         o = self.players[(self.turn+1)%2]
+
+
+        # update goal cards
+        await self.check_goal_cards(0)
+        
 
         
         
@@ -324,6 +318,11 @@ class Game:
         # TODO: rename this function. It doesn't make sense
         await p.end_defense_phase()
         await o.end_defense_phase()
+
+
+        # update goal cards
+        await self.check_goal_cards(1)
+
         
         self.inDefensePhase = False
 
@@ -334,6 +333,13 @@ class Game:
         if not self.active:
             return
         self.inPlayPhase = True
+
+
+        
+        # update goal cards
+        await self.check_goal_cards(2)
+
+        
         
         # TODO: implement sacrifice to play cards
         
@@ -404,7 +410,25 @@ class Game:
                     break
 
 
+
+
         await p.end_play_phase()
+
+
+        
+        # TODO: put this in it's own function
+        for p in self.players:
+            if len(p.deck) == 0:
+                # mill!
+                self.active = False                
+                await self.cardGamePlayer.end_game(self,
+                                    'Out of cards in deck! Game Over!')
+                return
+
+                
+        
+        # update goal cards
+        await self.check_goal_cards(3)
         
         self.inPlayPhase = False
 
@@ -415,6 +439,15 @@ class Game:
         if not self.active:
             return
         self.inAttackPhase = True
+
+
+
+        
+        # update goal cards
+        await self.check_goal_cards(4)
+        
+
+        
         print('\n\n\nattack phase for player', self.turn,'\n')
 
         # shortcut
@@ -457,6 +490,14 @@ class Game:
                           'update card order\n')
                     break
 
+
+
+        
+        # update goal cards
+        await self.check_goal_cards(5)
+
+        
+
         self.inAttackPhase = False
             
 
@@ -483,15 +524,15 @@ class Game:
 
 
     async def run_until_finished(self):
-        try:
-            while self.active:
-                await self.run_turn()
-        except:
-            print('there was an error :(')
+##        try:
+        while self.active:
+            await self.run_turn()
+##        except:
+##            print('there was an error :(')
         
         while len(self.players) > 0:
             p = self.players[0]
-            await self.cardGamePlayer.remove_player(p.socketId)
+            await self.cardGamePlayer.remove_player_data(p.socketId)
             if p in self.players:
                 await self.remove_player(p)
             self.players.pop(0)
@@ -624,7 +665,8 @@ class Player:
     async def add_cards_to(self, collectionName, cards):
         if not self.game.active:
             return
-        print('in add_cards_to, cards:',cards)
+        print('in add_cards_to, collectionName:',collectionName,
+              'cards:',cards)
         await self.game.cardGamePlayer.update_collection(self.game,
                                                     self.socketId,
                                                     collectionName,
@@ -648,7 +690,10 @@ class Player:
             for cardIndex in range(len(cards)):
                 card = PlayCard(self, cards.pop(0))
                 self.collections[collectionName].append(card)
-
+        elif collectionName == 'activeGoals':
+            for cardIndex in range(len(cards)):
+                card = await make_goal_card(self, cards.pop(0))
+                self.collections[collectionName].append(card)
         else:
             for c in range(len(cards)):
                 newc = NotPlayCard(self, cards.pop(0))
@@ -719,13 +764,13 @@ class Player:
 
             if c.rp <= 0:
                 print(c.data['name'], 'was destroyed')
-##                self.tempPlay.append(c)
+                await a.add_kill(c)
                 await self.add_cards_to('discard',[c])
                 self.play[i] = None
 
             if a.rp <= 0:
                 print(a.data['name'], 'was destroyed')
-##                opponent.tempPlay.append(a)
+                await c.add_defense(a)
                 await opponent.add_cards_to('discard',[a])
                 print(len(opponent.play))
                 opponent.play[opponent.play.index(a)] = None
@@ -740,6 +785,7 @@ class Player:
         if len(self.attackers) > 0:
             a = self.attackers.pop(0)
             print('took',a.rp,'from',a.data['name'])
+            await a.add_attack()
             await self.update_health(-a.rp)
             return True
         return False
@@ -764,7 +810,10 @@ class Player:
             return True
         return False
 
-
+    async def check_goal_cards(self, phase, opponent):
+        return any([await c.check(phase, opponent) \
+                    for c in filter(lambda x: x is not None,
+                                    self.activeGoals)])
 
     async def remove_none(self):
         if not self.game.active:
@@ -815,7 +864,11 @@ class Player:
     async def deal_goal_cards(self, count):
         if not self.game.active:
             return
+        print(self.goals[0].data)
         cards = await self.pull_cards_from('goals', count)
+        print(cards)
+        print([c.data for c in cards])
+        print([c.data['name'] for c in cards])
         await self.add_cards_to('activeGoals', cards)
 
 
@@ -829,8 +882,6 @@ class Player:
         c = self.hand[i]
         print('\nplaying', c.data['name'])
         
-##        c = PlayCard(self)
-##        await c.load_data(cardName)
 
 
         # breath managment
@@ -842,20 +893,13 @@ class Player:
         
         await self.update_breath(-rp)
 
-        # TODO:  remove from hand
         self.hand[i] = None
 
-        # TODO: improve this system
-        # [have unit in name for unit]
-        # [have action in the name for action]
-        # [have reponse in the name for response]
-        # TODO: convert from cardName to card
         if 'action' in c.data['cardType']:
             # it's an action card
             await CardExecutor.execute_card_action(c, i, self, opponent)
             await self.add_cards_to('discard',[c])
-##            self.tempPlay.append(c)
-##            print('added',c.data['name'],'to tempPlay.')
+
             del c
             return True
 
@@ -1055,104 +1099,3 @@ class Player:
 
 
         
-class Card:
-    __slots__ = ('player', 'data', 'tags')
-
-    
-    def __init__(self, player):
-        self.player = player
-        self.tags = []
-
-    async def add_tag(self,tag):
-        if not self.player.game.active:
-            return
-        if tag not in self.tags:
-            self.tags.append(tag)
-
-    async def remove_tag(self,tag):
-        if not self.player.game.active:
-            return
-        if tag in self.tags:
-            self.tags.remove(tag)
-
-    async def reset_tags(self):
-        if not self.player.game.active:
-            return
-        self.tags = []
-
-        
-    async def load_data(self, cardName):
-        if not self.player.game.active:
-            return
-        
-        self.data = await self.player.game.cardManager.getCardByName(cardName)
-
-
-class NotPlayCard(Card):
-    def __init__(self, player, card):
-        super().__init__(player)
-        self.data = card.data
-
-
-class PlayCard(Card):
-    __slots__ = ('rp',
-                 'hasDefended', 'hasActivated', 'hasAttacked')
-    def __init__(self, player, card):
-        super().__init__(player)
-        self.data = card.data
-        # TODO: make this work with Roid Rage
-        self.rp = self.parse_rp(self.data['cost'])
-
-        
-        self.hasDefended = False
-        self.hasActivated = True # can't activate on first turn played
-        self.hasAttacked = False
-
-
-    def parse_rp(self, coststr):
-        return int(coststr)
-
-    # all functions called by cards must not be async.
-    async def set_rp(self, amount):
-        if not self.player.game.active:
-            return
-        self.rp = self.parse_rp(amount)
-        print('in set_rp, rp is:', self.rp)
-        await self.player.game.cardGamePlayer.update_counters(
-            self.player.game,
-            self.player.socketId,
-            'rp',
-            [self.player.play.index(self), self.rp]
-            )
-
-    async def reset_rp(self):
-        if not self.player.game.active:
-            return
-        # TODO: make this work with Roid Rage
-        self.rp = self.parse_rp(self.data['cost'])
-            
-                                                                                             
-    async def update_rp(self, amount):
-        if not self.player.game.active:
-            return
-        await self.set_rp(self.rp + self.parse_rp(amount))
-
-    async def activate_cooldown(self, amount):
-        if not self.player.game.active:
-            return
-        print('set activate cooldown for:',amount)
-    async def attack_cooldown(self, amount):
-        if not self.player.game.active:
-            return
-        print('set attack cooldown for:',amount)                                  
-
-
-    async def reset_all(self):
-        if not self.player.game.active:
-            return
-        self.hasDefended = False
-        self.hasActivated = False
-        self.hasAttacked = False
-
-
-    

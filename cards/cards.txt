@@ -192,54 +192,63 @@
         "name": "Dance of Metal",
         "cost": "",
         "img": "",
-        "move": "Goal: summon a legendary swordsman card, and equip Excalibur.",
+        "move": "End your turn with a legendary swordsman in play with +15 RP.",
         "txtcolor": "",
-        "cardType": "goal card fullart",
+        "cardType": "goal fullart",
         "cardAction": ""
     },
     {
-        "name": "Sir Lancelot ",
-        "cost": "8",
-        "img": "",
-        "move": "The King's Personal Protector. He is the 2nd strongest Swordsman. When you play this card, search your deck for 2 common swordsman cards, and special play them. Shuffle your deck after.",
-        "txtcolor": "",
-        "cardType": "rare swordsman unit fullart",
-        "cardAction": ""
-    },
-    {
-        "name": "Achilles the mythical Swordsman ",
-        "cost": "7",
-        "img": "",
-        "move": "The strongest swordsman in the kingdom. This card gains +5 RP when you play it.",
-        "txtcolor": "",
-        "cardType": "rare swordsman unit fullart",
-        "cardAction": ""
-    },
-    {
-        "name": "Overwhelming Attack",
+        "name": "Flesh of the King",
         "cost": "",
         "img": "",
-        "move": "Goal: Attack with a combined total of 25 RP in a turn.",
+        "move": "End your turn with a legendary demon in play with +10 RP.",
         "txtcolor": "",
-        "cardType": "goal card fullart",
+        "cardType": "goal fullart",
+        "cardAction": ""
+    },
+	{
+        "name": "Smokeless Lungs",
+        "cost": "",
+        "img": "",
+        "move": "End your turn with 20 breath.",
+        "txtcolor": "",
+        "cardType": "goal fullart",
+        "cardAction": ""
+    },
+	{
+        "name": "Power of a Homeowner",
+        "cost": "",
+        "img": "",
+        "move": "End your defense phase after defending from a combined total of 25 RP or more without taking any damage.",
+        "txtcolor": "",
+        "cardType": "goal fullart",
         "cardAction": ""
     },
     {
-        "name": "Overwhelming Defense",
+        "name": "Pretty Good Attack",
         "cost": "",
         "img": "",
-        "move": "Goal: Have combined total of 40 RP at the end of your turn.",
+        "move": "End your attack phase, attacking with combined total of 25 RP or more in a turn.",
         "txtcolor": "",
-        "cardType": "goal card fullart",
+        "cardType": "goal fullart",
         "cardAction": ""
     },
     {
-        "name": "Overwhelming Numbers",
+        "name": "Not Too Bad Strength",
         "cost": "",
         "img": "",
-        "move": "Goal: End your turn with 9 unit cards in play.",
+        "move": "End your turn with a combined total of 28 or more RP in play.",
         "txtcolor": "",
-        "cardType": "goal card fullart",
+        "cardType": "goal fullart",
+        "cardAction": ""
+    },
+    {
+        "name": "The March of the Fairyfly",
+        "cost": "",
+        "img": "",
+        "move": "End your turn with 8 or more unit cards with 5 RP or less in play.",
+        "txtcolor": "",
+        "cardType": "goal fullart",
         "cardAction": ""
     },
     {
@@ -267,6 +276,25 @@
         "move": "The King of all the Swordsmen. Loved by his subjects, and hated by his enemies. When you play this card, search your deck for up to 3 common or rare swordsman cards, and special play them. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "legendary swordsman unit fullart",
+        "cardAction": ""
+    },
+	
+    {
+        "name": "Sir Lancelot ",
+        "cost": "8",
+        "img": "",
+        "move": "The King's Personal Protector. He is the 2nd strongest Swordsman. When you play this card, search your deck for 2 common swordsman cards, and special play them. Shuffle your deck after.",
+        "txtcolor": "",
+        "cardType": "rare swordsman unit fullart",
+        "cardAction": ""
+    },
+    {
+        "name": "Achilles the mythical Swordsman ",
+        "cost": "7",
+        "img": "",
+        "move": "The strongest swordsman in the kingdom. This card gains +5 RP when you play it.",
+        "txtcolor": "",
+        "cardType": "rare swordsman unit fullart",
         "cardAction": ""
     },
     {

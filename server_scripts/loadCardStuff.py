@@ -10,6 +10,7 @@ def saveCards(cards):
         f.write(json.dumps(cards, indent=4))
 
 def loadDecks():
+    # TODO: check deck to make sure it works.
     decks = {'k':{ 'deck': ['Dragon King Hades',
                             'Dragon King Hades', 
                             'Dragon King Hades', 
@@ -60,9 +61,9 @@ def loadDecks():
                             'Call of Hades',
                             'Call of Hades',
                             'Lucifer the Demon King'], 
-                  'goals': ['Overwhelming Attack',
-                            'Overwhelming Numbers',
-                            'Overwhelming Defense']},
+                      'goals': ['The March of the Fairyfly',
+                                'Power of a Homeowner',
+                                'Pretty Good Attack']},
              
              'hello':{'deck': ['Call of Hades',
                                "Hero's Chant",
@@ -85,9 +86,9 @@ def loadDecks():
                                'Golden Claws',
                                'Golden Claws',
                                'Golden Claws'],
-                      'goals': ['Overwhelming Numbers',
-                                'Overwhelming Defense',
-                                'Overwhelming Attack']},
+                      'goals': ['The March of the Fairyfly',
+                                'Power of a Homeowner',
+                                'Pretty Good Attack']},
              'virginia':{'deck': ['Sharpen Swords',
                                   'Sharpen Swords',
                                   'Sharpen Swords',
@@ -133,10 +134,10 @@ def loadDecks():
                                   'Swords Man',
                                   'Swords Man'],
                          'goals': ['Dance of Metal',
-                                   'Overwhelming Numbers',
-                                   'Overwhelming Attack']},
+                                   'Power of a Homeowner',
+                                   'Pretty Good Attack']},
              'dame dame':{'deck': ['Baseball Lad', 'Baseball Lad', 'Baseball Lad', 'Breath User Jaycob', 'Breath User Jaycob', 'Breath User Jaycob', 'Excalibur', 'Excalibur', 'Excalibur', 'King Arthur', 'King Arthur', 'King Arthur', 'Skinny Jaycob', 'Skinny Jaycob', 'Skinny Jaycob', "Jaycob's inner demon", "Jaycob's inner demon", "Jaycob's inner demon", 'Sir Lancelot ', 'Achilles the mythical Swordsman ', 'Sharpen Swords', 'Sharpen Swords', 'Sharpen Swords', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis'],
-                          'goals': ['Overwhelming Numbers', 'Overwhelming Attack', 'Dance of Metal']
+                          'goals': ['The March of the Fairyfly', 'Pretty Good Attack', 'Dance of Metal']
                           },
              }
     return decks

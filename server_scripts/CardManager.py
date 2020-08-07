@@ -3,6 +3,7 @@ from server_scripts import loadCardStuff
 class CardManager:
     def __init__(self,sio):
         self.cards = loadCardStuff.loadCards()
+        # TODO: check deck to make sure it works.
         self.decks = loadCardStuff.loadDecks()
 
 
@@ -71,6 +72,7 @@ class CardManager:
 
     async def clientAddDeck(self,sid,data):
         print(data)
+        # TODO: check deck to make sure it works.
         self.decks[data['name']] = {}
         self.decks[data['name']]['deck'] = data['deck']
         self.decks[data['name']]['goals'] = data['goals']
