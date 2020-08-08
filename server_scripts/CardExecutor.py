@@ -12,7 +12,9 @@ conditionalCommands = (
                       'randomChance',
                       'collectionHasCards',
                  )
-
+OnStr = ('onPlay',
+         'onAttack',
+         'onKill')
 
 cmdTable = {
     'increaseBreath':(
@@ -157,7 +159,7 @@ cmdTable = {
                 3,
                 (lambda x: x in ('me','you'),
                 lambda x,y: y+'.'+x),
-                (lambda x: x in [str(i) for i in range(1,40)],
+                (lambda x: x in [str(i) for i in range(-1,40)],
                 lambda x,y: x+y+','),
                 (lambda x: x in tags,
                 lambda x,y: x+y+')'),
@@ -168,7 +170,7 @@ cmdTable = {
                 3,
                 (lambda x: x in ('me','you'),
                 lambda x,y: y+'.'+x),
-                (lambda x: x in [str(i) for i in range(1,40)],
+                (lambda x: x in [str(i) for i in range(-1,40)],
                 lambda x,y: x+y+','),
                 (lambda x: x in tags,
                 lambda x,y: x+y+')'),
@@ -259,7 +261,7 @@ async def get_unit_card_special(card):
                 return []
     return out
 
-async def execute_card_action(card, index, me, you):
+async def execute_card_action(card, me, you):
     c = card.data['cardAction'].rstrip().split(' ')
     i = 0
     cmdStr = ''
@@ -290,6 +292,9 @@ async def execute_card_action(card, index, me, you):
             cmdStr = cmdTable[currentCommand][currentArgIndex+2][1](
                 cmdStr,c[i])
             currentArgIndex += 1
+        elif c[i] in OnStr:
+            # not the right time to do it
+            skipCommand = True
         # error
         else:
             cmdStr = ''
@@ -302,6 +307,68 @@ async def execute_card_action(card, index, me, you):
            currentArgIndex >= cmdTable[currentCommand][1]:
             if skipCommand:
                 skipCommand = False
+                print('skip')
+            elif currentCommand in conditionalCommands:
+                skipCommands = await eval(cmdStr)
+                print('waiting to skip')
+            else:
+                print('running command:',cmdStr)
+                await eval(cmdStr)
+            cmdStr = ''
+            currentCommand = ''
+            currentArgIndex = 0
+        i += 1
+
+
+
+
+
+async def execute_card_action_on(card, me, you, onStrIndex):
+    c = card.data['cardAction'].rstrip().split(' ')
+    i = 0
+    cmdStr = ''
+    currentCommand = ''
+    skipCommand = True
+    currentArgIndex = 0
+    onStr = OnStr[onStrIndex]
+
+
+    await me.remove_card_tags()
+    await you.remove_card_tags()
+    if any([len(c.tags)>0 for c in me.play]):
+        print('tags not reset!!')
+
+    
+    while i < len(c):
+
+        print('new arg/command:', c[i])
+        # commands
+        if c[i] in cmdTable:
+            currentCommand = c[i]
+            cmdStr = cmdTable[c[i]][0]
+        # args
+        elif len(currentCommand) > 0 and \
+           currentCommand in cmdTable and \
+           currentArgIndex < cmdTable[currentCommand][1] and \
+           cmdTable[currentCommand][currentArgIndex+2][0](c[i]):
+
+            cmdStr = cmdTable[currentCommand][currentArgIndex+2][1](
+                cmdStr,c[i])
+            currentArgIndex += 1
+        elif c[i] == onStr:
+            skipCommand = False
+        # error
+        else:
+            cmdStr = ''
+            currentCommand = ''
+            currentArgIndex = 0
+            print('failed command!')
+
+        if len(currentCommand) > 0 and \
+           currentCommand in cmdTable and \
+           currentArgIndex >= cmdTable[currentCommand][1]:
+            if skipCommand:
+                pass
                 print('skip')
             elif currentCommand in conditionalCommands:
                 skipCommands = await eval(cmdStr)

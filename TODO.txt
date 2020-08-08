@@ -17,15 +17,15 @@
 [DONE] reset game on disconnect
 [DONE] put try/except in to catch errors
 [DONE] goal cards
-[IN PROGRESS] winning
+[DONE] mill win condition
+[DONE] winning
+[DONE] onPlay system for unit cards
+[DONE] onAttack system for unit cards
+[DONE] onKill system for unit cards
 [IN PROGRESS] cost=X system
-mill win condition
 make a seperate section on client for cards opponent played
 choose number/text system
 attacking broken?
-onPlay system for unit cards
-onAttack system for unit cards
-onKill system for unit cards
 implement every card unit/action card
 sacrifice to play system
 response cards

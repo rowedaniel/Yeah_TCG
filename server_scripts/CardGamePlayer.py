@@ -764,13 +764,17 @@ class Player:
 
             if c.rp <= 0:
                 print(c.data['name'], 'was destroyed')
-                await a.add_kill(c)
+                await a.add_kill(c.data)
+                await CardExecutor.execute_card_action_on(a,
+                                                          self,
+                                                          opponent,
+                                                          2)
                 await self.add_cards_to('discard',[c])
                 self.play[i] = None
 
             if a.rp <= 0:
                 print(a.data['name'], 'was destroyed')
-                await c.add_defense(a)
+                await c.add_defense(a.data)
                 await opponent.add_cards_to('discard',[a])
                 print(len(opponent.play))
                 opponent.play[opponent.play.index(a)] = None
@@ -795,7 +799,7 @@ class Player:
             return
         if i < len(self.play):
             c = self.play[i]
-            await CardExecutor.execute_card_action(c, i, self, opponent)
+            await CardExecutor.execute_card_action(c, self, opponent)
             c.hasActivated = True
             return True
         return False
@@ -806,6 +810,10 @@ class Player:
         if i < len(self.play):
             c = self.play[i]
             opponent.attackers.append(c)
+            await CardExecutor.execute_card_action_on(c,
+                                                      self,
+                                                      opponent,
+                                                      1)
             c.hasAttacked = True
             return True
         return False
@@ -897,14 +905,20 @@ class Player:
 
         if 'action' in c.data['cardType']:
             # it's an action card
-            await CardExecutor.execute_card_action(c, i, self, opponent)
+            await CardExecutor.execute_card_action(c, self, opponent)
             await self.add_cards_to('discard',[c])
 
             del c
             return True
 
         elif 'unit' in c.data['cardType']:
+            # onPlay stuff
             await self.add_cards_to('play',[c])
+            await CardExecutor.execute_card_action_on(self.play[-1],
+                                                      self,
+                                                      opponent,
+                                                      0)
+            
             return True
         elif 'response' in c.data['cardType']:
             return True
@@ -1091,7 +1105,7 @@ class Player:
             return
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
-            c.attack_cooldown(amount)
+            await c.attack_cooldown(amount)
         
 
 
