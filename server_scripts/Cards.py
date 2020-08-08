@@ -213,8 +213,8 @@ class PowerOfAHomeowner(GoalCard):
         print('before_defense',self.prevHp,self.attackingRP)
         return False
     async def after_defense(self, opponent):
-        print(self.attackingRP, self.player.hp, self.prevHp)
-        return self.attackingRP >= 25 and self.player.hp == self.prevHp
+        print(self.attackingRP, self.player.health, self.prevHp)
+        return self.attackingRP >= 25 and self.player.health == self.prevHp
 class PrettyGoodAttack(GoalCard):
     async def after_attack(self, opponent):
         print(sum([a.rp for a in opponent.attackers]))

@@ -764,17 +764,17 @@ class Player:
 
             if c.rp <= 0:
                 print(c.data['name'], 'was destroyed')
-                await a.add_kill(c.data)
+                await a.add_kill(c)
                 await CardExecutor.execute_card_action_on(a,
-                                                          self,
                                                           opponent,
+                                                          self,
                                                           2)
                 await self.add_cards_to('discard',[c])
                 self.play[i] = None
 
             if a.rp <= 0:
                 print(a.data['name'], 'was destroyed')
-                await c.add_defense(a.data)
+                await c.add_defense(a)
                 await opponent.add_cards_to('discard',[a])
                 print(len(opponent.play))
                 opponent.play[opponent.play.index(a)] = None

@@ -159,7 +159,7 @@
         "move": "One of the most popular heros in the kingdom. After 2 turns, this card gains +1 RP each turn.",
         "txtcolor": "",
         "cardType": "rare swordsman unit",
-        "cardAction": ""
+        "cardAction": "onPlay this 0 onPlay activateCooldown me 2 0 this 0 increaseRP me 1 0"
     },
     {
         "name": "Breath User Jaycob",
@@ -258,7 +258,7 @@
         "move": "The lord of the... what did he do again? Not sure. This card gains +4 RP when you play it.",
         "txtcolor": "",
         "cardType": "rare demon unit fullart",
-        "cardAction": ""
+        "cardAction": "onPlay this 0 onPlay increaseRP me 4 0"
     },
     {
         "name": "Lucifer the Demon King",
@@ -276,7 +276,7 @@
         "move": "The King of all the Swordsmen. Loved by his subjects, and hated by his enemies. When you play this card, search your deck for up to 3 common or rare swordsman cards, and special play them. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "legendary swordsman unit fullart",
-        "cardAction": ""
+        "cardAction": "onPlay searchCollection me deck common swordsman 0 onPlay searchCollection me deck rare swordsman 0 onPlay choose me me deck 3 0 1 onPlay moveCards me deck play 1"
     },
 	
     {
@@ -286,7 +286,7 @@
         "move": "The King's Personal Protector. He is the 2nd strongest Swordsman. When you play this card, search your deck for 2 common swordsman cards, and special play them. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "rare swordsman unit fullart",
-        "cardAction": ""
+        "cardAction": "onPlay searchCollection me deck common swordsman 0 onPlay choose me me deck 2 0 1 onPlay moveCards me deck play 1"
     },
     {
         "name": "Achilles the mythical Swordsman ",
@@ -295,7 +295,7 @@
         "move": "The strongest swordsman in the kingdom. This card gains +5 RP when you play it.",
         "txtcolor": "",
         "cardType": "rare swordsman unit fullart",
-        "cardAction": ""
+        "cardAction": "onPlay this 0 onPlay increaseRP me 5 0"
     },
     {
         "name": "Sweaty Homunculus",
@@ -319,10 +319,10 @@
         "name": "Jack the Ripper",
         "cost": "7",
         "img": "",
-        "move": "His hunger for power is becoming known to more and more people. Gain +1 RP whenever this card destroy an opponent's card.",
+        "move": "His hunger for power is becoming known to more and more people. Gain +4 RP whenever this card destroy an opponent's card.",
         "txtcolor": "",
         "cardType": "rare demon unit",
-        "cardAction": ""
+        "cardAction": "onKill this 0 onKill increaseRP me 4 0"
     },
     {
         "name": "Flesh Blade",
@@ -502,7 +502,7 @@
         "move": "A man who spent his life studying the art of the sword. This card gains +2 RP when you play it.",
         "txtcolor": "",
         "cardType": "common swordsman unit",
-        "cardAction": ""
+        "cardAction": "onPlay this 0 onPlay increaseRP me 2 0"
     },
     {
         "name": "Swordsman's Final Shot",
