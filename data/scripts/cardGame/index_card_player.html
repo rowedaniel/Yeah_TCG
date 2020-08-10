@@ -44,7 +44,7 @@ button:hover {
 /* Control Div Stuff */
 
 
-div#control {
+div.control {
 	position: static;
 	margin-top: 8vh;
 	margin-left: 8vw;
@@ -52,7 +52,7 @@ div#control {
 	transition: all 0.2s;
 }
 
-div#control div.subControl {
+div.control div.subControl {
 	position: static;
 	width: 100%;
 	
@@ -62,7 +62,7 @@ div#control div.subControl {
 	
 }
 
-div#control p.label{
+div.control p.label{
 	position: absolute;
 	float: left;
 	margin-top: 8vh;
@@ -85,6 +85,10 @@ div#control p.label{
    -moz-user-select: none; /* Firefox */
    -ms-user-select: none; /* Internet Explorer/Edge */
    
+}
+
+div#opponentCards {
+	display:none;
 }
 
 
@@ -127,6 +131,12 @@ button#submitButton {
 	bottom: 8vh;
 	right: 8vw;
 	transition: all 0.2s;
+}
+
+button#hideOpponentCardButton {
+	position: fixed;
+	bottom: 8vh;
+	left: 16vw;
 }
 
 
@@ -405,7 +415,6 @@ button#hideControlButton {
 	position: fixed;
 	bottom: 8vh;
 	left: 8vw;
-	
 }
 
 
@@ -553,7 +562,9 @@ button#hideControlButton {
 		
 		<div id="mainControlDiv">
 			<div id="controlText"></div>
-			<div id="control"></div>
+			<div id="control" class="control"></div>
+			<div id="opponentCards" class="control"></div>
+			<button id="hideOpponentCardButton" class="uninteractable" onclick="cycleControl();return false;">Hide Opponent Cards</button>
 			<button id="submitButton" class="uninteractable" onclick="resGetCards();return false;">submit</button>
 		</div>
 		
@@ -657,11 +668,12 @@ button#hideControlButton {
 			controlTextDiv.appendChild(p);
 			
 			controlSubmitButton.classList.remove("uninteractable");
+			hideOpponentCardButton.classList.remove("uninteractable");
 			
 			
 			
 			for(let name in data) {
-				makeNewControlArea(name);
+				makeNewControlArea(name, controlDiv, control, controlNames);
 			}
 			for(let i=0; i<controlNames.length; ++i) {
 				for(let cindex=0; cindex < data[controlNames[i]].length; ++cindex) {
@@ -749,12 +761,12 @@ button#hideControlButton {
 		
 		function dispCards(data) {
 			console.log('in dispCards', data);
-			authToken = -1;
 			
-			clearMainDisplay();
 			
-			for(let cindex=0; cindex < data['cards'].length; ++cindex) {
-				dispCard(data['cards'][cindex], "");
+			
+			makeNewControlArea(data.msg, opponentCardDiv, opponentCards, opponentCardNames);
+			for(let cindex=0; cindex<data.cards.length; ++cindex) {
+				dispOpponentCard(data.cards[cindex], cindex, opponentCards.length-1);
 			}
 		}
 
@@ -768,12 +780,16 @@ button#hideControlButton {
 		cards = {};
 		const control = [];
 		const controlNames = [];
+		const opponentCards = [];
+		const opponentCardNames = [];
 		let authToken = 0;
 		let messageId = 0;
 		
 		const controlDiv = document.getElementById("control");
+		const opponentCardDiv = document.getElementById("opponentCards");
 		const controlTextDiv = document.getElementById("controlText");
 		const controlSubmitButton = document.getElementById("submitButton");
+		const hideOpponentCardButton = document.getElementById("hideOpponentCardButton");
 		
 		
 		const mainDisplayDiv = document.getElementById('mainDisplayDiv');
@@ -805,8 +821,7 @@ button#hideControlButton {
 		
 		
 		
-		
-		function makeNewControlArea(name) {
+		function makeNewControlArea(name, div, controls, names) {
 			const newArea = document.createElement('div');
 			newArea.classList.add('subControl');
 			//newArea.innerHTML = name;
@@ -819,16 +834,18 @@ button#hideControlButton {
 			
 			newArea.appendChild(p);
 			
-			controlDiv.appendChild(newArea);
-			control.push(newArea);
-			controlNames.push(name);
+			div.appendChild(newArea);
+			controls.push(newArea);
+			names.push(name);
 			
 			
 			
-			for(let area of control) {
-				area.style.height = (70/control.length)+"vh";
+			for(let area of controls) {
+				area.style.height = (70/controls.length)+"vh";
+				area.firstChild.style.fontSize = (16/controls.length)+"vh";
 			}
 		}
+	
 		
 		function clearControl() {
 			for(let area of control) {
@@ -842,11 +859,17 @@ button#hideControlButton {
 			selected.splice(0,selected.length);
 			
 			controlSubmitButton.classList.add('uninteractable');
+			hideOpponentCardButton.classList.add('uninteractable');
 		}
 		
 		function dispControlCard(cardName, i, section) {
 			const c = new GameCard(cardName, i, controlNames[section]);
 			c.addTo(control[section]);
+		}
+		
+		function dispOpponentCard(cardName, i, section) {
+			const c = new BGCard(cardName);
+			c.addTo(opponentCards[section]);
 		}
 	
 		
@@ -933,17 +956,29 @@ button#hideControlButton {
 			clearControl();
 		}
 		
+		function cycleControl(button) {
+			if(opponentCardDiv.style.display === "none") {
+				opponentCardDiv.style.display = "block";
+				controlDiv.style.display = "none";
+			} else {
+				opponentCardDiv.style.display = "none";
+				controlDiv.style.display = "block";
+			}
+		}
+		
 		function toggleControl(button) {
 			console.log(button);
-			if(controlDiv.classList.contains("uninteractable")) {
+			if(controlDiv.classList.contains('uninteractable')) {
 				controlDiv.classList.remove('uninteractable');
 				controlTextDiv.classList.remove('uninteractable');
 				controlSubmitButton.classList.remove('uninteractable');
+				hideOpponentCardButton.classList.remove('uninteractable');
 				button.innerHTML = 'hide control';
 			} else {
 				controlDiv.classList.add('uninteractable');
 				controlTextDiv.classList.add('uninteractable');
 				controlSubmitButton.classList.add('uninteractable');
+				hideOpponentCardButton.classList.add('uninteractable');
 				button.innerHTML = 'show control';
 			}
 			

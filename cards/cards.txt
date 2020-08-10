@@ -78,7 +78,7 @@
         "move": "Discard 3 cards from your hand. Search your deck for 3 common swordsman cards and special play them.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me hand 0 0 checkCardsTag me hand 3 0 searchCollection me deck rare swordsman 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 3 0 1 moveCards me deck play 1"
+        "cardAction": "spyCollection me hand 0 0 checkCardsTag me hand 3 0 searchCollection me deck common swordsman 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 3 0 1 moveCards me deck play 1"
     },
     {
         "name": "Ouija Board",

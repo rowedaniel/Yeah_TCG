@@ -22,16 +22,19 @@
 [DONE] onPlay system for unit cards
 [DONE] onAttack system for unit cards
 [DONE] onKill system for unit cards
+[IN PROGRESS] make a seperate section on client for cards opponent played
 [IN PROGRESS] cost=X system
-make a seperate section on client for cards opponent played
+No attack = no defense?
 choose number/text system
 attacking broken?
 implement every card unit/action card
 sacrifice to play system
 response cards
 implement every response card
+make safari work (scrollbars??)
 make it so people see buffness of cards
 Go through every card and make the phrasing consistent/better
+Make it so when building deck, you can't have more than 1 legendary/3 goal cards/more than one of the same goal card
 Implement card with the Charlemagne-Jackson image
 Implement card with name 'involuntary flex'
 Implement goal card which makes it so if you win, you lose and vice versa
