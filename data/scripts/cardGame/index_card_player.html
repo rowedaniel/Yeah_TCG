@@ -554,8 +554,8 @@ button#hideControlButton {
 			<div class="top topbar" id="opponent5"></div>
 			<div class="topMid midbar" id="opponent6"></div>
 			<div id="counterDivs">
-				<div class="midLeft counterDiv"><p id="playerHealth">Health: 40</p><p id="playerBreath">Breath: 3</p></div>
-				<div class="midRight counterDiv"><p id="opponentHealth">Health: 40</p><p id="opponentBreath">Breath: 3</p></div>
+				<div class="midLeft counterDiv"><p id="playerHealth">health: 40</p><p id="playerBreath">breath: 3</p></div>
+				<div class="midRight counterDiv"><p id="opponentHealth">health: 40</p><p id="opponentBreath">breath: 3</p></div>
 			</div>
 		</div>
 		
@@ -564,7 +564,7 @@ button#hideControlButton {
 			<div id="controlText"></div>
 			<div id="control" class="control"></div>
 			<div id="opponentCards" class="control"></div>
-			<button id="hideOpponentCardButton" class="uninteractable" onclick="cycleControl();return false;">Hide Opponent Cards</button>
+			<button id="hideOpponentCardButton" class="uninteractable" onclick="cycleControl();return false;">show opponent cards</button>
 			<button id="submitButton" class="uninteractable" onclick="resGetCards();return false;">submit</button>
 		</div>
 		
@@ -675,6 +675,10 @@ button#hideControlButton {
 			for(let name in data) {
 				makeNewControlArea(name, controlDiv, control, controlNames);
 			}
+			for(let area of control) {
+				area.style.height = (70/control.length)+"vh";
+				area.firstChild.style.fontSize = (16/control.length)+"vh";
+			}
 			for(let i=0; i<controlNames.length; ++i) {
 				for(let cindex=0; cindex < data[controlNames[i]].length; ++cindex) {
 					console.log(data[controlNames[i]][cindex], cindex, i);
@@ -765,6 +769,8 @@ button#hideControlButton {
 			
 			
 			makeNewControlArea(data.msg, opponentCardDiv, opponentCards, opponentCardNames);
+			opponentCards[opponentCards.length-1].style.height = 35+"vh";
+			opponentCards[opponentCards.length-1].firstChild.style.fontSize = 8+"vh";
 			for(let cindex=0; cindex<data.cards.length; ++cindex) {
 				dispOpponentCard(data.cards[cindex], cindex, opponentCards.length-1);
 			}
@@ -840,10 +846,7 @@ button#hideControlButton {
 			
 			
 			
-			for(let area of controls) {
-				area.style.height = (70/controls.length)+"vh";
-				area.firstChild.style.fontSize = (16/controls.length)+"vh";
-			}
+			
 		}
 	
 		
@@ -957,12 +960,14 @@ button#hideControlButton {
 		}
 		
 		function cycleControl(button) {
-			if(opponentCardDiv.style.display === "none") {
-				opponentCardDiv.style.display = "block";
-				controlDiv.style.display = "none";
-			} else {
+			if(opponentCardDiv.style.display === "block") {
 				opponentCardDiv.style.display = "none";
 				controlDiv.style.display = "block";
+				hideOpponentCardButton.innerHTML = "show opponent cards";
+			} else {
+				opponentCardDiv.style.display = "block";
+				controlDiv.style.display = "none";
+				hideOpponentCardButton.innerHTML = "hide opponent cards";
 			}
 		}
 		
@@ -973,12 +978,14 @@ button#hideControlButton {
 				controlTextDiv.classList.remove('uninteractable');
 				controlSubmitButton.classList.remove('uninteractable');
 				hideOpponentCardButton.classList.remove('uninteractable');
+				opponentCardDiv.classList.remove('uninteractable');
 				button.innerHTML = 'hide control';
 			} else {
 				controlDiv.classList.add('uninteractable');
 				controlTextDiv.classList.add('uninteractable');
 				controlSubmitButton.classList.add('uninteractable');
 				hideOpponentCardButton.classList.add('uninteractable');
+				opponentCardDiv.classList.add('uninteractable');
 				button.innerHTML = 'show control';
 			}
 			

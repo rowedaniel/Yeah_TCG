@@ -22,7 +22,7 @@
 [DONE] onPlay system for unit cards
 [DONE] onAttack system for unit cards
 [DONE] onKill system for unit cards
-[IN PROGRESS] make a seperate section on client for cards opponent played
+[DONE] make a seperate section on client for cards opponent played
 [IN PROGRESS] cost=X system
 No attack = no defense?
 choose number/text system

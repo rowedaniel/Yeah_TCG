@@ -287,6 +287,13 @@ class Game:
                             p.socketId, msg, collectionMap)
             print('\n\nNow playing in the following order:',cardOrder)
             self.updateCardOrder = False
+
+            # reveal cards to other player
+            await self.cardGamePlayer.disp_cards(
+                o.socketId,
+                [collectionMap[a][b] for a,b in cardOrder],
+                'defend'
+                )
     
             # break if all attacks have already resolved
             if len(undefendedPlay) == 0:
@@ -372,18 +379,15 @@ class Game:
             cardOrder = await self.cardGamePlayer.get_cards(
                             p.socketId, msg, collectionMap)
             print('\n\nNow playing in the following order:',cardOrder)
+            self.updateCardOrder = False
 
 
             # reveal cards to other player
             await self.cardGamePlayer.disp_cards(
                 o.socketId,
                 [collectionMap[a][b] for a,b in cardOrder],
-                'played'
+                'play'
                 )
-
-            
-
-            self.updateCardOrder = False
 
 
             # execute card order
@@ -473,6 +477,14 @@ class Game:
             print('\n\nNow playing in the following order:',cardOrder)
             self.updateCardOrder = False
 
+
+            # reveal cards to other player
+            await self.cardGamePlayer.disp_cards(
+                o.socketId,
+                [collectionMap[a][b] for a,b in cardOrder],
+                'attack'
+                )
+
             
             # TODO: custom activation unit cards (on play, on attack)
             for collection, i in cardOrder:
@@ -492,6 +504,8 @@ class Game:
                     break
 
 
+
+        
 
         
         # update goal cards
