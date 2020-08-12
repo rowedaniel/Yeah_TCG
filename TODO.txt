@@ -27,6 +27,7 @@
 No attack = no defense?
 choose number/text system
 attacking broken?
+choose card gets broken if packet doesn't get through
 implement every card unit/action card
 sacrifice to play system
 response cards
