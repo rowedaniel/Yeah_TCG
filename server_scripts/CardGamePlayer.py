@@ -273,7 +273,7 @@ class Game:
             # get card Order
             attackers = p.attackers[::-1]
             # reverse the attackers so they're in the order played
-            undefendedPlay = await p.get_unattacked_play_cards()
+            undefendedPlay = await p.get_undefended_play_cards()
             if len(p.attackers) == 0:
                 print('Skipping defense phase, no attackers.')
                 return
@@ -764,7 +764,7 @@ class Player:
         if not self.game.active:
             return
         if i < len(self.play) and self.play[i] is not None and \
-           len(self.attackers) > 0:
+           not self.play[i].hasDefended and len(self.attackers) > 0:
             c = self.play[i]
             a = self.attackers.pop(0)
             print(c.data['name'], 'vs', a.data['name'])
@@ -794,7 +794,7 @@ class Player:
                 print(len(opponent.play))
                 opponent.play[opponent.play.index(a)] = None
 
-            c.hasAttacked = True
+            c.hasDefended = True
             return True
         return False
 
