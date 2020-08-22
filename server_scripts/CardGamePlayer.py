@@ -81,9 +81,17 @@ class CardGamePlayer:
 
 
     async def disp_cards(self, sid, cards, msg):
-        await self.sio.emit('dispCards',
-                            {'msg':msg, 'cards':cards},
-                            room=sid)
+        if sid not in self.players:
+            return
+        for p in self.players[sid].players:
+            if p.socketId == sid:
+                await self.sio.emit('dispCards',
+                                    {'msg':'(you) '+msg, 'cards':cards},
+                                    room=p.socketId)
+            else:
+                await self.sio.emit('dispCards',
+                                    {'msg':msg, 'cards':cards},
+                                    room=p.socketId)
         
     
 
@@ -290,7 +298,7 @@ class Game:
 
             # reveal cards to other player
             await self.cardGamePlayer.disp_cards(
-                o.socketId,
+                p.socketId,
                 [collectionMap[a][b] for a,b in cardOrder],
                 'defend'
                 )
@@ -384,7 +392,7 @@ class Game:
 
             # reveal cards to other player
             await self.cardGamePlayer.disp_cards(
-                o.socketId,
+                p.socketId,
                 [collectionMap[a][b] for a,b in cardOrder],
                 'play'
                 )
@@ -480,7 +488,7 @@ class Game:
 
             # reveal cards to other player
             await self.cardGamePlayer.disp_cards(
-                o.socketId,
+                p.socketId,
                 [collectionMap[a][b] for a,b in cardOrder],
                 'attack'
                 )

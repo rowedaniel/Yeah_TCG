@@ -309,7 +309,7 @@ async def execute_card_action(card, me, you):
                 skipCommand = False
                 print('skip')
             elif currentCommand in conditionalCommands:
-                skipCommands = await eval(cmdStr)
+                skipCommand = await eval(cmdStr)
                 print('waiting to skip')
             else:
                 print('running command:',cmdStr)
@@ -328,10 +328,10 @@ async def execute_card_action_on(card, me, you, onStrIndex):
     i = 0
     cmdStr = ''
     currentCommand = ''
-    skipCommand = True
+    skipCommand = False
     currentArgIndex = 0
     onStr = OnStr[onStrIndex]
-
+    onConditionSatisfied = False
 
     await me.remove_card_tags()
     await you.remove_card_tags()
@@ -340,9 +340,9 @@ async def execute_card_action_on(card, me, you, onStrIndex):
 
     
     while i < len(c):
-
         print('new arg/command:', c[i])
         # commands
+        onConditionSatisfied = False
         if c[i] in cmdTable:
             currentCommand = c[i]
             cmdStr = cmdTable[c[i]][0]
@@ -356,7 +356,8 @@ async def execute_card_action_on(card, me, you, onStrIndex):
                 cmdStr,c[i])
             currentArgIndex += 1
         elif c[i] == onStr:
-            skipCommand = False
+            onConditionSatisfied = True
+            print('condition satisfied')
         # error
         else:
             cmdStr = ''
@@ -366,12 +367,13 @@ async def execute_card_action_on(card, me, you, onStrIndex):
 
         if len(currentCommand) > 0 and \
            currentCommand in cmdTable and \
-           currentArgIndex >= cmdTable[currentCommand][1]:
+           currentArgIndex >= cmdTable[currentCommand][1] and \
+           onConditionSatisfied:
             if skipCommand:
-                pass
+                skipCommand = False
                 print('skip')
             elif currentCommand in conditionalCommands:
-                skipCommands = await eval(cmdStr)
+                skipCommand = await eval(cmdStr)
                 print('waiting to skip')
             else:
                 print('running command:',cmdStr)
@@ -398,19 +400,33 @@ async def random_chance(success, total):
 
 
 
-class TestCard:
-    def __init__(self, cardAction):
-        self.data = {'cardAction':cardAction}
 
+async def main():
 
-def main():
+    
+    class TestCard:
+        def __init__(self, cardAction):
+            self.data = {'cardAction':cardAction}
+
+    class TestPlayer:
+        def __init__(self):
+            self.play = []
+        async def remove_card_tags(self):
+            pass
+    
     testCards = [
-        TestCard('choose me hand 4 0 2'),
+        TestCard('this 0 onPlay attackCooldown me -1 0 onPlay '+\
+                 'increaseBreath me 1'),
         ]
-
-    for t in testCards:
-        execute_card_action(t, 0, 0, 0)
-        print()
+    p1 = TestPlayer()
+    p2 = TestPlayer()
+    for card in testCards:
+        await execute_card_action_on(card,
+                                     p1,
+                                     p2,
+                                     0)
+    
 
 if __name__ == '__main__':
-    main()
+    import asyncio
+    asyncio.run(main())

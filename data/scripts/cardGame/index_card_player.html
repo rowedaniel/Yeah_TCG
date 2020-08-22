@@ -743,17 +743,17 @@ button#hideControlButton {
 			console.log('in updateCounters', data);
 			if(data['yours']) {
 				if(data['counter'] === 'health') {
-					playerHealth.innerHTML = 'Health: '+data['amount'];
+					playerHealth.innerHTML = 'health: '+data['amount'];
 				} else if(data['counter'] === 'breath') {
-					playerBreath.innerHTML = 'Breath: '+data['amount'];
+					playerBreath.innerHTML = 'breath: '+data['amount'];
 				} else if(data['counter'] === 'rp') {
 					playerPlay.children[data['amount'][0]].children[1].innerHTML = data['amount'][1];
 				}
 			} else {
 				if(data['counter'] === 'health') {
-					opponentHealth.innerHTML = 'Health: '+data['amount'];
+					opponentHealth.innerHTML = 'health: '+data['amount'];
 				} else if(data['counter'] === 'breath') {
-					opponentBreath.innerHTML = 'Breath: '+data['amount'];
+					opponentBreath.innerHTML = 'breath: '+data['amount'];
 				} else if(data['counter'] === 'rp') {
 					opponentPlay.children[data['amount'][0]].children[1].innerHTML = data['amount'][1];
 				}
