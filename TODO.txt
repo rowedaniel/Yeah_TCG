@@ -24,8 +24,9 @@
 [DONE] onKill system for unit cards
 [DONE] make a seperate section on client for cards opponent played
 [DONE] No attack = no defense?
+[DONE] Breath User Jaycob broken
 [IN PROGRESS] cost=X system
-choose number/text system
+[IN PROGRESS] choose number/text system
 winning via damage broken?
 attacking broken?
 choose card gets broken if packet doesn't get through

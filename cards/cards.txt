@@ -168,7 +168,7 @@
         "move": "*This card cannot attack*     While this card is on the field, gain +1 breath each turn.",
         "txtcolor": "",
         "cardType": "rare Jaycob unit fullart",
-        "cardAction": "this 0 onPlay attackCooldown me -1 0 onPlay increaseBreath me 1"
+        "cardAction": "onPlay this 0 onPlay attackCooldown me -1 0 increaseBreath me 1"
     },
     {
         "name": "Dead Shinubo",

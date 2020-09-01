@@ -124,3 +124,36 @@ class DispCard extends BaseCard{
 		this.div.appendChild(this.counterText);
 	}
 }
+
+
+
+
+
+class ChooseText {
+	selected = false;
+	txt = document.createElement('p');
+	
+	constructor(msg) {
+		this.txt.innerHTML = msg;
+		const chooseText = this;
+		this.txt.addEventListener('click', function() {
+			if(chooseText.selected) {
+				for(let ct of selected) {
+					chooseText.selected = false;
+					ct.txt.classList.remove('selected');
+				}
+				selected.splice(0,selected.length);
+			} else {
+				for(let ct of selected) {
+					ct.selected = false;
+					ct.txt.classList.remove('selected');
+				}
+				selected.splice(0,selected.length);
+				
+				chooseText.selected = true;
+				chooseText.txt.classList.add('selected');
+				selected.push(chooseText);
+			}
+		},false);
+	}
+}

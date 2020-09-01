@@ -342,7 +342,6 @@ async def execute_card_action_on(card, me, you, onStrIndex):
     while i < len(c):
         print('new arg/command:', c[i])
         # commands
-        onConditionSatisfied = False
         if c[i] in cmdTable:
             currentCommand = c[i]
             cmdStr = cmdTable[c[i]][0]
@@ -367,15 +366,15 @@ async def execute_card_action_on(card, me, you, onStrIndex):
 
         if len(currentCommand) > 0 and \
            currentCommand in cmdTable and \
-           currentArgIndex >= cmdTable[currentCommand][1] and \
-           onConditionSatisfied:
+           currentArgIndex >= cmdTable[currentCommand][1]:
             if skipCommand:
                 skipCommand = False
                 print('skip')
             elif currentCommand in conditionalCommands:
                 skipCommand = await eval(cmdStr)
                 print('waiting to skip')
-            else:
+            elif onConditionSatisfied:
+                onConditionSatisfied = False
                 print('running command:',cmdStr)
                 await eval(cmdStr)
             cmdStr = ''
@@ -407,15 +406,21 @@ async def main():
     class TestCard:
         def __init__(self, cardAction):
             self.data = {'cardAction':cardAction}
+        async def add_tag(self, tag):
+            pass
 
     class TestPlayer:
         def __init__(self):
             self.play = []
         async def remove_card_tags(self):
             pass
+        async def increase_breath(self, amount):
+            pass
+        async def set_attack_cooldown(self, duration, tag):
+            pass
     
     testCards = [
-        TestCard('this 0 onPlay attackCooldown me -1 0 onPlay '+\
+        TestCard('onPlay this 0 onPlay attackCooldown me -1 0 '+\
                  'increaseBreath me 1'),
         ]
     p1 = TestPlayer()

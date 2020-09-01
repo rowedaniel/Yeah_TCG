@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="utf-8"/>
+
 <style>
 
 /* general styles */ 
@@ -85,6 +86,36 @@ div.control p.label{
    -moz-user-select: none; /* Firefox */
    -ms-user-select: none; /* Internet Explorer/Edge */
    
+}
+
+div {
+	//background-color: grey;
+}
+
+div.control div#chooseText {
+	//background-color: red;
+	font-size: 8vh;
+	position: absolute;
+	height: 70vh;
+	left: 0;
+	right: 0;
+	
+	overflow-x: hidden;
+	overflow-y: auto;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+div.control div#chooseText p {
+	transition: all 0.2s;
+}
+
+div.control div#chooseText p:hover {
+	background-color: #A5A5DF;
+}
+
+div.control div#chooseText p.selected {
+	background-color: #DFA5A5;
 }
 
 div#opponentCards {
@@ -307,6 +338,7 @@ div#mainBackgroundDiv div.counterDiv {
 	height: 100%;
 	display: inline-block;
 	transition: all 0.2s;
+	cursor: pointer;
 }
 
 .dispDiv:hover {
@@ -478,6 +510,7 @@ button#hideControlButton {
 
 	<head>
 		<title>Yeah: TCG</title>
+		<link rel="icon" type="image/png" href="/data/ArMaN.png">
 	</head>
 	
 	
@@ -562,7 +595,8 @@ button#hideControlButton {
 		
 		<div id="mainControlDiv">
 			<div id="controlText"></div>
-			<div id="control" class="control"></div>
+			<div id="control" class="control">
+			</div>
 			<div id="opponentCards" class="control"></div>
 			<button id="hideOpponentCardButton" class="uninteractable" onclick="cycleControl();return false;">show opponent cards</button>
 			<button id="submitButton" class="uninteractable" onclick="resGetCards();return false;">submit</button>
@@ -595,6 +629,7 @@ button#hideControlButton {
 		socket.on("beginGame", beginGame);
 		socket.on("endGame", endGame);
 		socket.on("playerGetCards", getCards);
+		socket.on("playerGetText", getText);
 		socket.on("updateCollection", updateCollection);
 		socket.on("updateCounters", updateCounters);
 		socket.on("dispCards", dispCards);
@@ -684,6 +719,42 @@ button#hideControlButton {
 					console.log(data[controlNames[i]][cindex], cindex, i);
 					dispControlCard(data[controlNames[i]][cindex], cindex, i);
 				}
+			}
+		}
+		
+		function getText(data){
+			authToken = data['authToken'];
+			delete data['authToken'];
+			
+			if(messageId==data['msgId']) {
+				return;
+			}
+			messageId = data['msgId'];
+			delete data['msgId'];
+			let msg = data['msg'];
+			delete data['msg'];
+			
+			clearControl();
+			
+			
+			
+			
+			const p = document.createElement("p");
+			p.innerHTML = msg;
+			p.classList.add("fadein");
+			controlTextDiv.appendChild(p);
+			
+			controlSubmitButton.classList.remove("uninteractable");
+			hideOpponentCardButton.classList.remove("uninteractable");
+			
+			const chooseTextDiv = document.createElement('div');
+			chooseTextDiv.id = "chooseText";
+			controlDiv.appendChild(chooseTextDiv);
+			control.push(chooseTextDiv);
+			
+			for(let txt in data['msgs']) {
+				const ct = new ChooseText(txt);
+				chooseTextDiv.appendChild(ct.txt);
 			}
 		}
 		
@@ -996,10 +1067,6 @@ button#hideControlButton {
 		
 		
 		socket.emit("reqAllCards", {});
-		
-		
-		
-		
 		
 	</script>
 	
