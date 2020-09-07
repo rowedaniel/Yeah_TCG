@@ -131,10 +131,13 @@ class DispCard extends BaseCard{
 
 class ChooseText {
 	selected = false;
+	origNumber = 0;
+	category = 'chooseText';
 	txt = document.createElement('p');
 	
-	constructor(msg) {
+	constructor(msg, number) {
 		this.txt.innerHTML = msg;
+		this.origNumber = number;
 		const chooseText = this;
 		this.txt.addEventListener('click', function() {
 			if(chooseText.selected) {

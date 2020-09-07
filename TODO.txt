@@ -25,9 +25,10 @@
 [DONE] make a seperate section on client for cards opponent played
 [DONE] No attack = no defense?
 [DONE] Breath User Jaycob broken
+[DONE] winning via damage broken?
+[DONE] choose number/text system
 [IN PROGRESS] cost=X system
-[IN PROGRESS] choose number/text system
-winning via damage broken?
+make get_card/get_text more secure (re-ask if response doesn't match format)
 attacking broken?
 choose card gets broken if packet doesn't get through
 implement every card unit/action card

@@ -108,10 +108,11 @@ div.control div#chooseText {
 
 div.control div#chooseText p {
 	transition: all 0.2s;
+	background-color: #A5A5DF;
 }
 
 div.control div#chooseText p:hover {
-	background-color: #A5A5DF;
+	background-color: #A5DFA5;
 }
 
 div.control div#chooseText p.selected {
@@ -752,8 +753,8 @@ button#hideControlButton {
 			controlDiv.appendChild(chooseTextDiv);
 			control.push(chooseTextDiv);
 			
-			for(let txt in data['msgs']) {
-				const ct = new ChooseText(txt);
+			for(let i=0; i<data['msgs'].length; ++i) {
+				const ct = new ChooseText(data['msgs'][i], i);
 				chooseTextDiv.appendChild(ct.txt);
 			}
 		}

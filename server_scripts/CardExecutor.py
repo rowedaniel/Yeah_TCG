@@ -151,6 +151,16 @@ cmdTable = {
                 lambda x,y: x+y+')'),
             ),
 
+    'roidRage':(
+                'increase_rp(',
+                2,
+                (lambda x: x in ('me','you'),
+                lambda x,y: y+'.'+x),
+                (lambda x: x in tags,
+                lambda x,y: x+'card.rp,'+y+')'),
+            ),
+                
+
 
 
     # sets the cooldown to activate card

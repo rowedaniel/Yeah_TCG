@@ -42,7 +42,8 @@
         "move": "Increase the RP of all units on the field by X for the rest of the game.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": ""
+        "cardAction": "spyCollection me play 0 0 roidRage me 0",
+		"parseCost": "any"
     },
     {
         "name": "Power of the Church",
@@ -301,7 +302,7 @@
         "name": "Sweaty Homunculus",
         "cost": "X",
         "img": "",
-        "move": "Used to be a great general. Now is a sweaty general. Once, during your play phase, you may reset this cards RP to the number of cards in your discard pile.",
+        "move": "Used to be a great general. Now is a sweaty general. X=the number of cards in your discard pile. Once, during your play phase, you may reset this card's RP.",
         "txtcolor": "",
         "cardType": "rare demon unit",
         "cardAction": ""

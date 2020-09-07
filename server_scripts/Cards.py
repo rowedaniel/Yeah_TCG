@@ -39,9 +39,43 @@ class Card:
 
 # all normal cards
 class NotPlayCard(Card):
+    __slots__ = ('rp',
+                 )
     def __init__(self, player, card):
         super().__init__(player)
         self.data = card.data
+        self.rp = 0
+
+    async def parse_rp(self, coststr):
+        try:
+            return int(coststr)
+        except:
+            if coststr == 'X':
+                print('in parse_rp')
+                if 'parseCost' in self.data:
+                    print(self.data['parseCost'])
+                    if self.data['parseCost'] == 'any':
+                        costs = [str(i) for i in range(0,self.player.breath+1)]
+                        out = '-1'
+                        while out not in costs:
+                            choice = \
+                              (await self.player.game.cardGamePlayer.get_text(
+                                self.player.socketId,
+                                'How much breath do you want to pay?',
+                                {'msgs':costs}
+                                ))['order'][0][1]
+                            print(choice)
+                            out = costs[choice]
+                            # TODO: this might bomb. Fix later in get_text
+                        return int(out)
+            return 0
+
+    async def reset_rp(self):
+        if not self.player.game.active:
+            return
+        # TODO: make this work with Roid Rage
+        self.rp = await self.parse_rp(self.data['cost'])
+                
 
 
 
@@ -50,8 +84,7 @@ class NotPlayCard(Card):
 
 # play cards
 class PlayCard(NotPlayCard):
-    __slots__ = ('rp',
-                 'kills', 'attacks', 'defenses',
+    __slots__ = ('kills', 'attacks', 'defenses',
                  'hasDefended',
                  'hasActivated', 'activateCooldown',
                  'hasAttacked', 'attackCooldown'
@@ -59,7 +92,6 @@ class PlayCard(NotPlayCard):
     def __init__(self, player, card):
         super().__init__(player, card)
         # TODO: make this work with Roid Rage
-        self.rp = self.parse_rp(self.data['cost'])
 
         
         self.hasDefended = False
@@ -73,15 +105,11 @@ class PlayCard(NotPlayCard):
         self.kills = []    # killed another card by attacking
         self.defenses = [] # defended agaisnt another card
 
-    def parse_rp(self, coststr):
-        return int(coststr)
-
     # all functions called by cards must not be async.
     async def set_rp(self, amount):
         if not self.player.game.active:
             return
-        self.rp = self.parse_rp(amount)
-        print('in set_rp, rp is:', self.rp)
+        self.rp = await self.parse_rp(amount)
         await self.player.game.cardGamePlayer.update_counters(
             self.player.game,
             self.player.socketId,
@@ -89,11 +117,10 @@ class PlayCard(NotPlayCard):
             [self.player.play.index(self), self.rp]
             )
 
-    async def reset_rp(self):
+    async def update_rp(self, amount):
         if not self.player.game.active:
             return
-        # TODO: make this work with Roid Rage
-        self.rp = self.parse_rp(self.data['cost'])
+        await self.set_rp(self.rp + await self.parse_rp(amount))
 
 
     async def add_attack(self):
@@ -103,13 +130,7 @@ class PlayCard(NotPlayCard):
         self.kills.append(other.data)
 
     async def add_defense(self, other):
-        self.defenses.append(other.data)
-    
-                                                                                             
-    async def update_rp(self, amount):
-        if not self.player.game.active:
-            return
-        await self.set_rp(self.rp + self.parse_rp(amount))
+        self.defenses.append(other.data)                                                                       
 
     async def activate_cooldown(self, amount):
         if not self.player.game.active:
@@ -188,19 +209,20 @@ class DanceOfMetal(GoalCard):
         await self.player.remove_card_tags()
         await self.player.search_cards_in('play','legendary','swordsman',0)
         cards = await self.player.get_cards_with_tag('play',0)
+        # TODO: fix parse_rp, it's broken
         print(len(cards),
-              [c.rp >= c.parse_rp(c.data['cost'])+15 for c in cards])
+              [c.rp >= await c.parse_rp(c.data['cost'])+15 for c in cards])
         return len(cards) > 0 and \
-               any([c.rp >= c.parse_rp(c.data['cost'])+15 for c in cards])
+               any([c.rp >= await c.parse_rp(c.data['cost'])+15 for c in cards])
 class FleshOfTheKing(GoalCard):
     async def after_attack(self, opponent):
         await self.player.remove_card_tags()
         await self.player.search_cards_in('play','legendary','demon',0)
         cards = await self.player.get_cards_with_tag('play',0)
         print(len(cards),
-              [c.rp >= c.parse_rp(c.data['cost'])+10 for c in cards])
+              [c.rp >= await c.parse_rp(c.data['cost'])+10 for c in cards])
         return len(cards) > 0 and \
-               any([c.rp >= c.parse_rp(c.data['cost'])+10 for c in cards])
+               any([c.rp >= await c.parse_rp(c.data['cost'])+10 for c in cards])
 class SmokelessLungs(GoalCard):
     async def after_attack(self, opponent):
         print(self.player.breath)

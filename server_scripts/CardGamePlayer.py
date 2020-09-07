@@ -170,6 +170,51 @@ class CardGamePlayer:
         print(out)
         return out
 
+    async def get_text(self, sid, msg, textOptions):
+
+        if sid not in self.players:
+            return []
+
+        print(msg)
+
+        # set authToken, to prevent cheating
+        self.authTokens[sid] = random.random()
+        textOptions['authToken'] = self.authTokens[sid]
+
+        # set misc message properties
+        textOptions['msgId'] = random.random()
+        textOptions['msg'] = msg
+
+        print('sent socket.io msg to',sid, textOptions)
+
+
+        # loop until we have a result, remaking authToken every once in a while
+        self.getCardsRes[sid] = '-1'
+        while sid in self.getCardsRes and \
+              self.getCardsRes[sid] == '-1':
+            # remake authTokn, and send message
+            self.authTokens[sid] = random.random()
+            textOptions['authToken'] = self.authTokens[sid]
+            await self.sio.emit('playerGetText', textOptions, room=sid)
+
+            # check 10 times for response, before refreshing authToken again.
+            for i in range(10):
+                await asyncio.sleep(1)
+                if sid not in self.players:
+                    return []
+                if sid not in self.getCardsRes or \
+                   self.getCardsRes[sid] != '-1':
+                    break
+            
+        del textOptions['authToken']
+        del textOptions['msg']
+        del textOptions['msgId']
+        
+        out = self.getCardsRes[sid]
+        del self.getCardsRes[sid]
+        print(out)
+        return out
+
                       
 
 
@@ -712,6 +757,7 @@ class Player:
         if collectionName == 'play':            
             for cardIndex in range(len(cards)):
                 card = PlayCard(self, cards.pop(0))
+                await card.reset_rp()
                 self.collections[collectionName].append(card)
         elif collectionName == 'activeGoals':
             for cardIndex in range(len(cards)):
@@ -917,7 +963,8 @@ class Player:
 
         # breath managment
         # TODO fully implement sacrifice
-        rp = int(c.data['cost'])
+        await c.reset_rp()
+        rp = c.rp
         if self.breath < rp or \
            (sacrificePoints > 0 and sacrificePoints < rp):
             return False
