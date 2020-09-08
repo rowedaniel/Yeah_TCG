@@ -330,7 +330,7 @@
         "name": "Flesh Blade",
         "cost": "4",
         "img": "",
-        "move": "For some reason, gives the impression of a musician. You may discard the top card of your deck when you attack to deal +3RP.",
+        "move": "For some reason, gives the impression of a musician. Discard the top card of your deck to gain +3RP.",
         "txtcolor": "",
         "cardType": "common demon unit",
         "cardAction": ""
@@ -382,12 +382,12 @@
     },
     {
         "name": "Demonic Possession",
-        "cost": "1",
+        "cost": "0",
         "img": "",
-        "move": "Take Control of an enemy swordsman till the end of your next turn. It cannot perform attacks or be attacked. ",
+        "move": "Target swordsman on your opponent's side of the field cannot attack or defend for one turn.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": ""
+        "cardAction": "searchCollection you play any swordsman 0 attackCooldown you 1 0 defendCooldown you 1 0"
     },
     {
         "name": "Achilles's Shield ",
@@ -564,19 +564,19 @@
         "name": "Piercing Power",
         "cost": "0",
         "img": "",
-        "move": "Equip to a Swordsman card. Reset its RP. Its attacks can no longer be blocked by enemy units.",
+        "move": "Reset RP for target swordsman card on your side of the field. Its attacks can no longer be blocked by enemy units.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": ""
+        "cardAction": "searchCollection me play any any 0 choose me me play 1 0 1 reveal you me play 1 resetRP me 1"
     },
     {
         "name": "Rust Cleaner",
         "cost": "0",
         "img": "",
-        "move": "Reset target card's RP.",
+        "move": "Reset RP for target swordsman card on your side of the field. Then increase its RP by 2.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me play any any 0 choose me me play 1 0 1 reveal you me play 1 resetRP me 1"
+        "cardAction": "searchCollection me play any any 0 choose me me play 1 0 1 reveal you me play 1 resetRP me 1 increaseRP me 2 1"
     },
     {
         "name": "Banji's Scream",
@@ -607,12 +607,12 @@
     },
     {
         "name": "Miyamoto Musashi",
-        "cost": "8",
+        "cost": "5",
         "img": "",
         "move": "Set this unit's RP to 2*X, where X is the number of units your opponent controls.",
         "txtcolor": "",
-        "cardType": "action",
-        "cardAction": ""
+        "cardType": "rare swordsman unit",
+        "cardAction": "this 0 setRP me 0 0 miyamotoMusashi me you play 0 miyamotoMusashi me you play 0"
     },
     {
         "name": "Demon's Rebirth",

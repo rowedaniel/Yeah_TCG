@@ -78,7 +78,6 @@ class NotPlayCard(Card):
             return
         # TODO: make this work with Roid Rage
         self.rp = await self.parse_rp(self.data['cost'])
-        print('AAAAAAAAAAAAAAAAAAAAA')
                 
 
 
@@ -89,7 +88,7 @@ class NotPlayCard(Card):
 # play cards
 class PlayCard(NotPlayCard):
     __slots__ = ('kills', 'attacks', 'defenses',
-                 'hasDefended',
+                 'hasDefended', 'defendCooldown',
                  'hasActivated', 'activateCooldown',
                  'hasAttacked', 'attackCooldown'
                  )
@@ -101,6 +100,7 @@ class PlayCard(NotPlayCard):
         self.hasDefended = False
         self.hasActivated = True # can't activate on first turn played
         self.hasAttacked = False
+        self.defendCooldown = 0
         self.activateCooldown = 0
         self.attackCooldown = 0
 
@@ -144,13 +144,22 @@ class PlayCard(NotPlayCard):
             return
         print('set activate cooldown for:',amount)
         self.hasActivated = True
-        self.activateCooldown = amount
+        if self.activateCooldown != -1:
+            self.activateCooldown = amount
     async def attack_cooldown(self, amount):
         if not self.player.game.active:
             return
         print('set attack cooldown for:',amount)    
         self.hasAttacked = True
-        self.attackCooldown = amount                              
+        if self.attackCooldown != -1:
+            self.attackCooldown = amount     
+    async def defend_cooldown(self, amount):
+        if not self.player.game.active:
+            return
+        print('set defend cooldown for:',amount)    
+        self.hasDefended = True
+        if self.defendCooldown != -1:
+            self.defendCooldown = amount                            
 
 
     async def reset_all(self):

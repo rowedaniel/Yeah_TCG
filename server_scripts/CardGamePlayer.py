@@ -1114,6 +1114,18 @@ class Player:
         if collectionName == 'deck':
             random.shuffle(self.collections[collectionName])
 
+    async def decide(self):
+        choices = ['yes','no']
+        out = '-1'
+        while out not in choices:
+            choice = (await self.game.cardGamePlayer.get_text(self.socketId,
+                                                'Yes or No?',
+                                                {'msgs':choices})
+                      )['order'][0][1]
+            out = choices[choice]
+        return out == 'yes'
+
+
     async def remove_card_tags_with_tag(self, collectionName, intag, outtag):
         if not self.game.active:
             return
@@ -1177,6 +1189,13 @@ class Player:
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
             await c.attack_cooldown(amount)
+
+    async def set_defend_cooldown(self, amount, tag):
+        if not self.game.active:
+            return
+        cards = await self.get_cards_with_tag('play', tag)
+        for c in cards:
+            await c.defend_cooldown(amount)
         
 
 

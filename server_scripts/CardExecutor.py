@@ -10,7 +10,8 @@ tags = [str(i) for i in range(10)]
 
 conditionalCommands = (
                       'randomChance',
-                      'collectionHasCards',
+                      'checkCardsTag',
+                      'decide'
                  )
 OnStr = ('onPlay',
          'onAttack',
@@ -53,6 +54,13 @@ cmdTable = {
                 lambda x,y: x+','+y),
                 (lambda x: x in tags,
                 lambda x,y: x+','+repr(y)+')'),
+            ),
+
+    'decide':(
+                'decide()',
+                1,
+                (lambda x: x in ('me','you'),
+                lambda x,y: y+'.'+x),
             ),
 
 
@@ -125,7 +133,7 @@ cmdTable = {
                 3,
                 (lambda x: x in ('me','you'),
                 lambda x,y: y+'.'+x),
-                (lambda x: x in [str(i) for i in range(1,40)],
+                (lambda x: x in [str(i) for i in range(0,40)],
                 lambda x,y: x+y+','),
                 (lambda x: x in tags,
                 lambda x,y: x+y+')'),
@@ -159,6 +167,20 @@ cmdTable = {
                 (lambda x: x in tags,
                 lambda x,y: x+'card.rp,'+y+')'),
             ),
+
+    'miyamotoMusashi':(
+                'increase_rp(',
+                4,
+                (lambda x: x in ('me','you'),
+                lambda x,y: y+'.'+x),
+                (lambda x: x in ('me','you'),
+                lambda x,y: x+'len('+y+'.collections['),
+                (lambda x: x in collectionNames,
+                lambda x,y: x+repr(y)+']),'),
+                (lambda x: x in tags,
+                lambda x,y: x+y+')'),
+            ),
+    
                 
 
 
@@ -177,6 +199,17 @@ cmdTable = {
     # sets the cooldown to attack with card
     'attackCooldown':(
                 'set_attack_cooldown(',
+                3,
+                (lambda x: x in ('me','you'),
+                lambda x,y: y+'.'+x),
+                (lambda x: x in [str(i) for i in range(-1,40)],
+                lambda x,y: x+y+','),
+                (lambda x: x in tags,
+                lambda x,y: x+y+')'),
+            ),
+    # sets the cooldown to defend with card
+    'defendCooldown':(
+                'set_defend_cooldown(',
                 3,
                 (lambda x: x in ('me','you'),
                 lambda x,y: y+'.'+x),
@@ -401,8 +434,6 @@ async def execute_card_action_on(card, me, you, onStrIndex):
 
 async def random_chance(success, total):
     return random.randint(1,total) <= success
-
-
 
 
 
