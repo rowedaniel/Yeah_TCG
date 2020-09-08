@@ -133,7 +133,7 @@ cmdTable = {
     # reset rp to default
     'resetRP':(
                 'reset_rp(',
-                3,
+                2,
                 (lambda x: x in ('me','you'),
                 lambda x,y: y+'.'+x),
                 (lambda x: x in tags,

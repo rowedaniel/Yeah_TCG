@@ -27,7 +27,7 @@
 [DONE] Breath User Jaycob broken
 [DONE] winning via damage broken?
 [DONE] choose number/text system
-[IN PROGRESS] cost=X system
+[DONE] cost=X system
 make get_card/get_text more secure (re-ask if response doesn't match format)
 attacking broken?
 choose card gets broken if packet doesn't get through

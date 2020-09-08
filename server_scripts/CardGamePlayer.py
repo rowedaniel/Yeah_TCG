@@ -1155,7 +1155,7 @@ class Player:
             return
         cards = await self.get_cards_with_tag('play', tag)
         for c in cards:
-            await c.reset_rp(amount)
+            await c.reset_rp()
         
     async def increase_rp(self, amount, tag):
         if not self.game.active:

@@ -305,7 +305,8 @@
         "move": "Used to be a great general. Now is a sweaty general. X=the number of cards in your discard pile. Once, during your play phase, you may reset this card's RP.",
         "txtcolor": "",
         "cardType": "rare demon unit",
-        "cardAction": ""
+        "cardAction": "this 0 resetRP me 0",
+		"parseCost": "length discard"
     },
     {
         "name": "Baby Demon",

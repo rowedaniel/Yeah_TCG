@@ -68,6 +68,9 @@ class NotPlayCard(Card):
                             out = costs[choice]
                             # TODO: this might bomb. Fix later in get_text
                         return int(out)
+                    elif 'length' in self.data['parseCost']:
+                        if 'discard' in self.data['parseCost']:
+                            return len(self.player.discard)
             return 0
 
     async def reset_rp(self):
@@ -75,6 +78,7 @@ class NotPlayCard(Card):
             return
         # TODO: make this work with Roid Rage
         self.rp = await self.parse_rp(self.data['cost'])
+        print('AAAAAAAAAAAAAAAAAAAAA')
                 
 
 
@@ -110,18 +114,21 @@ class PlayCard(NotPlayCard):
         if not self.player.game.active:
             return
         self.rp = await self.parse_rp(amount)
-        await self.player.game.cardGamePlayer.update_counters(
-            self.player.game,
-            self.player.socketId,
-            'rp',
-            [self.player.play.index(self), self.rp]
-            )
+        if self in self.player.play: # just in case
+            await self.player.game.cardGamePlayer.update_counters(
+                self.player.game,
+                self.player.socketId,
+                'rp',
+                [self.player.play.index(self), self.rp]
+                )
 
     async def update_rp(self, amount):
         if not self.player.game.active:
             return
         await self.set_rp(self.rp + await self.parse_rp(amount))
 
+    async def reset_rp(self):
+        await self.set_rp(await self.parse_rp(self.data['cost']))
 
     async def add_attack(self):
         self.attacks.append(self.rp)
