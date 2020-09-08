@@ -28,13 +28,13 @@
 [DONE] winning via damage broken?
 [DONE] choose number/text system
 [DONE] cost=X system
+[IN PROGRESS] implement every card unit/action card
+response cards
+sacrifice to play system
+implement every response card
 make get_card/get_text more secure (re-ask if response doesn't match format)
 attacking broken?
 choose card gets broken if packet doesn't get through
-implement every card unit/action card
-sacrifice to play system
-response cards
-implement every response card
 make safari work (scrollbars??)
 make it so people see buffness of cards
 Go through every card and make the phrasing consistent/better
