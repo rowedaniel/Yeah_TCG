@@ -11,11 +11,7 @@ def saveCards(cards):
 
 def loadDecks():
     # TODO: check deck to make sure it works.
-    decks = {'k':{ 'deck': ['Dragon King Hades',
-                            'Dragon King Hades', 
-                            'Dragon King Hades', 
-                            'Lucifer the Demon King',
-                            'Miyamoto Musashi',
+    decks = {'k':{ 'deck': ['Miyamoto Musashi',
                             'Miyamoto Musashi',
                             'Miyamoto Musashi',
                             'ROID RAGE',
@@ -29,6 +25,8 @@ def loadDecks():
                             'Breath User Jaycob',
                             'Breath User Jaycob',
                             'Recruitment',
+                            'Soul Bond',
+                            'Soul Bond',
                             'Soul Bond',
                             'Skinny Jaycob',
                             'Skinny Jaycob',

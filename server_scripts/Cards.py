@@ -178,8 +178,66 @@ class PlayCard(NotPlayCard):
             self.attackCooldown -= 1
 
 
+
+# response card
+class ResponseCard(NotPlayCard):
+    async def check(self, phase, opponent, args=[]):
+        if phase >= 6:
+            return False
+        return await (self.check_before_destroyed,
+                    self.check_before_special_play,
+                    self.check_before_direct_damage,
+                    self.check_before_unit_activate,
+                    self.check_after_declare_attack,)[phase](opponent)
+    async def check_before_destroyed(self, opponent, args=[]):
+        return False
+    async def check_before_special_play(self, opponent, args=[]):
+        return False
+    async def check_before_direct_damage(self, opponent, args=[]):
+        return False
+    async def check_before_unit_activate(self, opponent, args=[]):
+        return False
+    async def check_after_declare_attack(self, opponent, args=[]):
+        return False
+
+    async def run(self, phase, opponent, args=[]):
+        if phase >= 6:
+            return False
+        return await (self.run_before_destroyed,
+                    self.run_before_special_play,
+                    self.run_before_direct_damage,
+                    self.run_before_unit_activate,
+                    self.run_after_declare_attack,)[phase](opponent)
+    async def run_before_destroyed(self, opponent, args=[]):
+        pass
+    async def run_before_special_play(self, opponent, args=[]):
+        pass
+    async def run_before_direct_damage(self, opponent, args=[]):
+        pass
+    async def run_before_unit_activate(self, opponent, args=[]):
+        pass
+    async def run_after_declare_attack(self, opponent, args=[]):
+        pass
+
+class SoulBond(ResponseCard):
+    async def check_before_destroyed(self, opponent, args=[]):
+        return True
+    async def run_before_destroyed(self, opponent, args=[]):
+        print('do something here, i guess')
+        return False
+    
     
 
+    
+# response card list
+responseCards = {
+    'Soul Bond':SoulBond,
+    }
+async def make_response_card(player, c):
+    name = c.data['name']
+    if name not in responseCards:
+        return ResponseCard(player, c)
+    return responseCards[name](player, c)
 
 
 

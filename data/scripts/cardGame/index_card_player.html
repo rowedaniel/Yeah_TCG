@@ -762,13 +762,13 @@ button#hideControlButton {
 		function updateCollection(data) {
 			console.log('in updateCollection', data);
 			let cardFunc;
-			if(data['operation'] == 'add') {
+			if(data['operation'] === 'add') {
 				cardFunc = dispBGCard;
 			} else if(data['operation']=='remove'){
 				cardFunc = removeBGCard;
 			}
 			
-			if(data['collection'] == 'discard') {
+			if(data['collection'] === 'discard') {
 				if(data['yours']) {
 					for(let card of data['cards']) {
 						cardFunc(card, playerDiscard);
@@ -778,7 +778,7 @@ button#hideControlButton {
 						cardFunc(card, opponentDiscard);
 					}
 				}
-			} else if(data['collection'] == 'hand') {
+			} else if(data['collection'] === 'hand') {
 				if(data['yours']) {
 					for(let card of data['cards']) {
 						cardFunc(card, playerHand);
@@ -788,7 +788,7 @@ button#hideControlButton {
 						cardFunc(card, opponentHand);
 					}
 				}
-			} else if(data['collection'] == 'activeGoals') {
+			} else if(data['collection'] === 'activeGoals') {
 				if(data['yours']) {
 					for(let card of data['cards']) {
 						cardFunc(card, playerActiveGoals);
@@ -798,7 +798,7 @@ button#hideControlButton {
 						cardFunc(card, opponentActiveGoals);
 					}
 				}
-			} else if(data['collection'] == 'play') {
+			} else if(data['collection'] === 'play' || data['collection'] === 'response') {
 				if(data['yours']) {
 					for(let card of data['cards']) {
 						cardFunc(card, playerPlay);

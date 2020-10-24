@@ -60,8 +60,10 @@ class CardGamePlayer:
         for p in game.players:
             # TODO: prbly a better place to do the following check:
             tmpCards = cards
-            if collection in ('hand','activeGoals') and \
-               p.socketId != sid and operation=='add':
+            if (collection in ('hand','activeGoals') and \
+               p.socketId != sid and operation=='add') or \
+               (collection in ('response') and \
+               p.socketId != sid and operation=='add'):
                 print('submiting blank data to',p.socketId,
                       'comparing to',sid)
                 tmpCards = ["cardBack" for i in cards]
@@ -425,6 +427,10 @@ class Game:
             if len(usableHand) == 0 and len(unactivatedPlay)==0:
                 print('Skipping play phase, no hand/play cards.')
                 return
+            collectionMapCardType = {
+                         'hand':[b.data['cardType'] for a,b in usableHand],
+                         'play':[b.data['cardType'] for a,b in unactivatedPlay],
+                             }
             collectionMap = {'hand':[b.data['name'] for a,b in usableHand],
                              'play':[b.data['name'] for a,b in unactivatedPlay],
                                  }
@@ -438,7 +444,8 @@ class Game:
             # reveal cards to other player
             await self.cardGamePlayer.disp_cards(
                 p.socketId,
-                [collectionMap[a][b] for a,b in cardOrder],
+                [('cardBack' if 'response' in collectionMapCardType[a][b] else \
+                  collectionMap[a][b]) for a,b in cardOrder],
                 'play'
                 )
 
@@ -617,6 +624,7 @@ class Player:
                  'hand',
                  'discard',
                  'play',
+                 'response',
                  'collections',
                  'tempPlay',
                  'attackers',
@@ -656,13 +664,15 @@ class Player:
         self.hand = []
         self.discard = []
         self.play = []
+        self.response = []
         self.collections = {
                             'deck':self.deck,
                             'goals':self.goals,
                             'activeGoals':self.activeGoals,
                             'hand':self.hand,
                             'discard':self.discard,
-                            'play':self.play
+                            'play':self.play,
+                            'response':self.response,
                             }
         
         await self.deal_cards(6)
@@ -763,10 +773,14 @@ class Player:
             for cardIndex in range(len(cards)):
                 card = await make_goal_card(self, cards.pop(0))
                 self.collections[collectionName].append(card)
+        elif collectionName == 'response':
+            for cardIndex in range(len(cards)):
+                card = await make_response_card(self, cards.pop(0))
+                self.collections[collectionName].append(card)
         else:
             for c in range(len(cards)):
-                newc = NotPlayCard(self, cards.pop(0))
-                self.collections[collectionName].append(newc)
+                card = NotPlayCard(self, cards.pop(0))
+                self.collections[collectionName].append(card)
         if collectionName == 'deck' or \
            collectionName == 'goals':
             random.shuffle(collections[collectionName])
@@ -832,6 +846,7 @@ class Player:
             await a.update_rp(-admg)
 
             if c.rp <= 0:
+                await self.check_response_cards(0, opponent)
                 print(c.data['name'], 'was destroyed')
                 await a.add_kill(c)
                 await CardExecutor.execute_card_action_on(a,
@@ -891,6 +906,24 @@ class Player:
         return any([await c.check(phase, opponent) \
                     for c in filter(lambda x: x is not None,
                                     self.activeGoals)])
+
+    async def check_response_cards(self, phase, opponent, args=[]):
+        cards = [ c for c in self.response \
+                  if ((c is not None) and \
+                   await c.check(phase, opponent, args))]
+        if len(cards)>0:
+            choices = \
+                await self.game.cardGamePlayer.get_cards(self.socketId,
+                                               'Choose response card',
+                                    {'cards':[c.data['name'] for c in cards]}
+                                                            )
+            print('in check_response_cards',choices)
+            out = False
+            for _,i in choices:
+                print(cards[i].data['name'])
+                out = out or await cards[i].run(phase, opponent, args)
+        
+        return False
 
     async def remove_none(self):
         if not self.game.active:
@@ -991,6 +1024,7 @@ class Player:
             
             return True
         elif 'response' in c.data['cardType']:
+            await self.add_cards_to('response',[c])
             return True
         else:
             # shouldn't get here

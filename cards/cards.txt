@@ -60,7 +60,7 @@
         "img": "/data/cards/soulbond.png",
         "move": "Activate when a card you control is about to be destroyed. Destroy the card that would have distroyed this card as well.",
         "txtcolor": "",
-        "cardType": "action",
+        "cardType": "response",
         "cardAction": ""
     },
     {
@@ -375,9 +375,9 @@
         "name": "Surprise Attack ",
         "cost": "1",
         "img": "",
-        "move": "Activate only when your opponent special plays a unit. Send it back to their deck. ",
+        "move": "Activate when your opponent special plays a unit card. Shuffle the card into their deck.",
         "txtcolor": "",
-        "cardType": "action",
+        "cardType": "response",
         "cardAction": ""
     },
     {
@@ -438,9 +438,9 @@
         "name": "Voc\u00c3\u00aa N\u00c3\u00a3o",
         "cost": "2",
         "img": "",
-        "move": "Activate when your opponent uses any effect. Its effect is negated and reversed back to them.",
+        "move": "Activate when your opponent activates a card. Negate the effect, and reverse it back to them.",
         "txtcolor": "",
-        "cardType": "action",
+        "cardType": "response",
         "cardAction": ""
     },
     {
@@ -512,7 +512,7 @@
         "img": "",
         "move": "Activate only when your opponent's Unit is about to deal damage to you directly. Negate the attack but destroy one swordsman on your side of the field. Gain Health equal to it's original RP",
         "txtcolor": "",
-        "cardType": "action",
+        "cardType": "response",
         "cardAction": ""
     },
     {
@@ -546,9 +546,9 @@
         "name": "Malfunction",
         "cost": "0",
         "img": "",
-        "move": "Activate when your opponent uses an effect. Its new effect is it does nothing and your opponent loses 2 health.",
+        "move": "Activate when your opponent activates a unit card. Negate the effect, your opponent loses 2 health, and that card may no longer be activated for the rest of the game.",
         "txtcolor": "",
-        "cardType": "action",
+        "cardType": "response",
         "cardAction": ""
     },
     {
@@ -589,7 +589,7 @@
     },
     {
         "name": "Black Market",
-        "cost": "2",
+        "cost": "1",
         "img": "",
         "move": "Pick one win condition card from your pile. This is now another way for you to win.",
         "txtcolor": "",
@@ -627,9 +627,9 @@
         "name": "Full Counter",
         "cost": "4",
         "img": "",
-        "move": "Activate when your opponent declares an attack. Negate it and deal damage equal to the Unit's original RP as direct damage.",
+        "move": "Activate when your opponent declares an attack. Choose one attacking unit, negate its damage and deal damage equal to the Unit's original RP as direct damage.",
         "txtcolor": "",
-        "cardType": "action",
+        "cardType": "response",
         "cardAction": ""
     },
     {
