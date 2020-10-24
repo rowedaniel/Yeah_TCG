@@ -45,7 +45,7 @@ async def reqAllCards(sid, data):
     await cardManager.reqAllCards(sid,data)
 
 @sio.on('clientAddCard')
-async def reqAllCards(sid, data):
+async def clientAddCard(sid, data):
     await cardManager.clientAddCard(sid,data)
 
 @sio.on('clientAddDeck')
