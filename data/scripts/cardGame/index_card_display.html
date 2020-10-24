@@ -66,8 +66,8 @@
 
 	</div>
 
-	<canvas id="gamecanvas" width="1000" height="800"></canvas>
-	<canvas id="cardcanvas" width="606" height="890"></canvas>
+	<!--<canvas id="gamecanvas" width="1000" height="800"></canvas>-->
+	<img id="bigimage" width="606" height="890"></img>
 
 	<div id="testdiv"></div>
 	
@@ -115,7 +115,7 @@
 				f(e);
 			}
 		}
-		
+		/*
 		const mainLoopFunctions = [];
 		const mainLoop = function(timestamp) {
 			for(let f of mainLoopFunctions) {
@@ -138,24 +138,30 @@
 			}
 			
 			
-			const entities = [];
+			//const entities = [];
 			const cards = [];
 			let cardX = 0;
 			let cardY = 100;
-			let scrollX = 0;
-			let scrollY = 0;
 			let scrollingLeft = false;
 			let scrollingRight = false;
 			
 			
 			
 			// late init
-			addCard = function(data, entities) {
-				let c = Card(entities, cardX+scrollX, cardY, data.name, data.cost, data.img, data.move, data.txtcolor, data.cardType, data.cardAction);
-				cards.push(c);
+			addCard = function(data) {
+				let c = Card(cards, cardX, cardY, data.name, data.cost, data.img, data.move, data.txtcolor, data.cardType, data.cardAction);
 				c.resize(0.4,0.4);
-				cardX -= c.width*1.2;
+				cardX -= c.width;//*1.2;
 			}
+			
+			initCardFunctions.push(function(data) {
+				for(let c of data) {
+					addCard(c);
+					break;
+				}
+			});
+			
+			/*
 			scrollCard = function(c) {
 				if(c.x > canvas.width) {
 					c.x = cardX;
@@ -172,29 +178,14 @@
 					c.xvel *= 0.95;
 				}
 			}
-			updateScroll = function() {
-				scrollX += 3;
-				scrollX %= canvas.width;
-			}
 			
-			initCardFunctions.push(function(data) {
-				for(let c of data) {
-					addCard(c, entities);
-				}
-			});
 			
 			// input 
 			buttonDownFunctions.push(function(e){
 				if(e.key === 'a' || e.key === 'ArrowLeft') {
-					for(let c of cards) {
-						//c.xvel = 32;
-						scrollingLeft = true;
-					}
+					scrollingLeft = true;
 				} else if(e.key === 'd' || e.key === 'ArrowRight') {
-					for(let c of cards) {
-						//c.xvel = -32;
-						scrollingRight = true;
-					}
+					scrollingRight = true;
 				} else if(e.key === 'ArrowUp') {
 					for(let c of cards) {
 						c.yvel = -4;
@@ -210,13 +201,9 @@
 			
 			buttonUpFunctions.push(function(e){
 				if(e.key === 'a' || e.key === 'ArrowLeft') {
-					for(let c of cards) {
-						scrollingLeft = false;
-					}
+					scrollingLeft = false;
 				} else if(e.key === 'd' || e.key === 'ArrowRight') {
-					for(let c of cards) {
-						scrollingRight = false;
-					}
+					scrollingRight = false;
 				} else if(e.key === 'ArrowUp') {
 					for(let c of cards) {
 						c.yvel = 0;
@@ -235,7 +222,7 @@
 				mouseDown = true;
 				prevMx = mX;
 				mX = e.clientX;
-				console.log(e.clientX, e.clientY);
+				//console.log(e.clientX, e.clientY);
 			}
 			
 			document.onmousemove = function(e) {
@@ -245,7 +232,7 @@
 				
 				for(let c of cards) {
 					c.xvel = mX-prevMx;
-					console.log(e.clientX, c.xvel);
+					//console.log(e.clientX, c.xvel, c.img);
 				}
 			}
 			
@@ -254,53 +241,53 @@
 				scrollingLeft = false;
 				scrollingRight = false;
 			}
-			
-			let entity;
+
+			let card;
 			mainLoopFunctions.push(function(timestamp) {
 				ctx.clearRect(0,0,canvas.width,canvas.height);
-				for(entity of entities) {
-					entity.update();
-					scrollCard(entity);
-					entity.draw(ctx);
+				for(card of cards) {
+					//card.update();
+					//scrollCard(card);
+					card.draw(ctx);
 				}
-				updateScroll();
-			})
+			});
+			console.log(cards);
 		}
 		cardScroll();
-		
-		
+
+		*/
 		
 		
 		
 		const singleCard = function() {
-			const canvas = document.getElementById("cardcanvas");
-			const ctx = canvas.getContext("2d");
+			const img = document.getElementById("bigimage");
 		
-			const entities = [];
 			const cards = [];
 			
 			
 			let currentCard = 0;
 			const cycleCard = function(inc) {
-				cards[currentCard].x = 1000;
-				cards[currentCard].y = 1000;
 				currentCard += inc;
 				currentCard %= cards.length;
-				cards[currentCard].x = 0;
-				cards[currentCard].y = 0;
+				img.src = cards[currentCard].src;
 			}
 			
 			
 			initCardFunctions.push(function(data) {
 				for(let cardData of data) {
-					let c = Card(entities, 1000, 1000, cardData.name, cardData.cost, cardData.img, cardData.move, cardData.txtcolor, cardData.cardType, cardData.cardAction);
-					cards.push(c);
+					const c = Card([], 0, 0, cardData.name, cardData.cost, cardData.img, cardData.move, cardData.txtcolor, cardData.cardType, cardData.cardAction);
+					cards.push(c.img);
 				}
-				cycleCard(1);
+				const firstLoad = function() {
+					cycleCard(0);
+					if(cards[0].src.substr(-16)==="cardtemplate.png") {
+						setTimeout(firstLoad, 100);
+					}
+				}
+				firstLoad();
 			});
 			
-			canvas.onclick = function() {cycleCard(1);};
-			
+			img.onclick = function(){cycleCard(1);};
 			
 			buttonDownFunctions.push(function(e) {
 				if(e.key === "k") {
@@ -309,13 +296,6 @@
 					} else {
 						cycleCard(-1);
 					}
-				}
-			});
-			
-			mainLoopFunctions.push(function(timestamp) {
-				for(entity of entities) {
-					entity.update();
-					entity.draw(ctx);
 				}
 			});
 		}
