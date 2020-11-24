@@ -5,8 +5,9 @@ from server_scripts.Cards import *
 
 
 
-
+# TODO: change to CardgameManager
 class CardGamePlayer:
+    # TODO: write description (with blockquotes)
 
     __slots__ = ('sio', 'cardManager',
                  'authTokens',

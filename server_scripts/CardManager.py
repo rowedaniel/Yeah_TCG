@@ -1,22 +1,22 @@
+# TODO: change loadCardStuff to loadCardData
 from server_scripts import loadCardStuff
 
+# TODO: change to CardDataManager
 class CardManager:
-    def __init__(self,sio):
+    def __init__(self, sio):
+        self.sio = sio
+        
         self.cards = loadCardStuff.loadCards()
         # TODO: check deck to make sure it works.
         self.decks = loadCardStuff.loadDecks()
 
-
-        
-        #bad practice, but not sure how to replace this
-        self.sio = sio
     async def getCardByName(self, name):
         res = list(filter(lambda x: x['name']==name, self.cards))
         if len(res) > 0:
             return res[0]
         return False
 
-    async def reqAllCards(self,sid,data):
+    async def reqAllCards(self, sid, data):
         await self.sio.emit('resAllCards', self.cards, room=sid)
         
 
