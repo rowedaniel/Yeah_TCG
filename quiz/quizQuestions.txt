@@ -36,3 +36,8 @@ Name the #1 contender to become a servant in FGO
 Dan, you're in 
 What is the powerhouse of the cell?
 What is the classification of neutral countries in the Cold War?
+Given a general problem which requires knowledge of some previous state (i.e. memory), what type of neural network is best used?
+Congratulations, you've reached the first checkpoint! To restart from here, type the following at any point: 'OBOhcX8B3ruzfvOwFdgQ'
+In 'Kimetsu No Yaiba' the fight against Upper moon one what did Genya eat? (Hint: 2 things)
+You Finished! Now, make a new question!
+You Finished! Now, make a new question!

@@ -1,5 +1,5 @@
 
-# Base Card class
+# Base Card for playing class
 class Card:
     __slots__ = ('player', 'data', 'tags')
 
