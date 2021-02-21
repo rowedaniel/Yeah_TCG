@@ -32,6 +32,7 @@
 [IN PROGRESS] response cards
 
 Planned Features:
+make your health say "your health"
 make safari work (scrollbars??)
 improve client code to work on old browsers
 implement every response card

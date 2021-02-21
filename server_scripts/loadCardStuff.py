@@ -11,9 +11,9 @@ def saveCards(cards):
 
 def loadDecks():
     # TODO: check deck to make sure it works.
-    decks = {'k':{ 'deck': ['Miyamoto Musashi',
-                            'Miyamoto Musashi',
-                            'Miyamoto Musashi',
+    decks = {'k':{ 'deck': ['Sweaty Homunculus',
+                            'Sweaty Homunculus',
+                            'Sweaty Homunculus',
                             'ROID RAGE',
                             'ROID RAGE',
                             'ROID RAGE',
