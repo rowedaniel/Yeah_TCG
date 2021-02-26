@@ -94,7 +94,7 @@
 		// card submit function
 		
 		function cardsubmit(){
-			socket.emit('clientAddCard', {name : document.forms['cardForm']['cardname'].value,
+			socket.emit('reqAddStockCard', {name : document.forms['cardForm']['cardname'].value,
 									   cost : document.forms['cardForm']['cardcost'].value,
 									   img  : document.forms['cardForm']['cardimg'].value,
 									   move : document.forms['cardForm']['cardmoves'].value,

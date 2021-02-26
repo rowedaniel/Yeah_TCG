@@ -53,6 +53,8 @@ choose card gets broken if packet doesn't get through
 Go through every card and make the phrasing consistent/better
 Make it so when building deck, you can't have more than 1 legendary/3 goal cards/more than one of the same goal card
 Make is so when building deck, there's a lower limit on number of cards
+Julius Caesar doesn't sacrifice
+Demon's Rebirth doesn't work
 
 
 card would be destroyed

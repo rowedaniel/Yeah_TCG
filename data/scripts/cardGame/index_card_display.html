@@ -96,7 +96,7 @@
 		
 		
 		const initCardFunctions = [];	
-		socket.on("resAllCards", function(data) {
+		socket.on("resAllStockCards", function(data) {
 			for(let f of initCardFunctions) {
 				f(data);
 			}
@@ -302,8 +302,8 @@
 		singleCard();
 		
 		
-		socket.emit("reqAllCards", {});
-		requestAnimationFrame(mainLoop);
+		socket.emit("reqAllStockCards", {});
+		//requestAnimationFrame(mainLoop);
 		
 	</script>
 	

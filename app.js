@@ -665,7 +665,7 @@ function loadQuiz() {
 			if(!line || line.length === 0) {
 				continue;
 			}
-			quizAnswers.push(line.replace(/(\r\n|\n|\r)/gm, ""));
+			quizAnswers.push(line.replace(/(\r\n|\n|\r|\r)/gm, ""));
 		}
 	});
 	

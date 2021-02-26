@@ -8,6 +8,7 @@
 #   2. Server receives request, and handles it: handle_req_example_message()
 #   3. Server may respond with a result (marked with a preceding 'res')
 #   4. All messages are camel case: 'reqExampleMessage'
+#   5. Messages sent from server which don't take a response are exceptions
 #
 # There is one exception to this standard, where the server sends out a
 # request, and the client responds with a result. This is clearly marked.
@@ -19,7 +20,7 @@
 
 from aiohttp import web
 import socketio
-from server_scripts import CardManager, CardGamePlayer 
+from server_scripts import CardManager, CardGamePlayer, QuizManager
 
 # Set up server and sockets
 # TODO: make sio a global?
@@ -31,6 +32,7 @@ sio.attach(app)
 # Set up internal server logic
 cardManager = CardManager.CardManager(sio)
 cardGamePlayer = CardGamePlayer.CardGamePlayer(sio, cardManager)
+quizManager = QuizManager.QuizManager(sio)
 
 
 
@@ -51,37 +53,51 @@ async def pingAll():
 
 # ================ Handle client requests ================
 @sio.on('dong')
-async def recievePing(sid, data):
+async def handle_recievePing(sid, data):
     print('dong')
 
 # Handle client request for stock copy of all card data
-# TODO: change to reqAllStockCards
-@sio.on('reqAllCards')
+# used to be reqAllCards
+@sio.on('reqAllStockCards')
 # TODO: change to handle_reqAllStockCards
-async def reqAllCards(sid, data):
-    await cardManager.reqAllCards(sid, data)
-
+async def handle_reqAllStockCards(sid, data):
+    await cardManager.resAllStockCards(sid, data)
+    
 # Handle client request to add new card data (for 1 card) to database
-# TODO: change to reqAddStockCard
-@sio.on('clientAddCard')
-# TODO: change to handle_reqAddStockCard
-async def clientAddCard(sid, data):
-    await cardManager.clientAddCard(sid, data)
+# used to be clientAddCard
+@sio.on('reqAddStockCard')
+async def handle_reqAddStockCard(sid, data):
+    await cardManager.addStockCard(sid, data)
 
-@sio.on('clientAddDeck')
-async def clientAddDeck(sid, data):
-    await cardManager.clientAddDeck(sid, data)
+# used to be clientAddDeck
+@sio.on('reqAddDeck')
+async def handle_reqAddDeck(sid, data):
+    await cardManager.addDeck(sid, data)
 
-@sio.on('clientReqDeck')
-async def clientReqDeck(sid, data):
+# used to be clientReqDeck
+@sio.on('reqQueueGame')
+# TODO: change to handle_reqQueueGame
+async def handle_reqQueueGame(sid, data):
     await cardGamePlayer.client_req_deck(sid,data)
 
-# TODO: change to clientResChooseCards
-@sio.on('playerGetCards')
+# used to be playerGetCards
+@sio.on('clientResChooseCards')
 # TODO: change to handle_clientResChooseCards
-async def playerGetCards(sid, data):
+async def handle_clientResChooseCards(sid, data):
     await cardGamePlayer.res_get_cards(sid, data)
 
+
+@sio.on('startQuiz')
+async def handle_startQuiz(sid, data):
+    await quizManager.handle_startQuiz(sid, data)
+
+@sio.on('quizAttemptAnswer')
+async def handle_quizAttemptAnswer(sid, data):
+    await quizManager.handle_quizAttemptAnswer(sid, data) 
+
+@sio.on('quizSubmitQuestion')
+async def handle_quizSubmitQuestion(sid, data):
+    await quizManager.handle_quizSubmitQuestion(sid, data) 
 # ================ End handle client requests ================
 
 

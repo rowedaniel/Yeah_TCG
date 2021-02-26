@@ -1,7 +1,7 @@
 [
     {
         "name": "Sharpen Swords",
-        "cost": "1",
+        "cost": "2",
         "img": "/data/cards/sharpensword.png",
         "move": "Discard a common swordsman card from your hand. Search your deck for a rare swordsman card, and special play it.",
         "txtcolor": "",
@@ -12,7 +12,7 @@
         "name": "Golden Claws",
         "cost": "0",
         "img": "/data/cards/goldenclaws.png",
-        "move": "Target demon card on your field gains +2 RP for the rest of the game.",
+        "move": "Target demon card on your field gains +2 RP.",
         "txtcolor": "",
         "cardType": "action",
         "cardAction": "searchCollection me play any demon 0 choose me me play 1 0 1 increaseRP me 2 1"
@@ -43,22 +43,22 @@
         "txtcolor": "",
         "cardType": "action",
         "cardAction": "spyCollection me play 0 0 roidRage me 0",
-		"parseCost": "any"
+        "parseCost": "any"
     },
     {
         "name": "Power of the Church",
         "cost": "0",
         "img": "/data/cards/powerofthechurch.png",
-        "move": "When your opponent threatens to destroy a card (including their own). Its effect is negated.",
+        "move": "Activate when your opponent threatens to destroy a unit (including their own). Its effect is negated.",
         "txtcolor": "",
-        "cardType": "action",
+        "cardType": "response",
         "cardAction": ""
     },
     {
         "name": "Soul Bond",
         "cost": "0",
         "img": "/data/cards/soulbond.png",
-        "move": "Activate when a card you control is about to be destroyed. Destroy the card that would have distroyed this card as well.",
+        "move": "Activate when a unit you control is attacked, and about to be destroyed. Destroy the attacking unit as well.",
         "txtcolor": "",
         "cardType": "response",
         "cardAction": ""
@@ -164,16 +164,25 @@
     },
     {
         "name": "Breath User Jaycob",
-        "cost": "3",
+        "cost": "2",
         "img": "/data/cards/breathuserjaycob.png",
-        "move": "*This card cannot attack*     While this card is on the field, gain +1 breath each turn.",
+        "move": "*This card cannot attack*     Once per turn, gain +1 breath.",
         "txtcolor": "",
         "cardType": "rare Jaycob unit fullart",
         "cardAction": "onPlay this 0 onPlay attackCooldown me -1 0 increaseBreath me 1"
     },
     {
-        "name": "Dead Shinubo",
+        "name": "Buff Jaycob",
         "cost": "4",
+        "img": "",
+        "move": "*This card cannot attack*     Once per turn, you may choose to gain +3 breath, then decrase this card's RP by 1.",
+        "txtcolor": "",
+        "cardType": "rare Jaycob unit fullart",
+        "cardAction": "onPlay this 0 onPlay attackCooldown me -1 0 increaseBreath me 3 this 0 increaseRP me -1 0"
+    },
+    {
+        "name": "Dead Shinubo",
+        "cost": "1",
         "img": "/data/cards/deadshinobu.png",
         "move": "Everyone's simpin' for her! Discard the top 3 cards of your opponent's deck",
         "txtcolor": "",
@@ -207,7 +216,7 @@
         "cardType": "goal fullart",
         "cardAction": ""
     },
-	{
+    {
         "name": "Smokeless Lungs",
         "cost": "",
         "img": "",
@@ -216,7 +225,7 @@
         "cardType": "goal fullart",
         "cardAction": ""
     },
-	{
+    {
         "name": "Power of a Homeowner",
         "cost": "",
         "img": "",
@@ -279,7 +288,6 @@
         "cardType": "legendary swordsman unit fullart",
         "cardAction": "onPlay searchCollection me deck common swordsman 0 onPlay searchCollection me deck rare swordsman 0 onPlay choose me me deck 3 0 1 onPlay moveCards me deck play 1"
     },
-	
     {
         "name": "Sir Lancelot ",
         "cost": "8",
@@ -306,7 +314,7 @@
         "txtcolor": "",
         "cardType": "rare demon unit",
         "cardAction": "this 0 resetRP me 0",
-		"parseCost": "length discard"
+        "parseCost": "length discard"
     },
     {
         "name": "Baby Demon",
@@ -339,10 +347,10 @@
         "name": "Lucifer's Servant",
         "cost": "4",
         "img": "",
-        "move": "Hums constantly, so it's very annoying to fight with her. This card gains +1 RP whenever a demon unit you control is destroyed.",
+        "move": "Hums constantly, so it's very annoying to fight with her. Discard the top 2 cards of your deck. This card gains +1 RP",
         "txtcolor": "",
         "cardType": "common demon unit",
-        "cardAction": ""
+        "cardAction": "spyCollection me deck 3 0 moveCards me deck discard 0 this 1 increaseRP me 1 1"
     },
     {
         "name": "Messenger of Hades",
@@ -372,7 +380,7 @@
         "cardAction": "searchCollection me discard rare Jaycob 0 choose me me discard 1 0 1 moveCards me discard hand 1"
     },
     {
-        "name": "Surprise Attack ",
+        "name": "Surprise Attack",
         "cost": "1",
         "img": "",
         "move": "Activate when your opponent special plays a unit card. Shuffle the card into their deck.",
@@ -544,7 +552,7 @@
     },
     {
         "name": "Malfunction",
-        "cost": "0",
+        "cost": "2",
         "img": "",
         "move": "Activate when your opponent activates a unit card. Negate the effect, your opponent loses 2 health, and that card may no longer be activated for the rest of the game.",
         "txtcolor": "",
@@ -555,9 +563,9 @@
         "name": "Aegis",
         "cost": "0",
         "img": "",
-        "move": "Once per turn when an opponent's unit declares an attack. Stop the attack then set this card facedown again. This effect can only be used once per turn.",
+        "move": "Activate when an opposing unit attacks you. Stop the attack then set this card facedown again. This effect can only be used once per turn.",
         "txtcolor": "",
-        "cardType": "action",
+        "cardType": "response",
         "cardAction": ""
     },
     {
@@ -625,9 +633,9 @@
     },
     {
         "name": "Full Counter",
-        "cost": "4",
+        "cost": "1",
         "img": "",
-        "move": "Activate when your opponent declares an attack. Choose one attacking unit, negate its damage and deal damage equal to the Unit's original RP as direct damage.",
+        "move": "Activate when you would have taken direct damage from an opponent's card. Cancel the damage and reflect it back onto them.",
         "txtcolor": "",
         "cardType": "response",
         "cardAction": ""

@@ -103,7 +103,7 @@ img {
 		// card submit function
 		
 			
-		socket.on("resAllCards", function(data) {
+		socket.on("resAllStockCards", function(data) {
 			for(let c of data) {
 				addCard(c);
 			}
@@ -135,7 +135,7 @@ img {
 		}
 		
 		
-		socket.emit("reqAllCards", {});
+		socket.emit("reqAllStockCards", {});
 		
 	</script>
 	

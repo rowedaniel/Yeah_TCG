@@ -21,13 +21,16 @@ def loadDecks():
                             'Call of Hades',
                             'Call of Hades',
                             'Tyranny',
+                            'Chad Squire',
+                            'Chad Squire',
+                            'Chad Squire',
                             'Breath User Jaycob',
                             'Breath User Jaycob',
                             'Breath User Jaycob',
                             'Recruitment',
-                            'Soul Bond',
-                            'Soul Bond',
-                            'Soul Bond',
+                            'Full Counter',
+                            'Full Counter',
+                            'Full Counter',
                             'Skinny Jaycob',
                             'Skinny Jaycob',
                             'Skinny Jaycob',], 
@@ -140,6 +143,9 @@ def loadDecks():
              'dame dame':{'deck': ['Baseball Lad', 'Baseball Lad', 'Baseball Lad', 'Breath User Jaycob', 'Breath User Jaycob', 'Breath User Jaycob', 'Excalibur', 'Excalibur', 'Excalibur', 'King Arthur', 'King Arthur', 'King Arthur', 'Skinny Jaycob', 'Skinny Jaycob', 'Skinny Jaycob', "Jaycob's inner demon", "Jaycob's inner demon", "Jaycob's inner demon", 'Sir Lancelot ', 'Achilles the mythical Swordsman ', 'Sharpen Swords', 'Sharpen Swords', 'Sharpen Swords', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis'],
                           'goals': ['The March of the Fairyfly', 'Pretty Good Attack', 'Dance of Metal']
                           },
+             'birginia' : {'deck': ['Sharpen Swords', 'Sharpen Swords', 'Sharpen Swords', 'Golden Claws', 'Golden Claws', 'Call of Hades', 'Call of Hades', 'ROID RAGE', 'Recruitment', 'Chad Squire', 'Baseball Lad', 'Baseball Lad', 'Baseball Lad', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis', 'Julius Caesar', 'Julius Caesar', 'Julius Caesar', 'Ajax the Spearman', 'Ajax the Spearman', 'Ajax the Spearman', 'Jason the Hero', 'Breath User Jaycob', 'Breath User Jaycob', 'Breath User Jaycob', 'Buff Jaycob', 'Buff Jaycob', 'Buff Jaycob', 'Dead Shinubo', 'Dead Shinubo', 'Dead Shinubo', 'Scout the Scout', 'Scout the Scout', 'Scout the Scout', 'King Arthur', 'Excalibur', 'Achilles the mythical Swordsman ', 'Achilles the mythical Swordsman ', 'Achilles the mythical Swordsman '], 'goals': ['Dance of Metal', 'Smokeless Lungs', 'Pretty Good Attack']},
+             'Herio' : {'deck': ['Kchau', 'Kchau', 'Kchau', 'Full Counter', 'Full Counter', 'Full Counter', "Demon's Rebirth", "Demon's Rebirth", "Demon's Rebirth", 'Miyamoto Musashi', 'Miyamoto Musashi', 'Miyamoto Musashi', 'Friends Close Enemies Closer', 'Friends Close Enemies Closer', 'Friends Close Enemies Closer', "Banji's Scream", "Banji's Scream", "Banji's Scream", 'Kiss of Death', 'Kiss of Death', 'Kiss of Death', 'Skinny Jaycob', 'Skinny Jaycob', 'Skinny Jaycob', "Lucifer's Servant", "Lucifer's Servant", "Lucifer's Servant", 'King Arthur', 'King Arthur', 'Lucifer the Demon King', 'Dead Shinubo', 'Dead Shinubo', 'Dead Shinubo', 'Breath User Jaycob', 'Breath User Jaycob', 'Breath User Jaycob', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis', 'Mr. Deffrey Javis', 'Baseball Lad', 'Baseball Lad', 'Baseball Lad', 'Chad Squire', 'Chad Squire', 'Recruitment', 'Metamorphosis ', 'Metamorphosis ', 'Soul Bond', 'Soul Bond', 'ROID RAGE', 'ROID RAGE', 'ROID RAGE', 'Sweaty Homunculus', 'Sweaty Homunculus', 'Sweaty Homunculus', 'Jack the Ripper', 'Jack the Ripper', "Achilles's Shield ", "Achilles's Shield ", 'Excalibur', 'Excalibur', 'The flaming sword of Lucifer', 'The flaming sword of Lucifer', 'Soul Snatcher', 'Soul Snatcher'], 'goals': ['Dance of Metal', 'Flesh of the King', 'Smokeless Lungs']},
+                           
              }
     return decks
 

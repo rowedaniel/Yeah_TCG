@@ -43,6 +43,10 @@ class BaseCard {
 	addTo(container) {
 		container.appendChild(this.div);
 	}
+	
+	addToStart(container) {
+		container.prepend(this.div);
+	}
 }
 
 

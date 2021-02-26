@@ -153,7 +153,8 @@ class CardGamePlayer:
             # remake authTokn, and send message
             self.authTokens[sid] = random.random()
             cardgroups['authToken'] = self.authTokens[sid]
-            await self.sio.emit('playerGetCards', cardgroups, room=sid)
+            # used to be playerGetCards
+            await self.sio.emit('serverReqChooseCards', cardgroups, room=sid)
 
             # check 10 times for response, before refreshing authToken again.
             for i in range(10):
@@ -198,7 +199,8 @@ class CardGamePlayer:
             # remake authTokn, and send message
             self.authTokens[sid] = random.random()
             textOptions['authToken'] = self.authTokens[sid]
-            await self.sio.emit('playerGetText', textOptions, room=sid)
+            # used to be playerGetText
+            await self.sio.emit('serverReqChooseText', textOptions, room=sid)
 
             # check 10 times for response, before refreshing authToken again.
             for i in range(10):
@@ -620,12 +622,8 @@ class Game:
 
 class Player:
     __slots__ = ('cardManager', 'game', 'socketId',
-                 'deck',
-                 'activeGoals', 'goals',
-                 'hand',
-                 'discard',
-                 'play',
-                 'response',
+                 'deck', 'activeGoals', 'goals', 'hand',
+                 'discard', 'play', 'response',
                  'collections',
                  'tempPlay',
                  'attackers',
@@ -841,13 +839,18 @@ class Player:
             #diff = abs(c.rp-a.rp)
             cdmg = a.rp
             admg = c.rp
+
+            # check response card for destruction
+            if await self.check_response_cards(0, opponent, (c,a), c.data['name']):
+                # successful, but canceled by response card
+                return True
+            
             print(c.data['name'], 'takes',cdmg)
             print(a.data['name'], 'takes',admg)
             await c.update_rp(-cdmg)
             await a.update_rp(-admg)
 
             if c.rp <= 0:
-                await self.check_response_cards(0, opponent)
                 print(c.data['name'], 'was destroyed')
                 await a.add_kill(c)
                 await CardExecutor.execute_card_action_on(a,
@@ -874,6 +877,14 @@ class Player:
         if len(self.attackers) > 0:
             a = self.attackers.pop(0)
             print('took',a.rp,'from',a.data['name'])
+            
+            # check response card for direct damage
+            if await self.check_response_cards(2,
+                                                   opponent,
+                                                   a, a.data['name']):
+                    # successful, but canceled by response card
+                    return True
+            
             await a.add_attack()
             await self.update_health(-a.rp)
             return True
@@ -884,6 +895,14 @@ class Player:
             return
         if i < len(self.play):
             c = self.play[i]
+
+            # get opponent, activate their response card
+            for o in self.game.players:
+                if o == self: continue
+                if await opponent.check_response_cards(3, self, c, c.data['name']):
+                    # successful, just got cancled by response card
+                    return True
+                    
             await CardExecutor.execute_card_action(c, self, opponent)
             c.hasActivated = True
             return True
@@ -908,14 +927,24 @@ class Player:
                     for c in filter(lambda x: x is not None,
                                     self.activeGoals)])
 
-    async def check_response_cards(self, phase, opponent, args=[]):
+    async def check_response_cards(self, phase, opponent, args=[], msg = ''):
+
+        phaseMessage = ('%s attacked!' % msg,
+                        '%s special played!' % msg,
+                        'Taking direct damage from %s!' % msg,
+                        '%s activated!' % msg,
+                        'Attack declared!')[phase]
+
+        msg = phaseMessage + ' Choose response card.'
+        
+        print('args:',args)
         cards = [ c for c in self.response \
                   if ((c is not None) and \
                    await c.check(phase, opponent, args))]
         if len(cards)>0:
             choices = \
                 await self.game.cardGamePlayer.get_cards(self.socketId,
-                                               'Choose response card',
+                                    msg,
                                     {'cards':[c.data['name'] for c in cards]}
                                                             )
             print('in check_response_cards',choices)
@@ -923,7 +952,7 @@ class Player:
             for _,i in choices:
                 print(cards[i].data['name'])
                 out = out or await cards[i].run(phase, opponent, args)
-        
+            return out
         return False
 
     async def remove_none(self):
@@ -957,6 +986,8 @@ class Player:
             return
         for c in self.play:
             await c.reset_all()
+        for c in self.response:
+            await c.reset_all()
         await self.remove_none()
 
 
@@ -968,6 +999,7 @@ class Player:
     async def deal_cards(self, count):
         if not self.game.active:
             return
+        await self.remove_none()
         cards = await self.pull_cards_from('deck', count)
         print('in deal_cards, dealing',len(cards),'cards.')
         await self.add_cards_to('hand', cards)
@@ -1179,12 +1211,27 @@ class Player:
         cardIndex.sort()
         cardIndex = cardIndex[::-1]
         print('in move_cards, cardIndex is:',cardIndex)
-
         moveCards = [self.collections[inCollection][i] for i in cardIndex]
+
+        if outCollection == 'play':
+            for card in moveCards:
+                # check response cards, phase 1 = special play
+                # get opponent
+                for o in self.game.players:
+                    if o == self: continue
+                    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+                    if await o.check_response_cards(1,
+                                                    self,
+                                                    card,
+                                                    card.data['name']):
+                        # it canceled the effect!
+                        return
+
         for i in cardIndex:
             self.collections[inCollection][i] = None
         
         await self.add_cards_to(outCollection,moveCards)
+
 
 
 

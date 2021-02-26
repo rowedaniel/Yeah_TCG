@@ -153,7 +153,7 @@ cmdTable = {
                 3,
                 (lambda x: x in ('me','you'),
                 lambda x,y: y+'.'+x),
-                (lambda x: x in [str(i) for i in range(1,40)],
+                (lambda x: x in [str(i) for i in range(-40,40)],
                 lambda x,y: x+y+','),
                 (lambda x: x in tags,
                 lambda x,y: x+y+')'),
@@ -378,7 +378,7 @@ async def execute_card_action_on(card, me, you, onStrIndex):
 
     await me.remove_card_tags()
     await you.remove_card_tags()
-    if any([len(c.tags)>0 for c in me.play]):
+    if any([len(c.tags)>0 for c in filter(lambda x: x is not None, me.play)]):
         print('tags not reset!!')
 
     

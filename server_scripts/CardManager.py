@@ -16,8 +16,9 @@ class CardManager:
             return res[0]
         return False
 
-    async def reqAllCards(self, sid, data):
-        await self.sio.emit('resAllCards', self.cards, room=sid)
+    async def resAllStockCards(self, sid, data):
+        # used to be resAllCards
+        await self.sio.emit('resAllStockCards', self.cards, room=sid)
         
 
 
@@ -64,13 +65,13 @@ class CardManager:
              
             
 
-    async def clientAddCard(self,sid,data):
+    async def addStockCard(self,sid,data):
         print(data)
         await self.cardQualityControl(data)
         self.cards.append(data)
         loadCardStuff.saveCards(self.cards)
 
-    async def clientAddDeck(self,sid,data):
+    async def addDeck(self,sid,data):
         print(data)
         # TODO: check deck to make sure it works.
         self.decks[data['name']] = {}

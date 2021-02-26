@@ -156,14 +156,14 @@ img:hover {
 				elem.style = "animation-name: flashRed;animation-duration: 0.1s;animation-fill-mode: forwards;";
 				return;
 			}
-			socket.emit('clientAddDeck', {name : document.forms['cardForm']['deckName'].value, deck:selectedCards, goals:selectedGoalCards});
+			socket.emit('reqAddDeck', {name : document.forms['cardForm']['deckName'].value, deck:selectedCards, goals:selectedGoalCards});
 			document.forms['cardForm']['deckName'].value = '';
 			elem.style = "animation-name: flashGreen;animation-duration: 0.1s;animation-fill-mode: forwards;";
 			elem.innerHTML = "Success!";
 		}
 		
 		// main stuff
-		socket.on("resAllCards", function(data) {
+		socket.on("resAllStockCards", function(data) {
 			addCards(data);
 		});
 		
@@ -220,7 +220,7 @@ img:hover {
 		
 		
 		
-		socket.emit("reqAllCards", {});
+		socket.emit("reqAllStockCards", {});
 		
 		setTimeout(addCardsToDisplay, 500);
 		

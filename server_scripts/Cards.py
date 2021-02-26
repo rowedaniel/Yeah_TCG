@@ -1,3 +1,5 @@
+from server_scripts import CardExecutor 
+
 
 # Base Card for playing class
 class Card:
@@ -184,12 +186,11 @@ class ResponseCard(NotPlayCard):
     async def check(self, phase, opponent, args=[]):
         if phase >= 6:
             return False
-        return await (self.check_before_destroyed,
+        return await (self.check_before_attacked,
                     self.check_before_special_play,
                     self.check_before_direct_damage,
-                    self.check_before_unit_activate,
-                    self.check_after_declare_attack,)[phase](opponent)
-    async def check_before_destroyed(self, opponent, args=[]):
+                    self.check_before_unit_activate,)[phase](opponent, args)
+    async def check_before_attacked(self, opponent, args=[]):
         return False
     async def check_before_special_play(self, opponent, args=[]):
         return False
@@ -197,41 +198,136 @@ class ResponseCard(NotPlayCard):
         return False
     async def check_before_unit_activate(self, opponent, args=[]):
         return False
-    async def check_after_declare_attack(self, opponent, args=[]):
-        return False
 
     async def run(self, phase, opponent, args=[]):
         if phase >= 6:
             return False
-        return await (self.run_before_destroyed,
+        return await (self.run_before_attacked,
                     self.run_before_special_play,
                     self.run_before_direct_damage,
-                    self.run_before_unit_activate,
-                    self.run_after_declare_attack,)[phase](opponent)
-    async def run_before_destroyed(self, opponent, args=[]):
-        pass
+                    self.run_before_unit_activate,)[phase](opponent, args)
+    async def run_before_attacked(self, opponent, args=[]):
+        return False
     async def run_before_special_play(self, opponent, args=[]):
-        pass
+        return False
     async def run_before_direct_damage(self, opponent, args=[]):
-        pass
+        return False
     async def run_before_unit_activate(self, opponent, args=[]):
+        return False
+
+    async def reset_all(self):
         pass
-    async def run_after_declare_attack(self, opponent, args=[]):
-        pass
+    
+    async def expire(self):
+        # this card should expire
+        await self.add_tag('0')
+        await self.player.move_cards('response','discard','0')
 
 class SoulBond(ResponseCard):
-    async def check_before_destroyed(self, opponent, args=[]):
+    async def check_before_attacked(self, opponent, args=[]):
+        return args[1].rp >= args[0].rp
+    async def run_before_attacked(self, opponent, args=[]):
+        await opponent.remove_card_tags()
+        await args[1].add_tag('0')
+        await opponent.move_cards('play','discard','0')
+        await self.expire()
+        return False
+        
+class SurpriseAttack(ResponseCard):
+    async def check_before_special_play(self, opponent, args=[]):
         return True
-    async def run_before_destroyed(self, opponent, args=[]):
-        print('do something here, i guess')
+    async def run_before_special_play(self, opponent, args=[]):
+        await opponent.remove_card_tags()
+        await args.add_tag('0')
+        await opponent.move_cards('play','deck','0')
+        await self.expire()
+        return False
+
+class VoceNao(ResponseCard):
+    async def check_before_unit_activate(self, opponent, args=[]):
+        return True
+    async def run_before_unit_activate(self, opponent, args=[]):
+        await CardExecutor.execute_card_action(args, self.player, opponent)
+        await self.expire()
+        return True
+
+class PowerOfTheChurch(ResponseCard):
+    async def check_before_attacked(self, opponent, args=[]):
+        return args[1].rp >= args[0].rp
+    async def run_before_attacked(self, opponent, args=[]):
+        await self.expire()
+        return True
+    
+class SwordsmansFinalShot(ResponseCard):
+    async def check_before_direct_damage(self, opponent, args=[]):
+        return True
+    async def run_before_direct_damage(self, opponent, args=[]):
+        await self.player.remove_card_tags()
+        await self.player.search_cards_in('play', 'any', 'swordsman', '0')
+        if await self.player.check_cards_tag('play', 1, '0'):
+            await self.player.choose_cards(self.player, 'play', 1, '0', '1')
+
+            card = (await self.player.get_cards_with_tag('play','1'))[0]
+            await self.player.update_health(card.rp)
+            
+            await self.player.move_cards('play', 'discard', '1')
+            await self.expire()
+            return True
+        return False
+
+class Malfunction(ResponseCard):
+    async def check_before_unit_activate(self, opponent, args=[]):
+        return True
+    async def run_before_unit_activate(self, opponent, args=[]):
+        await opponent.update_health(-2)
+        await args.activate_cooldown(-1)
+        await self.expire()
+        return True
+
+class Aegis(ResponseCard):
+    __slots__ = ('activatedThisTurn',)
+    
+    def __init__(self, player, card):
+        super().__init__(player, card)
+        self.activatedThisTurn = False
+    async def check_before_attacked(self, opponent, args=[]):
+        return not self.activatedThisTurn
+    async def check_before_direct_damage(self, opponent, args=[]):
+        return not self.activatedThisTurn
+    async def run_before_attacked(self, opponent, args=[]):
+        if not self.activatedThisTurn:
+            self.activatedThisTurn = True
+            return True
+        return False
+    async def run_before_direct_damage(self, opponent, args=[]):
+        if not self.activatedThisTurn:
+            self.activatedThisTurn = True
+            return True
         return False
     
-    
+
+    async def reset_all(self):
+        self.activatedThisTurn = False
+
+class FullCounter(ResponseCard):
+    async def check_before_direct_damage(self, opponent, args=[]):
+        return True
+    async def run_before_direct_damage(self, opponent, args=[]):
+        await opponent.update_health(-args.rp)
+        await self.expire()
+        return True
 
     
 # response card list
 responseCards = {
     'Soul Bond':SoulBond,
+    'Surprise Attack':SurpriseAttack,
+    'Voc\u00c3\u00aa N\u00c3\u00a3o':VoceNao,
+    'Power of the Church':PowerOfTheChurch,
+    "Swordsman's Final Shot":SwordsmansFinalShot,
+    'Malfunction':Malfunction,
+    'Aegis':Aegis,
+    'Full Counter':FullCounter
     }
 async def make_response_card(player, c):
     name = c.data['name']
