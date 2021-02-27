@@ -28,14 +28,14 @@
 [DONE] winning via damage broken?
 [DONE] choose number/text system
 [DONE] cost=X system
+[DONE] make your health say "your health"
+[DONE] response cards
+[DONE] implement every response card
 [IN PROGRESS] implement every card unit/action card
-[IN PROGRESS] response cards
 
 Planned Features:
-make your health say "your health"
 make safari work (scrollbars??)
 improve client code to work on old browsers
-implement every response card
 sacrifice to play system
 make it so people see buffness of cards
 Balance goal cards reasonably
@@ -43,7 +43,7 @@ Implement card with the Charlemagne-Jackson image
 Implement card with name 'involuntary flex'
 Implement goal card which makes it so if you win, you lose and vice versa
 Implement card which has you and your opponent swap positions (Hand only? Play only? Everything?)
-Implement card with name 'buff Jaycob'
+Fully implement Power of the Church
 
 Bugs:
 response cards mess up damage stuff
@@ -55,6 +55,7 @@ Make it so when building deck, you can't have more than 1 legendary/3 goal cards
 Make is so when building deck, there's a lower limit on number of cards
 Julius Caesar doesn't sacrifice
 Demon's Rebirth doesn't work
+Server indefinitely hangs sometimes (on win?)
 
 
 card would be destroyed

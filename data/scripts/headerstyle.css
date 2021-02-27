@@ -71,4 +71,13 @@ body {
 	margin: 0;
 	text-align: center;
 	color: black;
-}text-align: center;
+}
+
+ul {
+	text-align: left;
+	left: 0;
+}
+
+.tab {
+	margin-left: 40px;
+}

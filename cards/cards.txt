@@ -204,7 +204,7 @@
         "img": "",
         "move": "End your turn with a legendary swordsman in play with +15 RP.",
         "txtcolor": "",
-        "cardType": "goal fullart",
+        "cardType": "goal",
         "cardAction": ""
     },
     {
@@ -213,7 +213,7 @@
         "img": "",
         "move": "End your turn with a legendary demon in play with +10 RP.",
         "txtcolor": "",
-        "cardType": "goal fullart",
+        "cardType": "goal",
         "cardAction": ""
     },
     {
@@ -222,7 +222,7 @@
         "img": "",
         "move": "End your turn with 20 breath.",
         "txtcolor": "",
-        "cardType": "goal fullart",
+        "cardType": "goal",
         "cardAction": ""
     },
     {
@@ -231,7 +231,7 @@
         "img": "",
         "move": "End your defense phase after defending from a combined total of 25 RP or more without taking any damage.",
         "txtcolor": "",
-        "cardType": "goal fullart",
+        "cardType": "goal",
         "cardAction": ""
     },
     {
@@ -240,7 +240,7 @@
         "img": "",
         "move": "End your attack phase, attacking with combined total of 25 RP or more in a turn.",
         "txtcolor": "",
-        "cardType": "goal fullart",
+        "cardType": "goal",
         "cardAction": ""
     },
     {
@@ -249,7 +249,7 @@
         "img": "",
         "move": "End your turn with a combined total of 28 or more RP in play.",
         "txtcolor": "",
-        "cardType": "goal fullart",
+        "cardType": "goal",
         "cardAction": ""
     },
     {
@@ -258,7 +258,7 @@
         "img": "",
         "move": "End your turn with 8 or more unit cards with 5 RP or less in play.",
         "txtcolor": "",
-        "cardType": "goal fullart",
+        "cardType": "goal",
         "cardAction": ""
     },
     {

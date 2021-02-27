@@ -78,7 +78,8 @@ const Card = function(entities, x, y, name, cost, imgsrc, movetext, textcolor, c
 	let cardoutline = "/data/cards/cardtemplate_outline_default.png";
 	cardType = cardType.split(" ");
 	let cardTypeText = '';
-	if((cardType) && ((cardType.indexOf("unit") !== -1) || (cardType.indexOf("fullart") !== -1))){
+	if((cardType) && ((cardType.indexOf("unit") !== -1) || (cardType.indexOf("fullart") !== -1) || (cardType.indexOf("goal") !== -1))){
+		console.log("setting card type: ", cardType);
 		cardoutline = "/data/cards/cardtemplate_outline_" + cardType[cardType.length-1] + ".png";
 	}
 	entity.cardType = cardType;
@@ -106,7 +107,7 @@ const Card = function(entities, x, y, name, cost, imgsrc, movetext, textcolor, c
 	const imgOffsets =  [
 						 [0, 0, imgsrc], 
 						 [0, 0, cardoutline], 
-						]
+						];
 	const textOffsets = [
 						[60, 110, fontscale(cardTypeText, 140, 35), cardTypeText],
 						[20, 80, fontscale(name, 200, 60), name], 

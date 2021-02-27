@@ -3,38 +3,6 @@
 <meta charset="utf-8"/>
 <style>
 
-.flashRed {
-	animation-name: flashRed;
-	animation-duration: 0.3s;
-}
-
-.flashGreen {
-	animation-name: flashGreen;
-	animation-duration: 0.3s;
-}
-
-@keyframes flashRed {
-	0% {background-color: #BBBBBF;}
-	50% {background-color: #BB5555;}
-	100% {background-color: #BBBBBF;}
-}
-
-@keyframes flashGreen {
-	0% {background-color: #BBBBBF;}
-	50% {background-color: #55BB55;}
-	100% {background-color: #BBBBBF;}
-}
-
-div#hintdiv {
-	margin-left: 30%;
-	margin-right: 30%
-}
-
-li a {
-	text-decoration: underline;
-	color: blue;
-}
-
 </style>
 
 	<link rel="stylesheet" type="text/css" href="/data/scripts/headerstyle.css">
@@ -102,27 +70,7 @@ li a {
 	
 	<br>
 	
-	
-	<div id="quizdiv">
-		<div id="questiondiv" align="center">		
-			<p class="quizText" id="questionText">Welcome to the official Quiz of Yeah(™)! Type 'start' to continue.</p>
-			<br>
-			<form name="quizForm" autocomplete="off" onsubmit="answerAttempt();return false;">
-			<input type="text" name="response">
-			<input type="submit" value="submit">
-			</form>
-		</div>
-		<div id="newquestiondiv" align="center" style="visibility: hidden">
-			<p class="quizText">You Finished! Now, make a new question!</p>
-			<br>
-			<form name="quizNewQuestionForm" autocomplete="off" onsubmit="submitNewQuestion();">
-			<p>Question: </p><input type="text" name="question" required>
-			<p>Answer: </p><input type="text" name="answer" required>
-			<br>
-			<input type="submit" value="submit">
-			</form>
-		</div>
-	</div>
+
 	
 	<div id="hintdiv">
 	<h2>Answer format:</h2>
@@ -134,7 +82,7 @@ li a {
 	<li class="tab">All other words are capitalized</li>
 	<li>Area names should be spelled out, rather than abbreviated (United States of America instead of U.S.A.)</li>
 	<li>Numbers should be spelled out when under ten, otherwise written in number form. (Six, 400)</li>
-	<li>If you get stuck, there might be a special hint <a href="/data/scripts/games/index_quiz_hints.html">here</a> (open in new tab to not lose place in quiz)</li>
+	<li>If you get stuck, there might be a special hint <a href="/data/scripts/games/index_quiz_hints.html">here</a></li>
 	</ul>
 
 	</div>
