@@ -294,7 +294,7 @@
         "img": "",
         "move": "The King's Personal Protector. He is the 2nd strongest Swordsman. When you play this card, search your deck for 2 common swordsman cards, and special play them. Shuffle your deck after.",
         "txtcolor": "",
-        "cardType": "rare swordsman unit fullart",
+        "cardType": "rare swordsman unit",
         "cardAction": "onPlay searchCollection me deck common swordsman 0 onPlay choose me me deck 2 0 1 onPlay moveCards me deck play 1"
     },
     {
@@ -303,7 +303,7 @@
         "img": "",
         "move": "The strongest swordsman in the kingdom. This card gains +5 RP when you play it.",
         "txtcolor": "",
-        "cardType": "rare swordsman unit fullart",
+        "cardType": "rare swordsman unit",
         "cardAction": "onPlay this 0 onPlay increaseRP me 5 0"
     },
     {
