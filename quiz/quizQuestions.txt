@@ -20,7 +20,7 @@ The Seattle Space Needle can withstand up to what speed of wind (in miles per ho
 What war resulted in the most U.S. citizens deaths in history? (Hint: the name differs between sides)
 What is the name of the musical interval between the second and third notes of the ending theme to Fate Grand Order Learning Anime (アニメ「マンガでわかる!Fate/Grand Order」)
 What is the only country which does not have a rectangular flag?
-Where are VIKING BLADEs, a product of Vullian Group made?
+In what country are VIKING BLADEs, a product of Vullian Group made?
 As of January 4th of 1836 how many countries in North America above Mexico's Southern border were there? Give the number of countries, followed by a comma and space. Then name each of these countries by their modern-day names in alphabetical order, each separated by a comma followed by a space.
 How many countries are directly north of the South Pole?
 Using python 3.7, what will the following code output into stdout? 'print(" ".join([str(i)*j for j in range(3) for i in range(10)]))'

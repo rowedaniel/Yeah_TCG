@@ -12,3 +12,6 @@ What's the big-O worst-case for depth first search, given a branching factor s, 
 Born in March, 1847, a man nicknamed "The Little Giant" later participated in a famous debate with a future US president, who was famous for wearing what headwear?
 Jaycobs Pronouns are? Hint: there are / NO SPACES AND First letter is capitalized.
 At one time in history, The Japanese Empire stretched to multiple continents. Name every country which currently owns land which The Japanese Empire owned at the extent of its power.
+Why is a mouse when it spins?
+Around the begining of March, 2021, a user of this quiz (who shall remain anonymous) successfully cheated the system by looking at the answers on the github site for the Yeah: TCG server. Since then, more stringent security measures have been put into place to ensure security. Namely, all answers are encrypted via the Secure Hash Algorithm 1, or SHA-1, and stored in that form. For example, the message "four white stars on blue background" would be encrypted into a secure hash, which would then be stored. In this example, what would the user have to put in, in order to achieve the same hash?
+What is the scientific term for a fat germ?

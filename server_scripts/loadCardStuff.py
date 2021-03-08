@@ -11,9 +11,9 @@ def saveCards(cards):
 
 def loadDecks():
     # TODO: check deck to make sure it works.
-    decks = {'k':{ 'deck': ['Sweaty Homunculus',
-                            'Sweaty Homunculus',
-                            'Sweaty Homunculus',
+    decks = {'k':{ 'deck': ['Miyamoto Musashi',
+                            'Miyamoto Musashi',
+                            'Miyamoto Musashi',
                             'ROID RAGE',
                             'ROID RAGE',
                             'ROID RAGE',
@@ -28,9 +28,9 @@ def loadDecks():
                             'Buff Jaycob',
                             'Buff Jaycob',
                             'Recruitment',
-                            'Full Counter',
-                            'Full Counter',
-                            'Full Counter',
+                            'Total Annihilation',
+                            'Total Annihilation',
+                            'Total Annihilation',
                             'Skinny Jaycob',
                             'Skinny Jaycob',
                             'Skinny Jaycob',], 

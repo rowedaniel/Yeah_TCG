@@ -153,7 +153,7 @@ class PlayCard(NotPlayCard):
             return
         print('set attack cooldown for:',amount)    
         self.hasAttacked = True
-        if self.attackCooldown != -1:
+        if self.attackCooldown != -1 and self.attackCooldown < amount:
             self.attackCooldown = amount     
     async def defend_cooldown(self, amount):
         if not self.player.game.active:
@@ -373,7 +373,7 @@ class GoalCard(NotPlayCard):
         return False
     
 
-
+# TODO: make this better
 class DanceOfMetal(GoalCard):
     async def after_attack(self, opponent):
         await self.player.remove_card_tags()
@@ -406,27 +406,23 @@ class PowerOfAHomeowner(GoalCard):
         return False
     async def after_defense(self, opponent):
         print(self.attackingRP, self.player.health, self.prevHp)
-        return self.attackingRP >= 25 and self.player.health == self.prevHp
+        return self.attackingRP >= 36 and self.player.health == self.prevHp
 class PrettyGoodAttack(GoalCard):
     async def after_attack(self, opponent):
         print(sum([a.rp for a in opponent.attackers]))
-        return sum([a.rp for a in opponent.attackers]) >= 25
+        return sum([a.rp for a in opponent.attackers]) >= 40
 class NotTooBadStrength(GoalCard):
     async def after_attack(self, opponent):
         print(sum([a.rp if a is not None else 0 \
                         for a in self.player.play]))
         return sum([a.rp if a is not None else 0 \
-                        for a in self.player.play]) >= 28
+                        for a in self.player.play]) >= 38
 class TheMarchOfTheFairyfly(GoalCard):
     async def after_attack(self, opponent):
-        print(len(list(filter(
-                    lambda x: x is not None and x.rp <= 5,
-                    self.player.play
-                    ))))
         return len(list(filter(
                     lambda x: x is not None and x.rp <= 5,
                     self.player.play
-                    ))) >= 8
+                    ))) >= 7
 
 
 

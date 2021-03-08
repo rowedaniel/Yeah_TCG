@@ -1192,6 +1192,9 @@ class Player:
             out = choices[choice]
         return out == 'yes'
 
+    async def checkBreath(self, amount):
+        return self.breath < amount
+
 
     async def remove_card_tags_with_tag(self, collectionName, intag, outtag):
         if not self.game.active:

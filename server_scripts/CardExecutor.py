@@ -11,8 +11,11 @@ tags = [str(i) for i in range(10)]
 conditionalCommands = (
                       'randomChance',
                       'checkCardsTag',
-                      'decide'
+                      'decide',
+                      'checkBreath',
                  )
+variableCommands = ('setRandomChance',
+                    )
 OnStr = ('onPlay',
          'onAttack',
          'onKill')
@@ -23,7 +26,7 @@ cmdTable = {
                 2,
                 (lambda x: x in ('me','you'),
                 lambda x,y: y+'.'+x),
-                (lambda x: x in ('1','2','3'),
+                (lambda x: x in [str(i) for i in range(-5,5)],
                 lambda x,y: x+y+')')
                   ),
 
@@ -31,16 +34,14 @@ cmdTable = {
 
     # conditional commands
 
-        # TODO: finish this
+    # TODO: finish this
     # if it succeeds, then execute the next command.
     # Else, skip next command.
     'randomChance':(
-                'random_chance(',
-                2,
+                'check_random_chance(memory,',
+                1,
                 (lambda x: x in [str(i) for i in range(1,10)],
-                lambda x,y: x+y),
-                (lambda x: x in [str(i) for i in range(2,11)],
-                lambda x,y: x+','+y+')'),
+                lambda x,y: x+y+')'),
             ),
 
     'checkCardsTag':(
@@ -63,6 +64,14 @@ cmdTable = {
                 lambda x,y: y+'.'+x),
             ),
 
+    'checkBreath':(
+                'checkBreath(',
+                2,
+                (lambda x: x in ('me','you'),
+                lambda x,y: y+'.'+x),
+                (lambda x: x in [str(i) for i in range(0,10)],
+                lambda x,y: x+y+')'),
+            ),
 
 
     
@@ -74,7 +83,7 @@ cmdTable = {
                 lambda x,y: y+'.'+x),
                 (lambda x: x in collectionNames,
                 lambda x,y: x+repr(y)),
-                (lambda x: x in [str(i) for i in range(-1,10)],
+                (lambda x: x in [str(i) for i in range(0,10)],
                 lambda x,y: x+','+y),
                 (lambda x: x in tags,
                 lambda x,y: x+','+y+')'),
@@ -109,9 +118,20 @@ cmdTable = {
 
 
 
+    # variable commands store numbers in the designated variable
+    # updates the current random number
+    'setRandomChance':(
+                'get_random_number(',
+                1,
+                (lambda x: x in [str(i) for i in range(1,40)],
+                lambda x,y: x+y+')'),
+            ),
+
+
+
+
 
     # result commands
-
     
     # adds tagged cards to collection
     'moveCards':(
@@ -219,6 +239,10 @@ cmdTable = {
                 lambda x,y: x+y+')'),
             ),
 
+    
+                
+                
+
 
 
 
@@ -311,6 +335,7 @@ async def execute_card_action(card, me, you):
     currentCommand = ''
     skipCommand = False
     currentArgIndex = 0
+    memory = 0
 
 
     await me.remove_card_tags()
@@ -353,7 +378,10 @@ async def execute_card_action(card, me, you):
                 print('skip')
             elif currentCommand in conditionalCommands:
                 skipCommand = await eval(cmdStr)
-                print('waiting to skip')
+                if skipCommand:
+                    print('waiting to skip')
+            elif cmdStr in variableCommands:
+                memory = await eval(cmdStr)
             else:
                 print('running command:',cmdStr)
                 await eval(cmdStr)
@@ -432,10 +460,15 @@ async def execute_card_action_on(card, me, you, onStrIndex):
 
 # conditional funcs
 
-async def random_chance(success, total):
-    return random.randint(1,total) <= success
+async def check_random_chance(actual, success):
+    if actual in [str(i) for i in range(1,20)]:
+        print('in check_random_chance, returning: ', actual == success)
+        return actual == success
+    print('in check_random_chance, returning: False')
+    return False
 
-
+async def get_random_number(possibilities):
+    return random.randint(1, possibilities)
 
 
 

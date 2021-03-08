@@ -229,7 +229,7 @@
         "name": "Power of a Homeowner",
         "cost": "",
         "img": "",
-        "move": "End your defense phase after defending from a combined total of 25 RP or more without taking any damage.",
+        "move": "End your defense phase after defending from a combined total of 36 RP or more without taking any damage.",
         "txtcolor": "",
         "cardType": "goal",
         "cardAction": ""
@@ -238,7 +238,7 @@
         "name": "Pretty Good Attack",
         "cost": "",
         "img": "",
-        "move": "End your attack phase, attacking with combined total of 25 RP or more in a turn.",
+        "move": "End your attack phase, attacking with combined total of 40 RP or more in a turn.",
         "txtcolor": "",
         "cardType": "goal",
         "cardAction": ""
@@ -247,7 +247,7 @@
         "name": "Not Too Bad Strength",
         "cost": "",
         "img": "",
-        "move": "End your turn with a combined total of 28 or more RP in play.",
+        "move": "End your turn with a combined total of 38 or more RP in play.",
         "txtcolor": "",
         "cardType": "goal",
         "cardAction": ""
@@ -256,7 +256,7 @@
         "name": "The March of the Fairyfly",
         "cost": "",
         "img": "",
-        "move": "End your turn with 8 or more unit cards with 5 RP or less in play.",
+        "move": "End your turn with 7 or more unit cards with 5 RP or less in play.",
         "txtcolor": "",
         "cardType": "goal",
         "cardAction": ""
@@ -338,10 +338,10 @@
         "name": "Flesh Blade",
         "cost": "4",
         "img": "",
-        "move": "For some reason, gives the impression of a musician. Discard the top card of your deck to gain +3RP.",
+        "move": "For some reason, gives the impression of a musician. When you play this card, discard the top card of your deck to gain +3RP.",
         "txtcolor": "",
         "cardType": "common demon unit",
-        "cardAction": ""
+        "cardAction": "onPlay spyCollection me deck 1 0 onPlay moveCards me deck discard 0 onPlay this 1 onPlay increaseRP me 3 1"
     },
     {
         "name": "Lucifer's Servant",
@@ -401,19 +401,19 @@
         "name": "Achilles's Shield ",
         "cost": "2",
         "img": "",
-        "move": "Stop your opponent from performing any assaults to any of your cards for 2 turns. ",
+        "move": "Stop your opponent from performing any assaults to any of your cards for 2 turns.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": ""
+        "cardAction": "spyCollection you play 0 0 attackCooldown you 2 0"
     },
     {
-        "name": "Total Annihilation ",
+        "name": "Total Annihilation",
         "cost": "0",
         "img": "",
-        "move": "Flip a coin. If heads, every card on the field is destroyed. If tails the user of this card must discard 1 card.",
+        "move": "Flip a coin. If heads, every card on the field is destroyed. If tails the user of this card must discard 1 card from their hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": ""
+        "cardAction": "setRandomChance 2 randomChance 1 spyCollection you play 0 0 randomChance 1 spyCollection me play 0 0 randomChance 2 spyCollection me hand 0 0 randomChance 2 choose me me hand 1 0 1 moveCards me hand discard 1 moveCards you play discard 0 moveCards me play discard 0"
     },
     {
         "name": "Kiss of Death",
@@ -611,16 +611,16 @@
         "move": "All player search their deck for a rare Jaycob card, and add it to their hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me deck rare Jaycob 0 choose me me deck 1 0 1 moveCards me deck hand 0 searchCollection you deck rare Jaycob 0 choose you you deck 1 0 1 moveCards you deck hand 0"
+        "cardAction": "searchCollection me deck rare Jaycob 0 choose me me deck 1 0 1 moveCards me deck hand 1 searchCollection you deck rare Jaycob 0 choose you you deck 1 0 1 moveCards you deck hand 1"
     },
     {
         "name": "Miyamoto Musashi",
         "cost": "5",
         "img": "",
-        "move": "Set this unit's RP to 2*X, where X is the number of units your opponent controls.",
+        "move": "Spend 1 breath, then set this unit's RP to 2*X, where X is the number of units your opponent controls.",
         "txtcolor": "",
         "cardType": "rare swordsman unit",
-        "cardAction": "this 0 setRP me 0 0 miyamotoMusashi me you play 0 miyamotoMusashi me you play 0"
+        "cardAction": "checkBreath me 1 this 0 setRP me 0 0 miyamotoMusashi me you play 0 miyamotoMusashi me you play 0 checkBreath me 1 increaseBreath me -1"
     },
     {
         "name": "Demon's Rebirth",
