@@ -97,7 +97,15 @@ async def handle_quizAttemptAnswer(sid, data):
 
 @sio.on('quizSubmitQuestion')
 async def handle_quizSubmitQuestion(sid, data):
-    await quizManager.handle_quizSubmitQuestion(sid, data) 
+    await quizManager.handle_quizSubmitQuestion(sid, data)
+
+@sio.on('reqLegacyChessChat')
+async def handle_reqLegacyChessChat(sid, data):
+    await sio.emit('resLegacyChessChat', data)
+
+@sio.on('reqLegacyChessMovePiece')
+async def handle_reqLegacyChessMovePiece(sid, data):
+    await sio.emit('resLegacyChessMovePiece', data)
 # ================ End handle client requests ================
 
 
@@ -116,11 +124,13 @@ async def disconnect(sid):
 
 # Handle client file requests
 app.router.add_static('/data', './data')
-app.router.add_static('/socket.io', './node_modules/socket.io-client/dist')
+app.router.add_static('/socket.io', './socket.io-client/dist')
 app.router.add_get('/', index)
 
 # Kick off server
 if __name__ == '__main__':
+
+    
     sio.start_background_task(pingAll)
     web.run_app(app, port=3000)
 

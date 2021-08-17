@@ -146,6 +146,10 @@ li a {
 	<script src = "/socket.io/socket.io.js"></script>
 	<script>
 	
+		// audio init
+		const correctAudio = new Audio('/data/sounds/quiz/correct.ogg');
+		const incorrectAudio = new Audio('/data/sounds/quiz/incorrect.ogg');
+		
 		// communication init
 		const socket = io();
 		
@@ -160,17 +164,24 @@ li a {
 		
 		socket.on("quizRightAnswer", function(data) {
 			document.body.classList.add("flashGreen");
+			correctAudio.play();
 			questionText.innerHTML = data.question;
 		});
 		
 		socket.on("quizWrongAnswer", function(data) {
 			document.body.classList.add("flashRed");
+			incorrectAudio.play();
 		});
 		
 		socket.on("quizFinish", function(data) {
 			questiondiv.style.visibility = "hidden";
 			newquestiondiv.style.visibility = "visible";
 		});
+		
+		
+		
+		
+
 		
 		const questionText = document.getElementById("questionText");
 		const questiondiv = document.getElementById("questiondiv");

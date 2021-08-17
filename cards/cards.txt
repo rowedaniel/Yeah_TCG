@@ -124,7 +124,7 @@
         "move": "An intern for the king. Sacrifice this card to search your deck for a legendary swordsman card, and add it to your hand. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "common swordsman unit",
-        "cardAction": "searchCollection me deck legendary swordsman 0 choose me me deck 1 0 1 moveCards me deck hand 1"
+        "cardAction": "searchCollection me deck legendary swordsman 0 choose me me deck 1 0 1 moveCards me deck hand 1 this 0 moveCards me play discard 0"
     },
     {
         "name": "Baseball Lad",
@@ -267,7 +267,7 @@
         "img": "/data/cards/dragonkinghades.png",
         "move": "The lord of the... what did he do again? Not sure. This card gains +4 RP when you play it.",
         "txtcolor": "",
-        "cardType": "rare demon unit fullart",
+        "cardType": "rare demon unit",
         "cardAction": "onPlay this 0 onPlay increaseRP me 4 0"
     },
     {
@@ -620,7 +620,7 @@
         "move": "Spend 1 breath, then set this unit's RP to 2*X, where X is the number of units your opponent controls.",
         "txtcolor": "",
         "cardType": "rare swordsman unit",
-        "cardAction": "checkBreath me 1 this 0 setRP me 0 0 miyamotoMusashi me you play 0 miyamotoMusashi me you play 0 checkBreath me 1 increaseBreath me -1"
+        "cardAction": "checkBreath me 1 this 0 setRP me 1 0 miyamotoMusashi me you play 0 miyamotoMusashi me you play 0 increaseRP me -1 0 checkBreath me 1 increaseBreath me -1"
     },
     {
         "name": "Demon's Rebirth",

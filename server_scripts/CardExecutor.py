@@ -189,14 +189,14 @@ cmdTable = {
             ),
 
     'miyamotoMusashi':(
-                'increase_rp(',
+                'miyamoto_musashi(',
                 4,
                 (lambda x: x in ('me','you'),
-                lambda x,y: y+'.'+x),
+                lambda x,y: x+y+','),
                 (lambda x: x in ('me','you'),
-                lambda x,y: x+'len('+y+'.collections['),
+                lambda x,y: x+y+','),
                 (lambda x: x in collectionNames,
-                lambda x,y: x+repr(y)+']),'),
+                lambda x,y: x+repr(y)+','),
                 (lambda x: x in tags,
                 lambda x,y: x+y+')'),
             ),
@@ -328,7 +328,7 @@ async def get_unit_card_special(card):
                 return []
     return out
 
-async def execute_card_action(card, me, you):
+async def execute_card_action(card, me, you, onStrIndex=-1):
     c = card.data['cardAction'].rstrip().split(' ')
     i = 0
     cmdStr = ''
@@ -337,15 +337,21 @@ async def execute_card_action(card, me, you):
     currentArgIndex = 0
     memory = 0
 
+    if onStrIndex == -1:
+        onStr = ''
+        onConditionSatisfied = True
+    else:
+        onStr = OnStr[onStrIndex]
+        onConditionSatisfied = False
+
 
     await me.remove_card_tags()
     await you.remove_card_tags()
-    if any([len(c.tags)>0 for c in me.play]):
+    if any([len(c.tags)>0 for _,c in await me.get_existing_cards(me.play)]):
         print('tags not reset!!')
 
     
     while i < len(c):
-
         print('new arg/command:', c[i])
         # commands
         if c[i] in cmdTable:
@@ -361,8 +367,12 @@ async def execute_card_action(card, me, you):
                 cmdStr,c[i])
             currentArgIndex += 1
         elif c[i] in OnStr:
-            # not the right time to do it
-            skipCommand = True
+            if onStr == '':
+                # not the right time to do it
+                skipCommand = True
+            else:
+                onConditionSatisfied = True
+                print('condition satisfied')
         # error
         else:
             cmdStr = ''
@@ -380,9 +390,13 @@ async def execute_card_action(card, me, you):
                 skipCommand = await eval(cmdStr)
                 if skipCommand:
                     print('waiting to skip')
-            elif cmdStr in variableCommands:
+            elif currentCommand in variableCommands:
+                print('AAAAAAAAAAAAAAAAAAAAAAAAAAAA')
                 memory = await eval(cmdStr)
-            else:
+                print('memory is:', memory)
+            elif onStr == '' or onConditionSatisfied:
+                if onConditionSatisfied:
+                    onConditionSatisfied = False
                 print('running command:',cmdStr)
                 await eval(cmdStr)
             cmdStr = ''
@@ -394,81 +408,32 @@ async def execute_card_action(card, me, you):
 
 
 
-async def execute_card_action_on(card, me, you, onStrIndex):
-    c = card.data['cardAction'].rstrip().split(' ')
-    i = 0
-    cmdStr = ''
-    currentCommand = ''
-    skipCommand = False
-    currentArgIndex = 0
-    onStr = OnStr[onStrIndex]
-    onConditionSatisfied = False
-
-    await me.remove_card_tags()
-    await you.remove_card_tags()
-    if any([len(c.tags)>0 for c in filter(lambda x: x is not None, me.play)]):
-        print('tags not reset!!')
-
-    
-    while i < len(c):
-        print('new arg/command:', c[i])
-        # commands
-        if c[i] in cmdTable:
-            currentCommand = c[i]
-            cmdStr = cmdTable[c[i]][0]
-        # args
-        elif len(currentCommand) > 0 and \
-           currentCommand in cmdTable and \
-           currentArgIndex < cmdTable[currentCommand][1] and \
-           cmdTable[currentCommand][currentArgIndex+2][0](c[i]):
-
-            cmdStr = cmdTable[currentCommand][currentArgIndex+2][1](
-                cmdStr,c[i])
-            currentArgIndex += 1
-        elif c[i] == onStr:
-            onConditionSatisfied = True
-            print('condition satisfied')
-        # error
-        else:
-            cmdStr = ''
-            currentCommand = ''
-            currentArgIndex = 0
-            print('failed command!')
-
-        if len(currentCommand) > 0 and \
-           currentCommand in cmdTable and \
-           currentArgIndex >= cmdTable[currentCommand][1]:
-            if skipCommand:
-                skipCommand = False
-                print('skip')
-            elif currentCommand in conditionalCommands:
-                skipCommand = await eval(cmdStr)
-                print('waiting to skip')
-            elif onConditionSatisfied:
-                onConditionSatisfied = False
-                print('running command:',cmdStr)
-                await eval(cmdStr)
-            cmdStr = ''
-            currentCommand = ''
-            currentArgIndex = 0
-        i += 1
 
 
-
-
-
+async def miyamoto_musashi(player1, player2, collection, tag):
+    await player1.increase_rp(
+        len(await player2.get_existing_cards(player2.collections[collection])),
+        tag)
 
 # conditional funcs
 
 async def check_random_chance(actual, success):
-    if actual in [str(i) for i in range(1,20)]:
-        print('in check_random_chance, returning: ', actual == success)
-        return actual == success
-    print('in check_random_chance, returning: False')
-    return False
+    print('in check_random_chance, actual =',actual,
+          'success =',success,
+          'returning: ', actual == success)
+    return actual == success
 
 async def get_random_number(possibilities):
-    return random.randint(1, possibilities)
+    a = random.randint(1, possibilities)
+    print(a)
+    return a
+
+
+
+
+
+
+
 
 
 

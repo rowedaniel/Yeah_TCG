@@ -31,6 +31,9 @@
 [DONE] make your health say "your health"
 [DONE] response cards
 [DONE] implement every response card
+[DONE] Jaycob cards could still attack
+[DONE] Julius Caesar doesn't sacrifice
+[DONE] Buff Jaycob doesn't die on negative RP
 [IN PROGRESS] implement every card unit/action card
 
 Planned Features:
@@ -56,15 +59,16 @@ choose card gets broken if packet doesn't get through
 Go through every card and make the phrasing consistent/better
 Make it so when building deck, you can't have more than 1 legendary/3 goal cards/more than one of the same goal card
 Make is so when building deck, there's a lower limit on number of cards
-Julius Caesar doesn't sacrifice
 Demon's Rebirth doesn't work
 Server indefinitely hangs sometimes (on win?)
 Friends Close Enemies Closer doesn't work
-Buff Jaycob doesn't die on negative RP
 Voce Nao lets them use the card anyway
 When someone disconnects, it doesn't reset health and breath counters
 Sweaty Homunculus doesn't display when just played
 Make it cost breath to use miyamoto musashi
+Swordsman Unity kinda funky
+Sir Lancelot triggers on attack and it's only supposed to do it on play.
+Defending a 3rp card with a 5rp sweaty homunculus crashed game (can't replicate?)
 
 
 card would be destroyed

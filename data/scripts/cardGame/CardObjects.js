@@ -126,18 +126,19 @@ const Card = function(entities, x, y, name, cost, imgsrc, movetext, textcolor, c
 	
 	// bottom text
 	const lines = textToLines(movetext);
-	let movetextX = 20;
+	let movetextX = 60;
 	let movetextY = 600;
-	let bottomtextsize = fontscale(lines[0], 280, 60);
+	const bottomtextsize = (function(x){return fontscale(x, 280, 60);});
+	let bottomtextsize_min = 99999;
 	for(let line of lines) {
 		if(line && line.length > 1) {
-			bottomtextsize = Math.min(fontscale(line, 320, 60), bottomtextsize);
+			bottomtextsize_min = Math.min(bottomtextsize(line), bottomtextsize_min);
 		}
 	}
 	for(let txt of lines) {
-		textOffsets.push([movetextX, movetextY, bottomtextsize]);
-		Text(subentities, x+movetextX, y+movetextY, bottomtextsize+"px Shintaku", textcolor, txt);
-		movetextY += bottomtextsize*1.2;
+		textOffsets.push([movetextX, movetextY, bottomtextsize_min]);
+		Text(subentities, x+movetextX, y+movetextY, bottomtextsize_min+"px Shintaku", textcolor, txt);
+		movetextY += bottomtextsize_min*1.2;
 	}
 	
 	entity.finishedinit = false;

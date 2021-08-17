@@ -123,6 +123,11 @@ class PlayCard(NotPlayCard):
                 'rp',
                 [self.player.play.index(self), self.rp]
                 )
+            
+            if self.rp <= 0:
+                # rp less than 0, so destroy
+                await self.add_tag('0')
+                await self.player.move_cards('play', 'discard', '0')
 
     async def update_rp(self, amount):
         if not self.player.game.active:
@@ -154,7 +159,12 @@ class PlayCard(NotPlayCard):
         print('set attack cooldown for:',amount)    
         self.hasAttacked = True
         if self.attackCooldown != -1 and self.attackCooldown < amount:
-            self.attackCooldown = amount     
+            self.attackCooldown = amount
+        elif amount == -1:
+            self.attackCooldown = amount
+            
+        print('hasAttacked is:',self.hasAttacked,
+              'cooldown is:',self.attackCooldown)
     async def defend_cooldown(self, amount):
         if not self.player.game.active:
             return
@@ -175,6 +185,7 @@ class PlayCard(NotPlayCard):
             self.activateCooldown -1
             
         if self.attackCooldown == 0:
+            print('attack cooldown ended')
             self.hasAttacked = False
         elif self.attackCooldown != -1:
             self.attackCooldown -= 1

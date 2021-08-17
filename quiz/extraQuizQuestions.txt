@@ -6,12 +6,16 @@ In the wise word of Shinobu, "
 If you have a blue chair that fell down to the ground, the first thing you gotta do is get down to the level of the chair and you __________.
 Daniel's Dad's _______ is to Jason's Dad's _____ (Hint: capitalized, separated by comma)
 What is the parable of Jason Tran on the 26th of February in 2021 AD? (Google it)
-2D2E2D202D2E2E202D2E2D202D2E2E202D2D2E2E2D2D202F202D2E2E2E202D2E2E2D202E2E2E (Hint: start with hex2bin)
+2D2E2D202D2E2E202D2E2D202D2E2E202D2D2E2E2D2D202F202D2E2E2E202D2E2E2D202E2E2E (Hint: start with hex2text)
 If you were 12 in the year 2095, and wanted to eat as many cashews as you can while still being healthy, for another half of your life multiplied by 2, but in years, how many grams of cashews would you have eaten?
 What's the big-O worst-case for depth first search, given a branching factor s, and depth k?
 Born in March, 1847, a man nicknamed "The Little Giant" later participated in a famous debate with a future US president, who was famous for wearing what headwear?
 Jaycobs Pronouns are? Hint: there are / NO SPACES AND First letter is capitalized.
-At one time in history, The Japanese Empire stretched to multiple continents. Name every country which currently owns land which The Japanese Empire owned at the extent of its power.
+At one time in history, The Japanese Empire stretched to multiple continents. Name all 25 countries which currently own land which The Japanese Empire owned at the extent of its power. (Hint: alphabetical order)
 Why is a mouse when it spins?
 Around the begining of March, 2021, a user of this quiz (who shall remain anonymous) successfully cheated the system by looking at the answers on the github site for the Yeah: TCG server. Since then, more stringent security measures have been put into place to ensure security. Namely, all answers are encrypted via the Secure Hash Algorithm 1, or SHA-1, and stored in that form. For example, the message "four white stars on blue background" would be encrypted into a secure hash, which would then be stored. In this example, what would the user have to put in, in order to achieve the same hash?
 What is the scientific term for a fat germ?
+According to Daniel, these are the possible dates of his birthday: February 3rd, February 7th, February 29th, March 1st, March 4th, March 22nd, April 7th, April 4th, April 21st, April 28th, April 30th, May 18th, May 4th, May 22nd, June 31st, September 6th, September 7th, September 8th, November 1st, November 7th, November 22nd, November 29th, November 30st. Jackson's Jackson's Jackson knows the month, and Jaycob's Jacob knows the day. Jackson's Jackson's Jackson says: "I don't know when Neshyba-Rowe's birthday is, but I know for a fact that that idiot Jaycob's Jacob doesn't know either." Ethan's Jackson responds: "Ok, I didn't actually know when it was before you said that, but I figured it out now. Who's the idiot now, huh?" Finally, Jackson's Jackson's Jackson says "Wait, in that case, I just figured it out too." Finally for real this time, Jaycob's Jacob says "That's it, get over here, punk." OK, so Jackson's Jackson's Jackson was attacked by Jaycob's Jacob. But Jaycob's Jaycob was actually Ethan's Jackson. What's Daniel's Birthday?
+test
+Which Country is London the 11th biggest city in?
+Which was the first state that Mount Rainier was a part of?

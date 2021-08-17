@@ -69,28 +69,32 @@ class Quiz:
 
 class QuizManager:
 
-    __slots__ = ( 'sio', 'firstAnswer', 'quizes', 'changeQuizKeywords')
+    __slots__ = ( 'sio', 'firstAnswer', 'quizzes', 'changeQuizKeywords')
 
     def __init__(self, sio):
         self.sio = sio
 
         self.firstAnswer = self.hash('start')
-        self.quizes = [Quiz('quiz/quizQuestions.txt',
+        self.quizzes = [Quiz('quiz/quizQuestions.txt',
                             'quiz/quizAnswers.txt',
                             self.firstAnswer),
                        Quiz('quiz/extraQuizQuestions.txt',
                             'quiz/extraQuizAnswers.txt',
+                            self.firstAnswer),
+                       Quiz('quiz/jaycobSecretQuizQuestions.txt',
+                            'quiz/jaycobSecretQuizAnswers.txt',
                             self.firstAnswer)
                        ]
         self.changeQuizKeywords = {
-            '889ed27c6a43a3efe392fe84cd85a9b211c30c0d':self.quizes[1]
+            '889ed27c6a43a3efe392fe84cd85a9b211c30c0d':self.quizzes[1],
+            '0de7d977fc4fbbc001cec3eff9336d819510e360':self.quizzes[2]
             }
 
     def hash(self, msg):
         return hashlib.sha1(msg.rstrip().encode()).hexdigest()
         
     async def handle_startQuiz(self, sid, data):
-        await self.quizes[0].add_player(sid)
+        await self.quizzes[0].add_player(sid)
         await self.sio.emit("startQuiz", {}, room=sid)
         
     async def handle_quizAttemptAnswer(self, sid, data):
@@ -100,7 +104,7 @@ class QuizManager:
         answer = self.hash(data['answer'])
         
         if answer in self.changeQuizKeywords:
-            for quiz in self.quizes:
+            for quiz in self.quizzes:
                 await quiz.remove_player(sid)
             newQuiz = self.changeQuizKeywords[answer]
             await newQuiz.add_player(sid)
@@ -109,7 +113,7 @@ class QuizManager:
         # check if anwer works for either quiz
         else:
             rightAnswer = False
-            for quiz in self.quizes:
+            for quiz in self.quizzes:
                 if await self.attempt_advance(quiz,
                                               sid,
                                               answer):
@@ -121,7 +125,7 @@ class QuizManager:
         if 'question' not in data or 'answer' not in data: return
         question = data['question']
         answer = self.hash(data['answer'])
-        for quiz in self.quizes:
+        for quiz in self.quizzes:
             await quiz.add_question(sid,
                                     question,
                                     answer)
