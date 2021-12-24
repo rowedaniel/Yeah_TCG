@@ -49,11 +49,9 @@ class Game:
         self.active = True
         assert deck1 in self.cardManager.decks
         assert deck2 in self.cardManager.decks
-        self.players = [Player(self.cardManager,
-                               self,
+        self.players = [Player(self,
                                id1,),
-                        Player(self.cardManager,
-                               self,
+                        Player(self,
                                id2,)]
 
         # deal

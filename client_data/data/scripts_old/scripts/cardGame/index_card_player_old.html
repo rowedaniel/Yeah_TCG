@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+<style>
+
+div.documentOutline {
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height:40px;
+	background-color: #9999A0;
+	overflow: auto;
+	z-index: 4;
+}
+
+div.menuItem {
+	position: absolute;
+	top: 0;
+	left: inherit;
+	width: 100px;
+	height:40px;
+	line-height: 40px;
+	text-align: center;
+}
+
+div.menuItem:hover {
+	background-color: #7070A0;
+}
+
+div.playerHand {
+	position: fixed;
+	left:10%;
+	bottom: 0;
+	width: 80%;
+	height: 14%;
+	transition: height 0.3s;
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+	direction: rtl;
+	z-index: 3;
+}
+
+div.playerHand:hover {
+	height:41%;
+}
+
+div.opponentHand {
+	position: fixed;
+	left:10%;
+	top: 40px;
+	width: 80%;
+	height: 14%;
+	transition: height 0.3s;
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+	direction: rtl;
+	z-index: 1;
+	transform: scale(-1);
+}
+
+div.playerDeck {
+	position: fixed;
+	right: 10px;
+	bottom: 27%;
+	width: auto;
+	height: 24%;
+	z-index: 0;
+}
+
+div.opponentDeck {
+	position: fixed;
+	left: 10px;
+	top: 31%;
+	width: auto;
+	height: 24%;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.playerGoal {
+	position: fixed;
+	right: 10px;
+	bottom: 20px;
+	width: auto;
+	height: 24%;
+	z-index: 0;
+}
+
+div.opponentGoal {
+	position: fixed;
+	left: 10px;
+	top: 60px;
+	width: auto;
+	height: 24%;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.playerDiscard {
+	position: fixed;
+	left: 10px;
+	bottom: 20px;
+	width: auto;
+	height: 24%;
+	z-index: 0;
+}
+
+div.opponentDiscard {
+	position: fixed;
+	right: 10px;
+	top: 20px;
+	width: auto;
+	height: 24%;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.playerCounters {
+	position: fixed;
+	left: 10px;
+	bottom: 27%;
+	width: 160px;
+	height: auto;
+	font-size: 30px;
+	z-index: 2;
+}
+
+div.opponentCounters {
+	position: fixed;
+	right: 10px;
+	top: 306px;
+	width: 160px;
+	height: auto;
+	font-size: 30px;
+	text-align: left;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.playerPlay {
+	position: fixed;
+	left:20%;
+	bottom: 16%;
+	width: 60%;
+	height: 24%;
+	transition: all 0.3s;
+	direction: rtl;
+	z-index: 0;
+}
+
+div.opponentPlay {
+	position: fixed;
+	left:20%;
+	top: 20%;
+	width: 60%;
+	height: 24%;
+	transition: all 0.3s;
+	direction: rtl;
+	z-index: 0;
+	transform: scale(-1);
+}
+
+div.announcement {
+	top: 10%;
+	left: 0;
+	width: 100%;
+	height: 64%;
+	
+	position: fixed;
+	
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+	
+	visibility: hidden;
+	
+	font-size: 60px;
+	z-index: 2;
+}
+
+div.buttonTextDiv {
+	position: relative;
+	border: 2px solid #66EE66;
+	background-color: #229922;
+	width: 40px;
+	height: auto;
+	font-size: 20px;
+	margin: auto;
+	z-index: 2;
+}
+
+img.hand {
+	width: 14%;
+	height:auto;
+	top: 10%;
+	transition: scale 0.3s, top 0.3s;
+}
+
+img.hand:hover {
+	scale: 1.2;
+	z-index: 2;
+}
+
+img.play {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	position: relative;
+	transition: scale 0.3s;
+}
+
+img.play:hover {
+	scale: 1.2;
+	z-index:2;
+}
+
+img.disp {
+	position: relative;
+	width: auto;
+	height: 90%;
+	z-index: 2;
+}
+
+img.faceUpCard {
+	position: relative;
+}
+
+img.faceDownCard {
+	position: relative;
+}
+
+a {
+	color: #000000;
+	text-decoration:none;
+}
+
+p {
+	margin: 0;
+}
+
+text.disp {
+	z-index: 2;
+	background-color: #9999A0;
+}
+
+body {
+	margin: 0;
+	text-align: center;
+}
+
+
+.slidein {
+	opacity: 0;
+	animation-name: slidein;
+	animation-duration: 0.5s;
+	animation-delay: 0.2s;
+	animation-fill-mode: forwards;
+	position: relative;
+}
+
+.slideout {
+	opacity: 100%;
+	animation-name: slideout;
+	animation-duration: 0.5s;
+	animation-delay: 0.2s;
+	animation-fill-mode: forwards;
+}
+
+.slideby {
+	position: relative;
+	animation-name: slideby;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+	animation-delay: inherit;
+}
+
+@keyframes fadein {
+	from {opacity: 0%}
+	to {opacity: 100%;}
+}
+
+@keyframes slidein {
+	0%   {left: 2000px; opacity: 100%;}
+	100% {left: 0; opacity: 100%;}
+}
+
+@keyframes slideout {
+	0%   {left: 0px;}
+	100% {left: -2000px;}
+}
+
+@keyframes slideby {
+	0%   {left: 2000px;}
+	25%  {left: 0;}
+	50%  {left: 0;}
+	100% {left: -2000px;}
+}
+
+
+</style>
+
+	<head>
+		<title>Yeah: TCG</title>
+	</head>
+	
+	
+	<body bgcolor="BBBBBF">
+	<title>hello</title>
+	<div class="documentOutline">
+	
+	
+	<div><div class="menuItem"><p>Card Game</p>
+		<div class="dropDown">
+			<a href="/data/scripts/index_card_display.html"><div>
+				<p>Display</p>
+			</div></a>
+			
+			<a href="/data/scripts/index_card_gallery.html"><div>
+				<p>Gallery</p>
+			</div></a>
+			
+			<a href="/data/scripts/index_card_maker.html"><div>
+				<p>Maker</p>
+			</div></a>
+			
+			<a href="/data/scripts/index_card_deckbuilder.html"><div>
+				<p>Build A Deck</p>
+			</div></a>
+			
+			<a href="/data/scripts/index_card_player.html"><div>
+				<p>Play</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Games</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/index_quiz.html"><div>
+				<p>Quiz</p>
+			</div></a>
+			
+			<a href="/data/scripts/index_platformer.html"><div>
+				<p>Platformer</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Tools</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/index_quiz.html"><div>
+				<p>100 Axes</p>
+			</div></a>
+			
+			<a href="/data/scripts/index_platformer.html"><div>
+				<p>Tierlist maker</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	
+	
+	
+	
+	</div>
+	
+	
+	<div id="deckformdiv">
+		<form name="cardForm" autocomplete="off" onsubmit="deckreq();return false;">
+		<p>Deck Name</p><input type="text" name="deckName">
+		<input type="submit" value="submit">
+		</form>
+	</div>
+	
+	<div id="gamediv" style="visibility: hidden">			
+		<div id="announcementdiv" class="announcement"></img></div>
+		<div id="playerdiv" style="visibility: hidden">
+			<div id="playerdeck" class="playerDeck"></div>
+			<div id="playergoal" class="playerGoal"></div>
+			<div id="playerhand" class="playerHand"></div>
+			<div id="playerdiscard" class="playerDiscard"></div>
+			<div id="playercounters" class="playerCounters"><p id="playerhealth"></p><p id="playerbreath"></p><div id="passbutton" class="buttonTextDiv">pass</div></div>
+			<div id="playerplay" class="playerPlay"></div>
+		</div>
+		<div id="opponentdiv" style="visibility: hidden">
+			<div id="opponentdeck" class="opponentDeck"></div>
+			<div id="opponentgoal" class="opponentGoal"></div>
+			<div id="opponenthand" class="opponentHand"></div>
+			<div id="opponentdiscard" class="opponentDiscard"></div>
+			<div id="opponentcounters" class="opponentCounters"><p id="opponenthealth"></p><p id="opponentbreath"></p></div>
+			<div id="opponentplay" class="opponentPlay"></div>
+		</div>
+	</div>
+	
+	
+	<script src = "/socket.io/socket.io.js"></script>
+	<script src = "/data/scripts/CardObjects.js"></script>
+	<script src = "/data/scripts/GameUtils.js"></script>
+	<script>
+	
+		// communication init
+		const socket = io();
+		
+		socket.on('ding', function(data){
+			socket.emit("dong", {beat: 1});
+		});
+		
+		// player connection+setup stuff
+		
+		socket.on("resAllCards", function(data) {
+			for(let card of data) {
+				cards[card.name] = Card([], 0, 0, card.name, card.cost, card.img, card.move, card.txtcolor, card.cardType, card.cardAction);
+			}
+		});
+		
+		
+		socket.on("playerDisconnect", function(data) {
+			//not sure what to do... for now refresh page.
+			disp.flashText("A player disconnected :(");
+			setTimeout(function() {location.reload();}, 2000);
+		});
+		
+		
+		// request Deck
+		function deckreq(){
+			socket.emit('clientReqDeck', {name : document.forms['cardForm']['deckName'].value});
+			document.getElementById("deckformdiv").style.visibility = "hidden";
+			document.getElementById("gamediv").style.visibility = "visible";
+			document.getElementById("playerdiv").style.visibility = "visible";
+			document.getElementById("opponentdiv").style.visibility = "visible";
+		}
+		
+		
+		socket.on("clientDeal", function(data) {
+			
+			//delay slightly to let stuff load
+			setTimeout(function() {
+				
+				disp.flashText("Game Start!");
+				
+				
+				playerDeck.deal();
+				playerGoal.deal([data.goal]);
+				
+				opponentDeck.deal();
+				opponentGoal.deal();
+				
+				//dealPlayerGoal(data.goal);
+				//dealOpponentGoal();
+				
+				let cardDelay = 1000;
+				let animationDelay = 0;
+				for(let cardName of data.hand) {
+					playerHand.addCard(cardName);
+					opponentHand.addCard();
+					animationDelay += 100;
+				}
+			}, 500);
+		});
+		
+		socket.on("yourMove", function(data) {
+			disp.flashText("Your move!");
+			//dealPlayerCard(data.cardName, 700);
+			playerHand.addCard(data.cardName);
+			playerCounters.increaseBreath(2);
+			yourMove = true;
+			//playerBreath += 2;
+			//updateCounters();
+			//for(let c of playerPlay) {
+			//	c.used = false;
+			//}
+		});
+		
+		socket.on("opponentsMove", function(data) {
+			opponentCounters.increaseBreath(2);
+			disp.flashText("Opponent's move!");
+		})
+		
+		socket.on("playCard", function(data) {
+			//dispCards([data.name], false, false, false);
+			setTimeout(function() {
+				if(cards && data.hasOwnProperty("name") && cards.hasOwnProperty(data.name) && cards[data.name] && cards[data.name].cardType) {
+					if(cards[data.name].cardType !== "default") {
+						if(data.yours) {
+							playerCounters.decreaseBreath(cards[data.name].cost);
+							playerHand.removeCard(data.name);
+							playerPlay.addCard(data.name);
+						} else {
+							opponentCounters.decreaseBreath(cards[data.name].cost);
+							opponentHand.removeCard();
+							opponentPlay.addCard(data.name);
+						}
+					} else if(cards[data.name].cardType === "default") {
+						// send to discard
+						if(data.yours) {
+							playerHand.removeCard(data.name);
+							playerDiscard.addCard(data.name);
+						} else {
+							opponentDiscard.addCard(data.name);
+						}
+						eval(cards[data.name].cardAction)();
+					}
+				}
+			}, 1400);
+		});
+		
+		socket.on("useCard", function(data) {
+			setTimeout(function() {
+				if(cards && data.hasOwnProperty("name") && cards.hasOwnProperty(data.name) && cards[data.name] && cards[data.name].cardAction) {
+					if(data.yours && playerPlay.hasCard(data.name) && playerPlay.filterCards((x => ((x.name==data.name)&&!x.used))).length > 0) {
+						playerPlay.filterCards((x => ((x.name==data.name)&&!x.used)))[0].used = true;
+						console.log(cards[data.name].cardAction);
+						eval(cards[data.name].cardAction)();
+					} else {
+						
+						console.log(cards[data.name].cardAction);
+						eval(cards[data.name].cardAction)();
+					}
+				}
+			}, 1400);
+		});
+		
+		socket.on("searchRes", function(data) {
+			dispCards(data.cards, false, false, false);
+		});
+		
+		
+		
+		const cards = {};
+		
+		
+		/*// functions
+		
+		const currentDispCards = [];
+		const dispCards = function(cardNames, playable, usable, attackable) {
+			const announce = document.getElementById("announcementdiv");
+			if(currentDispCards.length > 0) {
+				for(let img of currentDispCards) {
+					img.click();
+				}
+			} else {
+				let playTextDiv;
+				let useTextDiv;
+				let attackTextDiv;
+				let playCardFilter;
+				for(let cardName of cardNames) {
+					const dispCardImg = new Image();
+					dispCardImg.classList.add("disp");
+					dispCardImg.src = cards[cardName].img.src;
+					dispCardImg.classList.add("slidein");
+					dispCardImg.onclick = function() {			
+						for(let img of currentDispCards) {
+							img.classList.add("slideout");
+						}
+						if(playTextDiv) {
+							playTextDiv.classList.add("slideout");
+						}
+						if(useTextDiv) {
+							useTextDiv.classList.add("slideout");
+						}
+						setTimeout(function() {
+							for(let i=0; i<currentDispCards.length; ++i){
+								if(currentDispCards && currentDispCards[0] && announce.contains(currentDispCards[0])){
+									announce.removeChild(currentDispCards.shift());
+								}
+								if(playTextDiv && announce.contains(playTextDiv)){
+									announce.removeChild(playTextDiv);
+								}
+								if(useTextDiv && announce.contains(useTextDiv)){
+									announce.removeChild(useTextDiv);
+								}
+							}
+						}, 700);
+					}
+					
+					currentDispCards.push(dispCardImg);
+					announce.appendChild(dispCardImg);
+					
+					if(playable && yourMove && eval(cards[cardNames[0]].cost) <= playerBreath) {
+						playTextDiv = playCard(cardNames[0]);
+						announce.appendChild(playTextDiv);
+					}
+					if(usable && yourMove) {
+						playCardFilter = playerPlay.filter(a => (a.cardName===cardName && a.hasOwnProperty("used") && !a.used));
+						if(playCardFilter.length > 0) {
+							console.log("use card", playCardFilter);
+							useTextDiv = useCard(cardNames[0]);
+							announce.appendChild(useTextDiv);
+						}
+					}
+					/*if(attackable && yourMove) {
+						playCardFilter = playerPlay.filter(a => (a.cardName===cardName && a.hasOwnProperty("used") && !a.used));
+						if(playCardFilter.length > 0) {
+							console.log("attack with card", playCardFilter);
+							useTextDiv = attackCard(cardNames[0]);
+							announce.appendChild(useTextDiv);
+						}
+					}
+				}
+			}
+		}
+		
+		const addButtonText = function(text) {
+			const playTextDiv = document.createElement("div");
+			playTextDiv.classList.add("slidein");
+			playTextDiv.classList.add("buttonTextDiv");
+			playTextDiv.innerHTML = text;
+			return playTextDiv;
+		}
+		
+		const playCard2 = function(cardName) {
+			// add 'play' text
+			const playTextDiv = addButtonText("play");
+			playTextDiv.onclick = function() {
+				setTimeout(function() {
+					socket.emit("playCard", {name:cardName});
+				}, 1000);
+				playerBreath -= eval(cards[cardName].cost);
+				updateCounters();
+				for(let img of currentDispCards) {
+					img.click();
+				}
+				const handCard = playerHand.filter(a => a.cardName===cardName)[0];
+				document.getElementById("playerhand").removeChild(handCard.img);
+				playerHand.splice(playerHand.indexOf(handCard), 1);
+			};
+			return playTextDiv;
+		}
+		
+		const useCard = function(cardName) {
+			// add 'use' text
+			const playTextDiv = addButtonText("use");
+			playTextDiv.onclick = function() {
+				setTimeout(function() {
+					socket.emit("useCard", {name:cardName});
+				}, 1000);
+				for(let img of currentDispCards) {
+					img.click();
+				}
+				const playCard = playerPlay.filter(a => a.cardName===cardName && !a.used);
+				if(playCard.length > 0) {
+					playCard[0].used = true;
+				}
+			};
+			return playTextDiv;
+		}
+		
+		const placeCardPlayerPlay = function(cardName) {
+			const img = new Image();
+			img.src = cards[cardName].img.src;
+			img.classList.add("play");
+			img.classList.add("faceDownCard");
+			img.classList.add("slidein");
+			img.onclick = function() {
+				dispCards([cardName], false, true, true);
+			}
+			const play = document.getElementById("playerplay");
+			play.appendChild(img);
+			console.log('playerplay', playerPlay);
+			playerPlay.push({cardName: cardName, img: img, used: true, attacked: false});
+		}
+		
+		const placeCardPlayerDiscard = function(cardName) {
+			const img = new Image();
+			img.src = cards[cardName].img.src;
+			img.classList.add("play");
+			img.classList.add("faceDownCard");
+			img.classList.add("slidein");
+			img.onclick = function() {
+				const cs = [];
+				for(let card of playerDiscard) {
+					cs.push(card.cardName);
+				}
+				dispCards(cs, false, false, false);
+			}
+			const discard = document.getElementById("playerdiscard");
+			for(let card of playerDiscard) {
+				if(discard.contains(card.img)){
+					discard.removeChild(card.img);
+				}
+			}
+			discard.appendChild(img);
+			playerDiscard.push({cardName:cardName,img:img});
+		}
+		
+		const placeCardOpponentPlay = function(cardName) {
+			const img = new Image();
+			img.src = cards[cardName].img.src;
+			img.classList.add("play");
+			img.classList.add("faceDownCard");
+			img.classList.add("slidein");
+			img.onclick = function() {
+				dispCards([cardName], false, false, false);
+			}
+			const play = document.getElementById("opponentplay");
+			play.appendChild(img);
+			opponentPlay.push({cardName: cardName, img: img});
+		}
+		
+		const placeCardOpponentDiscard = function(cardName) {
+			const img = new Image();
+			img.src = cards[cardName].img.src;
+			img.classList.add("play");
+			img.classList.add("faceDownCard");
+			img.classList.add("slidein");
+			img.onclick = function() {
+				const cs = [];
+				for(let card of opponentDiscard) {
+					cs.push(card.cardName);
+				}
+				dispCards(cs, false, false, false);
+			}
+			const discard = document.getElementById("opponentdiscard");
+			for(let card of opponentDiscard) {
+				if(discard.contains(card.img)){
+					discard.removeChild(card.img);
+				}
+			}
+			discard.appendChild(img);
+			opponentDiscard.push({cardName:cardName,img:img});
+		}
+		
+		
+		const dealPlayerCard = function(cardName, delay) {
+			const img = new Image();
+			img.src = cards[cardName].img.src;
+			img.classList.add("hand");
+			img.classList.add("faceUpCard");
+			img.classList.add("slidein");
+			img.style.animationDelay = (delay) + "ms";
+			img.onclick = function() {dispCards([cardName], true, false, false);}
+			const hand = document.getElementById("playerhand");
+			hand.appendChild(img);
+			playerHand.push({cardName:cardName,img:img});
+		}
+		
+		const dealPlayerGoal = function(cardName) {
+			const img = new Image();
+			img.src = "/data/cards/cardback.png";
+			img.classList.add("play");
+			img.classList.add("faceDownCard");
+			img.classList.add("slidein");
+			img.onclick = function() {dispCards([cardName], false, false, false);}
+			const playerGoal = document.getElementById("playergoal");
+			playerGoal.appendChild(img);
+		}
+		
+		const dealOpponentCard = function(delay) {
+			const img = new Image();
+			img.src = "/data/cards/cardback.png";
+			img.classList.add("hand");
+			img.classList.add("faceDownCard");
+			img.classList.add("slidein");
+			img.style.animationDelay = (delay) + "ms";
+			const opponentHand = document.getElementById("opponenthand");
+			opponentHand.appendChild(img);
+		}
+		
+		const dealOpponentGoal = function() {
+			const img = new Image();
+			img.src = "/data/cards/cardback.png";
+			img.classList.add("play");
+			img.classList.add("faceDownCard");
+			img.classList.add("slidein");
+			const opponentGoal = document.getElementById("opponentgoal");
+			opponentGoal.appendChild(img);
+		}
+		
+		const announceText = document.createElement("text");
+		announceText.classList.add("disp");
+		const flashText = function(txt) {
+			const announce = document.getElementById("announcementdiv");
+			announceText.innerHTML = txt;
+			announceText.classList.add("slideby");
+			setTimeout(function(){
+				if(announceText && announce.contains(announceText)){
+					announce.removeChild(announceText);
+				}
+			}, 1400);
+			announce.appendChild(announceText);
+		}
+		
+		const updateCounters = function() {
+			document.getElementById("playerhealth").innerHTML = "Health: "+playerHealth;
+			document.getElementById("playerbreath").innerHTML = "Breath: "+playerBreath;
+			document.getElementById("opponenthealth").innerHTML = "Health: "+opponentHealth;
+			document.getElementById("opponentbreath").innerHTML = "Breath: "+opponentBreath;
+		}
+		
+		const increaseBreath = function() {
+			if(yourMove) {
+				playerBreath ++;
+			} else {
+				opponentBreath ++;
+			}
+			updateCounters();
+		}
+		
+		const searchDeckCategory = function(filter) {
+			socket.emit("searchDeckCategory", {filter});
+		}
+		
+		const searchDeckCard = function(filter) {
+			socket.emit("searchDeckCard", {filter});
+		}
+		
+		var playerHealth = 40;
+		var playerBreath = 3;
+		var opponentHealth = 40;
+		var opponentBreath = 3;
+		var yourMove = false;
+		//var playerHand = [];
+		var playerPlay = [];
+		//var playerDiscard = [];
+		var opponentPlay = [];
+		var opponentDiscard = [];*/
+		
+		
+		const disp = new Disp(cards, "announcementdiv");
+		
+		/*const playerCounters = new Counters("playerhealth", "playerbreath");
+		const playerDiscard = new Discard(cards, "playerdiscard");
+		const playerGoal = new VisibleGoal(cards, "playergoal");
+		const playerDeck = new Deck(cards, "playerdeck");
+		const playerHand = new VisibleHand(cards, "playerhand");
+		const playerPlay = new Play(cards, "playerplay");
+		playerDiscard.lateinit(disp);
+		playerGoal.lateinit(disp);
+		playerDeck.lateinit(disp);
+		playerHand.lateinit(disp);
+		playerPlay.lateinit(disp);
+		
+		const opponentCounters = new Counters("opponenthealth", "opponentbreath");
+		const opponentDiscard = new Discard(cards, "opponentdiscard");
+		const opponentGoal = new ConcealedGoal(cards, "opponentgoal");
+		const opponentDeck = new Deck(cards, "opponentdeck");
+		const opponentHand = new ConcealedHand(cards, "opponenthand");
+		const opponentPlay = new Play(cards, "opponentplay");
+		opponentDiscard.lateinit(disp);
+		opponentGoal.lateinit(disp);
+		opponentDeck.lateinit(disp);
+		opponentHand.lateinit(disp);
+		opponentPlay.lateinit(disp);*/
+		
+		const player = new Combatant("player", disp);
+		const opponent = new Combatant("opponent", disp);
+		
+		var yourMove = false;
+		
+		// board setup
+		setupBoard = function() {
+			//TODO: move this code to better spots
+			
+			let txt;
+			
+			//updateCounters();
+			document.getElementById("passbutton").onclick = function() {
+				if(yourMove) {
+					socket.emit("passTurn", {});
+					yourMove = false;
+				}
+			}
+		}
+		
+		setupBoard();
+		socket.emit("reqAllCards", {});
+		
+		
+	</script>
+	
+	</body>
+</html>

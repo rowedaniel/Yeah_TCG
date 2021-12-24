@@ -1,19 +1,24 @@
 import random
 
-from server_scripts.Cards import *
+from server_scripts.card_game.Cards import *
 
 class Player:
-    __slots__ = ('cardManager', 'game', 'socketId',
-                 'deck', 'activeGoals', 'goals', 'hand',
-                 'discard', 'play', 'response',
+    __slots__ = ('game',
+                 'socketId',
+                 'deck',
+                 'activeGoals',
+                 'goals',
+                 'hand',
+                 'discard',
+                 'play',
+                 'response',
                  'collections',
                  'tempPlay',
                  'attackers',
                  'breath',
                  'health',
                  'firstTurn')
-    def __init__(self, cardManager, game, socketId):
-        self.cardManager = cardManager
+    def __init__(self, game, socketId):
         self.game = game
         self.socketId = socketId
         

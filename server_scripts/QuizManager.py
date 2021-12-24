@@ -1,5 +1,6 @@
+from socketio import AsyncServer
+from server_scripts.Manager import Manager
 import hashlib
-
 
 
 class Quiz:
@@ -67,22 +68,30 @@ class Quiz:
             file.write('\n'+answer)
 
 
-class QuizManager:
+class QuizManager(Manager):
 
-    __slots__ = ( 'sio', 'firstAnswer', 'quizzes', 'changeQuizKeywords')
+    __slots__ = ( 'sio', # (AsyncServer)
+                  'datadir', # (str) root directory for quiz stuff
+                  'firstAnswer', # (str) default first answer to start quiz
+                  'quizzes', # (Quiz) list of quiz question/answer sets
+                  'changeQuizKeywords' # (str) hashes to change client's quiz
+                  )
 
-    def __init__(self, sio):
-        self.sio = sio
+    def __init__(self,
+                 sio : AsyncServer,
+                 datadir: str,
+                 ):
+        super().__init__(sio, datadir)
 
         self.firstAnswer = self.hash('start')
-        self.quizzes = [Quiz('quiz/quizQuestions.txt',
-                            'quiz/quizAnswers.txt',
+        self.quizzes = [Quiz(f'{datadir}/quizQuestions.txt',
+                            f'{datadir}/quizAnswers.txt',
                             self.firstAnswer),
-                       Quiz('quiz/extraQuizQuestions.txt',
-                            'quiz/extraQuizAnswers.txt',
+                       Quiz(f'{datadir}/extraQuizQuestions.txt',
+                            f'{datadir}/extraQuizAnswers.txt',
                             self.firstAnswer),
-                       Quiz('quiz/jaycobSecretQuizQuestions.txt',
-                            'quiz/jaycobSecretQuizAnswers.txt',
+                       Quiz(f'{datadir}/jaycobSecretQuizQuestions.txt',
+                            f'{datadir}/jaycobSecretQuizAnswers.txt',
                             self.firstAnswer)
                        ]
         self.changeQuizKeywords = {
@@ -90,7 +99,7 @@ class QuizManager:
             '0de7d977fc4fbbc001cec3eff9336d819510e360':self.quizzes[2]
             }
 
-    def hash(self, msg):
+    def hash(self, msg : str) -> str:
         return hashlib.sha1(msg.rstrip().encode()).hexdigest()
         
     async def handle_startQuiz(self, sid, data):

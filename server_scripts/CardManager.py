@@ -1,14 +1,24 @@
+from socketio import AsyncServer
+
 # TODO: change loadCardStuff to loadCardData
-from server_scripts import loadCardStuff
+from server_scripts.card_loader.loadCardStuff import CardLoader
+from server_scripts.Manager import Manager
 
 # TODO: change to CardDataManager
-class CardManager:
-    def __init__(self, sio):
-        self.sio = sio
+# TODO: segregate so that all the stuff relating exclusively to cards is
+# handled elsewhere
+class CardManager(Manager):
+    def __init__(self,
+                 sio : AsyncServer,
+                 datadir: str,
+                 ):
+        super().__init__(sio, datadir)
+
+        self.cardLoader = CardLoader(datadir)
         
-        self.cards = loadCardStuff.loadCards()
+        self.cards = self.cardLoader.loadCards()
         # TODO: check deck to make sure it works.
-        self.decks = loadCardStuff.loadDecks()
+        self.decks = self.cardLoader.loadDecks()
 
     async def getCardByName(self, name):
         res = list(filter(lambda x: x['name']==name, self.cards))
@@ -69,7 +79,7 @@ class CardManager:
         print(data)
         await self.cardQualityControl(data)
         self.cards.append(data)
-        loadCardStuff.saveCards(self.cards)
+        self.cardLoader.saveCards(self.cards)
 
     async def addDeck(self,sid,data):
         print(data)
@@ -77,5 +87,5 @@ class CardManager:
         self.decks[data['name']] = {}
         self.decks[data['name']]['deck'] = data['deck']
         self.decks[data['name']]['goals'] = data['goals']
-        loadCardStuff.saveDeck(data)
+        self.cardLoader.saveDeck(data)
 

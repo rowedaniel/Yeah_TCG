@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+<style>
+
+div#hintdiv {
+	margin-left: 30%;
+	margin-right: 30%
+}
+
+li a {
+	text-decoration: underline;
+	color: blue;
+}
+div#hiddenHintDiv p {
+	display: none;
+}
+
+button {
+	margin: 10px;
+	padding-left: 30px;
+	padding-right: 30px;
+	height: 40px;
+	background-color: #424282;
+	border: none;
+	border-radius: 4px;
+	color: #E5E5E5;
+}
+
+</style>
+
+	<link rel="stylesheet" type="text/css" href="/data/scripts/headerstyle.css">
+
+	<head>
+		<title>Yeah: TCG</title>
+		<link rel="icon" type="image/png" href="/data/ArMaN.png">
+	</head>
+	
+	
+	<body bgcolor="BBBBBF">
+	<title>hello</title>
+	<div class="documentOutline">
+	
+	<div><div class="menuItem"><p>Card Game</p>
+		<div class="dropDown">
+			<a href="/data/scripts/cardGame/index_card_display.html"><div>
+				<p>Display</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_gallery.html"><div>
+				<p>Gallery</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_maker.html"><div>
+				<p>Maker</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_deckbuilder.html"><div>
+				<p>Build A Deck</p>
+			</div></a>
+			
+			<a href="/data/scripts/cardGame/index_card_player.html"><div>
+				<p>Play</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Games</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/games/index_quiz.html"><div>
+				<p>Quiz</p>
+			</div></a>
+			
+			<a href="/data/scripts/games/index_platformer.html"><div>
+				<p>Platformer</p>
+			</div></a>
+		</div>
+	</div></div>
+	
+	<div><div class="menuItem"><p>Tools</p>
+		<div class="dropDown">		
+			<a href="/data/scripts/tools/index_political_alignment.html"><div>
+				<p>100 Axes</p>
+			</div></a>
+			
+			<a href="/data/scripts/tools/index_tierlistmaker.html"><div>
+				<p>Tierlist maker</p>
+			</div></a>
+		</div>
+	</div></div>
+
+	</div>
+	
+	
+	<br>
+	
+
+	
+	<div id="hintdiv">
+	<h2>Answer format:</h2>
+	<ul>
+	
+	<li>Most answers follow standard title conventions:</li>
+	<li class="tab">First word capitalized</li>
+	<li class="tab">Short words like the, an, of, etc. are not capitalized unless at the begining</li>
+	<li class="tab">All other words are capitalized</li>
+	<li>Area names should be spelled out, rather than abbreviated (United States of America instead of U.S.A.)</li>
+	<li>Numbers should be spelled out when under ten, otherwise written in number form. (Six, 400)</li>
+	<li>If you get stuck, there might be a special hint <a href="/data/scripts/games/index_quiz_hints.html">here</a></li>
+	</ul>
+	
+	
+	<br>
+	<h2>Specific Hints:</h2>
+	
+	<div id="hiddenHintDiv">
+	<button onclick="showHint('1')">Question 4 - Jackson or Jaycob</button><p id="1">A name, 5 letters, starts with J.</p>
+	<br>
+	<button onclick="showHint('2')">Question 13 - Dolphin</button><p id="2">So far in the quiz, one name has been mentioned more than any other. The answer to this question is that person's sister.</p>
+	<br>
+	<button onclick="showHint('3')">Question 14 - Best Picture</button><p id="3">This was chosen out of every picture of Jaycob visible on the tierlist page of this site. Good Luck. You might have to right click on the images, then select "view image" to make it bigger.</p>
+	<br>
+	<button onclick="showHint('4')">Question 14 - Best Picture (Second Hint)</button><p id="4">"Pls send ___ ____?"</p>
+	<br>
+	<button onclick="showHint('5')">Question 22 - Republic</button><p id="5">Relatedly, it's the name of a famous city in Vietnam. Also, the excitement of the answer should match that of the question.</p>
+	<br>
+	<button onclick="showHint('6')">Question 36 - #1 Contender</button><p id="6">The answer is the youtube video "When a Costumed Person Destroys The Drums At Children’s Music Concert - NyangoStar -"</p>
+	<br>
+	<button onclick="showHint('7')">Question 37 - Dan</button><p id="7">Bobby Wagner -- stop freaking, call Beacon.</p>
+	<br>
+	<button onclick="showHint('8')">Question 45 - Recording</button><p id="8">The filename is the name of someone who fought with Perseus in Greek mythology, with a common sound file extention at the end. All lowercase.</p>
+	<br>
+	<button onclick="showHint('9')">Question 46 - Shinobu</button><p id="9">The answer quotes a popular meme of Shinobu, from the anime Demon Slayer. Try Googling it.</p>
+	<br>
+	<button onclick="showHint('10')">Question 48 - Dads'</button><p id="10">It's Pho and Grunola, but spelled right.</p>
+	<br>
+	<button onclick="showHint('11')">Question 54 - Pronouns</button><p id="11">There are six items, including:<br>
+		So far in the quiz, one person has been mentioned more than any other. The final item is this person's last name.<br>
+		The Tent of Congretation or Tent of Meeting.<br>
+		The thing you use to hold a pan, but with an umlaut over the a.<br>
+		The last name of a famous man born under the sign of Sagittarius in Dunfermine Abbey.<br>
+		Normal, actual pronouns.
+	</p>
+	<br>
+	</div>
+	
+	
+	
+	
+	<h2>When you finish the quiz, it should look like this:</h2>
+	<p class="quizText">You Finished! Now, make a new question!</p>
+	<br>
+	<form autocomplete="off" onsubmit="submitNewQuestion();">
+	<p>Question: </p><input type="text" name="question" required>
+	<p>Answer: </p><input type="text" name="answer" required>
+	<br>
+	<input type="submit" value="submit">
+	<br><br><br><br>
+	
+	
+	</div>
+	
+	
+	</body>
+	
+	
+	<script src = "/socket.io/socket.io.js"></script>
+	<script>
+	
+		function showHint(id) {
+			var elem = document.getElementById(id);
+			if(elem && elem.style.display === "block") {
+				elem.style.display = "none";
+			} else if(elem) {
+				elem.style.display = "block";
+			}
+		}
+	</script>
+	
+</html>
