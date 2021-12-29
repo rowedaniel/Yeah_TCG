@@ -12,8 +12,10 @@ from server_scripts.card_game.Game import Game
 # TODO: change to CardgameManager
 class CardGamePlayer(Manager):
     # TODO: write description (with blockquotes)
+    # TODO: segregate this class--it should contain ONLY client communication
+    #       stuff. Minimal internal processing.
 
-    __slots__ = ('sio',
+    __slots__ = (
                  'cardManager',
                  'authTokens',
                  'getCardsRes',
@@ -22,16 +24,15 @@ class CardGamePlayer(Manager):
                  )
 
     def __init__(self,
-                 sio : AsyncServer,
+                 namespace: str,
                  datadir : str,
                  cardManager : CardManager 
                  ):
         """
         Initialize class
-        @param sio socketcontroller
         TODO: fix later
         """
-        super().__init__(sio, datadir)
+        super().__init__(namespace, datadir)
 
         self.cardManager = cardManager
         self.authTokens = {}
@@ -41,8 +42,8 @@ class CardGamePlayer(Manager):
         self.players = {}
 
 
-    # socket stuff
-    async def client_req_deck(self,sid,data):
+    ### handle client requests
+    async def on_reqQueueGame(self,sid,data):
         if sid in self.players or \
            data['name'] not in self.cardManager.decks:
             return
@@ -50,7 +51,7 @@ class CardGamePlayer(Manager):
         await self.add_player(sid, data['name'])
 
     
-    async def res_get_cards(self, sid, data):
+    async def on_clientResChooseCards(self, sid, data):
         if sid in self.players and \
            sid in self.authTokens and \
            sid in self.getCardsRes and \
@@ -65,11 +66,13 @@ class CardGamePlayer(Manager):
 
 
 
+
+    ### internal logic
     async def begin_game(self, game):
-        await self.sio.emit('beginGame', {}, room=game.room)
+        await self.emit('beginGame', {}, room=game.room)
 
     async def end_game(self, game, msg):
-        await self.sio.emit('endGame', {'msg':msg}, room=game.room)
+        await self.emit('endGame', {'msg':msg}, room=game.room)
 
     async def update_collection(self, game, sid, collection, operation, cards):
         # TODO: let players know how many cards in goal
@@ -84,7 +87,7 @@ class CardGamePlayer(Manager):
                 print('submiting blank data to',p.socketId,
                       'comparing to',sid)
                 tmpCards = ["cardBack" for i in cards]
-            await self.sio.emit('updateCollection', {'operation': operation,
+            await self.emit('updateCollection', {'operation': operation,
                                                      'collection':collection,
                                                      'yours':p.socketId == sid,
                                                      'cards':tmpCards},
@@ -93,7 +96,7 @@ class CardGamePlayer(Manager):
 
     async def update_counters(self, game, sid, counter, amount):
         for p in game.players:
-            await self.sio.emit('updateCounters', {  'counter':counter,
+            await self.emit('updateCounters', {  'counter':counter,
                                                      'yours':p.socketId == sid,
                                                      'amount':amount},
                                 room=p.socketId)
@@ -104,11 +107,11 @@ class CardGamePlayer(Manager):
             return
         for p in self.players[sid].players:
             if p.socketId == sid:
-                await self.sio.emit('dispCards',
+                await self.emit('dispCards',
                                     {'msg':'(you) '+msg, 'cards':cards},
                                     room=p.socketId)
             else:
-                await self.sio.emit('dispCards',
+                await self.emit('dispCards',
                                     {'msg':msg, 'cards':cards},
                                     room=p.socketId)
         
@@ -118,7 +121,7 @@ class CardGamePlayer(Manager):
         for g in self.games:
             if not g.active:
                 self.players[sid] = g
-                self.sio.enter_room(sid, g.room)
+                self.enter_room(sid, g.room)
                 await g.add_player(sid, deck)
                 break
 
@@ -170,7 +173,7 @@ class CardGamePlayer(Manager):
             self.authTokens[sid] = random.random()
             cardgroups['authToken'] = self.authTokens[sid]
             # used to be playerGetCards
-            await self.sio.emit('serverReqChooseCards', cardgroups, room=sid)
+            await self.emit('serverReqChooseCards', cardgroups, room=sid)
 
             # check 10 times for response, before refreshing authToken again.
             for i in range(10):
@@ -209,6 +212,10 @@ class CardGamePlayer(Manager):
 
 
         # loop until we have a result, remaking authToken every once in a while
+        # TODO: reduce repeated code between get_choice and get_text
+        # ^ in order to do this, maybe make a generic method which takes a
+        #   'verification' function as input to make sure the chosen options
+        #   are valid?
         self.getCardsRes[sid] = '-1'
         while sid in self.getCardsRes and \
               self.getCardsRes[sid] == '-1':
@@ -216,7 +223,7 @@ class CardGamePlayer(Manager):
             self.authTokens[sid] = random.random()
             textOptions['authToken'] = self.authTokens[sid]
             # used to be playerGetText
-            await self.sio.emit('serverReqChooseText', textOptions, room=sid)
+            await self.emit('serverReqChooseText', textOptions, room=sid)
 
             # check 10 times for response, before refreshing authToken again.
             for i in range(10):

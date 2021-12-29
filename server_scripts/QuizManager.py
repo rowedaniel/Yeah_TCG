@@ -70,7 +70,7 @@ class Quiz:
 
 class QuizManager(Manager):
 
-    __slots__ = ( 'sio', # (AsyncServer)
+    __slots__ = ( 
                   'datadir', # (str) root directory for quiz stuff
                   'firstAnswer', # (str) default first answer to start quiz
                   'quizzes', # (Quiz) list of quiz question/answer sets
@@ -78,10 +78,10 @@ class QuizManager(Manager):
                   )
 
     def __init__(self,
-                 sio : AsyncServer,
+                 namespace: str,
                  datadir: str,
                  ):
-        super().__init__(sio, datadir)
+        super().__init__(namespace, datadir)
 
         self.firstAnswer = self.hash('start')
         self.quizzes = [Quiz(f'{datadir}/quizQuestions.txt',
@@ -102,11 +102,11 @@ class QuizManager(Manager):
     def hash(self, msg : str) -> str:
         return hashlib.sha1(msg.rstrip().encode()).hexdigest()
         
-    async def handle_startQuiz(self, sid, data):
+    async def on_startQuiz(self, sid, data):
         await self.quizzes[0].add_player(sid)
-        await self.sio.emit("startQuiz", {}, room=sid)
+        await self.emit("startQuiz", {}, room=sid)
         
-    async def handle_quizAttemptAnswer(self, sid, data):
+    async def on_quizAttemptAnswer(self, sid, data):
         if 'answer' not in data: return
         # checkpoint 1
         
@@ -128,9 +128,9 @@ class QuizManager(Manager):
                                               answer):
                     rightAnswer = True
             if not rightAnswer:
-                await self.sio.emit('quizWrongAnswer', {}, room=sid)
+                await self.emit('quizWrongAnswer', {}, room=sid)
     
-    async def handle_quizSubmitQuestion(self, sid, data):
+    async def on_quizSubmitQuestion(self, sid, data):
         if 'question' not in data or 'answer' not in data: return
         question = data['question']
         answer = self.hash(data['answer'])
@@ -146,9 +146,9 @@ class QuizManager(Manager):
         if await quiz.attempt_advance(sid, answer):
             if quiz.players[sid] == -1:
                 # finished with quiz
-                await self.sio.emit('quizFinish', {}, room=sid)
+                await self.emit('quizFinish', {}, room=sid)
             else:
-                await self.sio.emit('quizRightAnswer',
+                await self.emit('quizRightAnswer',
                         {'question':await quiz.get_question(sid)},
                                     room=sid)
             return True

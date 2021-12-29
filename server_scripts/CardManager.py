@@ -9,10 +9,10 @@ from server_scripts.Manager import Manager
 # handled elsewhere
 class CardManager(Manager):
     def __init__(self,
-                 sio : AsyncServer,
+                 namespace : str,
                  datadir: str,
                  ):
-        super().__init__(sio, datadir)
+        super().__init__(namespace, datadir)
 
         self.cardLoader = CardLoader(datadir)
         
@@ -26,12 +26,6 @@ class CardManager(Manager):
             return res[0]
         return False
 
-    async def resAllStockCards(self, sid, data):
-        # used to be resAllCards
-        await self.sio.emit('resAllStockCards', self.cards, room=sid)
-        
-
-
     async def cardQualityControl(self, card):
         for attr in card:
             if attr not in (
@@ -42,7 +36,7 @@ class CardManager(Manager):
                             'txtcolor',
                             'cardType',
                             'cardAction',
-                            ):
+                            ): 
                 del card[attr]
 
                 
@@ -50,12 +44,12 @@ class CardManager(Manager):
             card['name'] = 'default'
             
         if 'cost' not in card:
-            cards['cost'] = '0'
-        if cards['cost'] != 'X':
+            card['cost'] = '0'
+        if card['cost'] != 'X':
             try:
-                int(cards['cost'])
+                int(card['cost'])
             except ValueError:
-                cards['cost'] = '0'
+                card['cost'] = '0'
 
         if 'img' not in card:
             card['img'] = ''
@@ -71,17 +65,28 @@ class CardManager(Manager):
         
         if 'cardAction' not in card:
             card['cardAction'] = ''
+
+
+
+
+
+    ### client request handling
+
+    async def on_reqAllStockCards(self, sid, data):
+        # NOTE: used to be resAllCards
+        await self.emit('resAllStockCards', self.cards, room=sid)
+
         
              
             
 
-    async def addStockCard(self,sid,data):
+    async def on_reqAddStockCard(self,sid,data):
         print(data)
         await self.cardQualityControl(data)
         self.cards.append(data)
         self.cardLoader.saveCards(self.cards)
 
-    async def addDeck(self,sid,data):
+    async def on_reqAddDeck(self,sid,data):
         print(data)
         # TODO: check deck to make sure it works.
         self.decks[data['name']] = {}

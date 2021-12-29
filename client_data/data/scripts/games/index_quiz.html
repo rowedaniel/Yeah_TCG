@@ -151,8 +151,8 @@ li a {
 		const incorrectAudio = new Audio('/data/sounds/quiz/incorrect.ogg');
 		
 		// communication init
-		const socket = io();
-		
+
+		const socket = io("/quiz");
 		
 		socket.on('ding', function(data){
 			socket.emit("dong", {beat: 1});
@@ -194,7 +194,7 @@ li a {
 		var quizStarted = false;
 		
 		// card submit function
-		function answerAttempt(){
+        function answerAttempt() {
 			if(!quizStarted) {return;}
 			socket.emit('quizAttemptAnswer', {answer:document.forms['quizForm']['response'].value});
 			document.forms['quizForm']['response'].value = "";

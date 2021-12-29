@@ -619,14 +619,16 @@ button#hideControlButton {
 	<script>
 	
 		// communication init
-		const socket = io();
+		const socket = io("/cardgame");
+		const carddisplaysocket = io("/cards");
 		
 		socket.on('ding', function(data){
 			socket.emit("dong", {beat: 1});});
 		
 		// player connection+setup stuff
 		
-		socket.on("resAllStockCards", resAllCards);
+		carddisplaysocket.on("resAllStockCards", resAllCards);
+
 		socket.on("beginGame", beginGame);
 		socket.on("endGame", endGame);
 		socket.on("serverReqChooseCards", getCards);
@@ -1110,7 +1112,7 @@ button#hideControlButton {
 		
 		
 		
-		socket.emit("reqAllStockCards", {});
+		carddisplaysocket.emit("reqAllStockCards", {});
 		
 	</script>
 	

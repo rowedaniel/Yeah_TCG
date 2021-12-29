@@ -80,7 +80,7 @@
 	<script>
 	
 		// communication init
-		const socket = io();
+		const socket = io("/cards");
 	
 		socket.on('ding', function(data){
 			socket.emit("dong", {beat: 1});
