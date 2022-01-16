@@ -1,0 +1,113 @@
+
+
+div#documentOutline {
+	
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height:40px;
+	background-color: #9999A0; /* 94949F */
+	overflow: visible;
+	
+	z-index: 20;
+	
+	
+	
+	
+	user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+   
+   
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+div#documentOutline > div > div > div {
+	/*transform: translate(0, 40px);*/
+}
+
+
+div.menu {
+	height:40px;
+}
+
+div.menu div {
+	background-color: #9999A0; /* 94949F */
+}
+
+div.menu > div > div {
+	min-width: 100px;
+	min-height:40px;
+	line-height: 40px;
+	text-align: center;
+}
+
+div.menu > div > div > div {
+	display: none;
+	position: absolute;
+	min-width: 100px;
+	max-width: 400px;
+	width: auto;
+	box-shadow: 0px 4px 8px 1px #808080;
+	/*transform: translate(40px, 0px);*/
+}
+
+
+/*
+.menuItem:hover .dropDown {
+	display: inline-block;
+}
+*/
+
+div.menu:hover > div {
+	display: inline-block;
+}
+
+
+
+.menu:hover {
+	background-color: #7070A0;
+}
+
+.menuItem:hover {
+	background-color: #D2D2FF;
+}
+
+
+/*
+.menuItem .dropDown div:hover {
+	background-color: #D2D2FF;
+}
+*/
+
+
+
+a {
+	color: #000000;
+	text-decoration:none;
+}
+
+p {
+	margin: 0;
+}
+
+
+body {
+	margin: 0;
+	text-align: center;
+	color: black;
+}
+
+ul {
+	text-align: left;
+	left: 0;
+}
+
+.tab {
+	margin-left: 40px;
+}

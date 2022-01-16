@@ -27,6 +27,7 @@ from aiohttp import web
 from server_scripts.CardManager import CardManager
 from server_scripts.CardGameManager import CardGamePlayer
 from server_scripts.QuizManager import QuizManager
+from server_scripts import build_site
 
 ### set up directories
 # unchanging data
@@ -66,27 +67,7 @@ sio.register_namespace(cardGamePlayer)
 
 # ================ Handle client requests ================
 
-## card/deck managment stuff
-
-# Handle client request for stock copy of all card data
-# used to be reqAllCards
-##@sio.on('reqAllStockCards')
-### TODO: change to handle_reqAllStockCards
-##async def handle_reqAllStockCards(sid, data):
-##    await cardManager.resAllStockCards(sid, data)
-##    
-### Handle client request to add new card data (for 1 card) to database
-### used to be clientAddCard
-##@sio.on('reqAddStockCard')
-##async def handle_reqAddStockCard(sid, data):
-##    await cardManager.addStockCard(sid, data)
-##
-### used to be clientAddDeck
-##@sio.on('reqAddDeck')
-##async def handle_reqAddDeck(sid, data):
-##    await cardManager.addDeck(sid, data)
-
-# legacy chess stuff
+# legacy chess stuff (TODO: move this elsewhere)
 
 @sio.on('reqLegacyChessChat')
 async def handle_reqLegacyChessChat(sid, data):
@@ -100,7 +81,7 @@ async def handle_reqLegacyChessMovePiece(sid, data):
 
 
 ### build website
-# TODO: implement this
+build_site.make_all()
 
 
 
