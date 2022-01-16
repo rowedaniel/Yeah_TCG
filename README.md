@@ -8,6 +8,7 @@ Copyright 2020 by Daniel Neshyba-Rowe.
 1) Python 3.7 or higher  
 2) aiohttp module   
 3) socketio modules  
+4) asyncio module
 
 ==============  Running  ==============
 1) Run by calling app.py
