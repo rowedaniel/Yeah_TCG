@@ -20,6 +20,21 @@ class CardManager(Manager):
         # TODO: check deck to make sure it works.
         self.decks = self.cardLoader.loadDecks()
 
+        self.cardDefaults = {
+            'name' : 'default',
+            'cost' : 0,
+            'img' : '',
+            'move' : '',
+            'txtcolor' : '',
+            'cardType' : 'action',
+            'cardAction' : '',
+            'cardActionPlay' : '',
+            'cardActionAttack' : '',
+            'cardActionKill' : '',
+            'cardActionDeath' : '',
+            
+            
+
     async def getCardByName(self, name):
         res = list(filter(lambda x: x['name']==name, self.cards))
         if len(res) > 0:
@@ -28,43 +43,8 @@ class CardManager(Manager):
 
     async def cardQualityControl(self, card):
         for attr in card:
-            if attr not in (
-                            'name',
-                            'cost',
-                            'img',
-                            'move',
-                            'txtcolor',
-                            'cardType',
-                            'cardAction',
-                            ): 
+            if attr not in self.cardDefaults: 
                 del card[attr]
-
-                
-        if 'name' not in card:
-            card['name'] = 'default'
-            
-        if 'cost' not in card:
-            card['cost'] = '0'
-        if card['cost'] != 'X':
-            try:
-                int(card['cost'])
-            except ValueError:
-                card['cost'] = '0'
-
-        if 'img' not in card:
-            card['img'] = ''
-        
-        if 'move' not in card:
-            card['move'] = ''
-        
-        if 'txtcolor' not in card:
-            card['txtcolor'] = ''
-        
-        if 'cardType' not in card:
-            card['cardType'] = 'action'
-        
-        if 'cardAction' not in card:
-            card['cardAction'] = ''
 
 
 

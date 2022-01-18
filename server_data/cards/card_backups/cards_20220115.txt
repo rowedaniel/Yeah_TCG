@@ -6,10 +6,7 @@
         "move": "Discard a common swordsman card from your hand. Search your deck for a rare swordsman card, and special play it.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me hand common swordsman 0 checkCardsTag me hand 1 0 searchCollection me deck rare swordsman 0 choose me me hand 1 0 1 moveCards me hand discard 1 choose me me deck 1 0 1 moveCards me deck play 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me hand common swordsman 0 checkCardsTag me hand 1 0 searchCollection me deck rare swordsman 0 choose me me hand 1 0 1 moveCards me hand discard 1 choose me me deck 1 0 1 moveCards me deck play 1"
     },
     {
         "name": "Golden Claws",
@@ -18,10 +15,7 @@
         "move": "Target demon card on your field gains +2 RP.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me play any demon 0 choose me me play 1 0 1 increaseRP me 2 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me play any demon 0 choose me me play 1 0 1 increaseRP me 2 1"
     },
     {
         "name": "Call of Hades",
@@ -30,10 +24,7 @@
         "move": "Reveal up to 3 cards from your discard pile. Your opponent returns 2 to your discard pile. The third is added to your hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me discard 0 0 choose me me discard 3 0 1 choose you me discard 2 1 2 removeTag me discard 2 1 moveCards me discard hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me discard 0 0 choose me me discard 3 0 1 choose you me discard 2 1 2 removeTag me discard 2 1 moveCards me discard hand 1"
     },
     {
         "name": "Hero's Chant",
@@ -42,10 +33,7 @@
         "move": "Pick up the top 4 cards of your deck. Choose one, reveal it to your opponent, and add it to your hand. The rest are shuffled back into your deck.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me deck 4 0 choose me me deck 1 0 1 reveal you me deck 1 moveCards me deck hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me deck 4 0 choose me me deck 1 0 1 reveal you me deck 1 moveCards me deck hand 1"
     },
     {
         "name": "ROID RAGE",
@@ -55,10 +43,7 @@
         "txtcolor": "",
         "cardType": "action",
         "cardAction": "spyCollection me play 0 0 roidRage me 0",
-        "parseCost": "any",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "parseCost": "any"
     },
     {
         "name": "Power of the Church",
@@ -67,10 +52,7 @@
         "move": "Activate when your opponent threatens to destroy a unit (including their own). Its effect is negated.",
         "txtcolor": "",
         "cardType": "response",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Soul Bond",
@@ -79,10 +61,7 @@
         "move": "Activate when a unit you control is attacked, and about to be destroyed. Destroy the attacking unit as well.",
         "txtcolor": "",
         "cardType": "response",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Metamorphosis ",
@@ -91,10 +70,7 @@
         "move": "Discard 2 cards from your hand. Then, search your deck for a common or rare demon card and special play it.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me hand 0 0 checkCardsTag me hand 2 0 searchCollection me deck common demon 0 checkCardsTag me hand 2 0 searchCollection me deck rare demon 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 1 0 1 moveCards me deck play 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me hand 0 0 checkCardsTag me hand 2 0 searchCollection me deck common demon 0 checkCardsTag me hand 2 0 searchCollection me deck rare demon 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 1 0 1 moveCards me deck play 1"
     },
     {
         "name": "Swordsmen Unity",
@@ -103,10 +79,7 @@
         "move": "Discard 3 cards from your hand. Search your deck for 3 common swordsman cards and special play them.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me hand 0 0 checkCardsTag me hand 3 0 searchCollection me deck common swordsman 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 3 0 1 moveCards me deck play 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me hand 0 0 checkCardsTag me hand 3 0 searchCollection me deck common swordsman 0 choose me me hand 2 0 1 moveCards me hand discard 1 choose me me deck 3 0 1 moveCards me deck play 1"
     },
     {
         "name": "Ouija Board",
@@ -115,10 +88,7 @@
         "move": "Search your deck for 2 Common Demons. Reveal them to your opponent and have them pick one. Add the one they chose to your hand. The other is sent to discard.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me deck common demon 0 choose me me deck 2 0 1 choose you me deck 1 1 2 moveCards me deck hand 2",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me deck common demon 0 choose me me deck 2 0 1 choose you me deck 1 1 2 moveCards me deck hand 2"
     },
     {
         "name": "Recruitment",
@@ -127,10 +97,7 @@
         "move": "Search your deck for 1 common Swordsman. Reveal it to your opponent and special play it. Shuffle your deck afterwards.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me deck common swordsman 0 choose me me deck 1 0 1 reveal you me deck 1 moveCards me deck play 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me deck common swordsman 0 choose me me deck 1 0 1 reveal you me deck 1 moveCards me deck play 1"
     },
     {
         "name": "Roar of Cerberus",
@@ -139,10 +106,7 @@
         "move": "Send 3 cards from your opponent's side of the field to their hand. Then, Call one Common Demon from your discard pile.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection you play 0 0 choose me you play 3 0 1 moveCards you play hand 0 spyCollection me discard 0 0 choose me me discard 1 0 0 moveCards me discard hand 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection you play 0 0 choose me you play 3 0 1 moveCards you play hand 0 spyCollection me discard 0 0 choose me me discard 1 0 0 moveCards me discard hand 0"
     },
     {
         "name": "Chad Squire",
@@ -151,10 +115,7 @@
         "move": "Your basic common swordsman in training. Once during your turn, you may draw a card.",
         "txtcolor": "",
         "cardType": "common swordsman unit fullart",
-        "cardAction": "spyCollection me deck 1 0 reveal you me deck 0 moveCards me deck hand 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me deck 1 0 reveal you me deck 0 moveCards me deck hand 0"
     },
     {
         "name": "Julius Caesar",
@@ -163,10 +124,7 @@
         "move": "An intern for the king. Sacrifice this card to search your deck for a legendary swordsman card, and add it to your hand. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "common swordsman unit",
-        "cardAction": "searchCollection me deck legendary swordsman 0 choose me me deck 1 0 1 moveCards me deck hand 1 this 0 moveCards me play discard 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me deck legendary swordsman 0 choose me me deck 1 0 1 moveCards me deck hand 1 this 0 moveCards me play discard 0"
     },
     {
         "name": "Baseball Lad",
@@ -175,10 +133,7 @@
         "move": "Random Kid who likes to swing his bat. Hit his head, and thinks his bat is Excalibur.",
         "txtcolor": "",
         "cardType": "common swordsman unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Mr. Deffrey Javis",
@@ -187,10 +142,7 @@
         "move": "Random guy who stumbled onto the battle. Joined the fight when a demon drank his coffee. Reveal your opponent's goal card.",
         "txtcolor": "",
         "cardType": "common swordsman unit",
-        "cardAction": "spyCollection you activeGoals 0 0 reveal me you activeGoals 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection you activeGoals 0 0 reveal me you activeGoals 0"
     },
     {
         "name": "Ajax the Spearman",
@@ -199,10 +151,7 @@
         "move": "A well known spear-man whose spear craves demon blood.",
         "txtcolor": "",
         "cardType": "rare swordsman unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Jason the Hero",
@@ -211,10 +160,7 @@
         "move": "One of the most popular heros in the kingdom. After 2 turns, this card gains +1 RP each turn.",
         "txtcolor": "",
         "cardType": "rare swordsman unit",
-        "cardAction": "this 0 increaseRP me 1 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay this 0 onPlay activateCooldown me 2 0 this 0 increaseRP me 1 0"
     },
     {
         "name": "Breath User Jaycob",
@@ -223,10 +169,7 @@
         "move": "*This card cannot attack*     Once per turn, gain +1 breath.",
         "txtcolor": "",
         "cardType": "rare Jaycob unit fullart",
-        "cardAction": "increaseBreath me 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay this 0 onPlay attackCooldown me -1 0 increaseBreath me 1"
     },
     {
         "name": "Buff Jaycob",
@@ -235,10 +178,7 @@
         "move": "*This card cannot attack*     Once per turn, you may choose to gain +3 breath, then decrase this card's RP by 1.",
         "txtcolor": "",
         "cardType": "rare Jaycob unit fullart",
-        "cardAction": "increaseBreath me 3 this 0 increaseRP me -1 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay this 0 onPlay attackCooldown me -1 0 increaseBreath me 3 this 0 increaseRP me -1 0"
     },
     {
         "name": "Dead Shinubo",
@@ -247,10 +187,7 @@
         "move": "Everyone's simpin' for her! Discard the top 3 cards of your opponent's deck",
         "txtcolor": "",
         "cardType": "action fullart",
-        "cardAction": "spyCollection you deck 3 0 moveCards you deck discard 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection you deck 3 0 moveCards you deck discard 0"
     },
     {
         "name": "Scout the Scout",
@@ -259,10 +196,7 @@
         "move": "He is a scout named scout. He likes long walks on the beach.",
         "txtcolor": "",
         "cardType": "common swordsman unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Dance of Metal",
@@ -271,10 +205,7 @@
         "move": "End your turn with a legendary swordsman in play with +15 RP.",
         "txtcolor": "",
         "cardType": "goal",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Flesh of the King",
@@ -283,10 +214,7 @@
         "move": "End your turn with a legendary demon in play with +10 RP.",
         "txtcolor": "",
         "cardType": "goal",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Smokeless Lungs",
@@ -295,10 +223,7 @@
         "move": "End your turn with 20 breath.",
         "txtcolor": "",
         "cardType": "goal",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Power of a Homeowner",
@@ -307,10 +232,7 @@
         "move": "End your defense phase after defending from a combined total of 36 RP or more without taking any damage.",
         "txtcolor": "",
         "cardType": "goal",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Pretty Good Attack",
@@ -319,10 +241,7 @@
         "move": "End your attack phase, attacking with combined total of 40 RP or more in a turn.",
         "txtcolor": "",
         "cardType": "goal",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Not Too Bad Strength",
@@ -331,10 +250,7 @@
         "move": "End your turn with a combined total of 38 or more RP in play.",
         "txtcolor": "",
         "cardType": "goal",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "The March of the Fairyfly",
@@ -343,10 +259,7 @@
         "move": "End your turn with 7 or more unit cards with 5 RP or less in play.",
         "txtcolor": "",
         "cardType": "goal",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Dragon King Hades",
@@ -355,10 +268,7 @@
         "move": "The lord of the... what did he do again? Not sure. This card gains +4 RP when you play it.",
         "txtcolor": "",
         "cardType": "rare demon unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay this 0 onPlay increaseRP me 4 0"
     },
     {
         "name": "Lucifer the Demon King",
@@ -367,10 +277,7 @@
         "move": "The king of Demons. He had his home invaded by people with pointy sticks. This card gains +2 RP every turn.",
         "txtcolor": "",
         "cardType": "legendary demon unit fullart",
-        "cardAction": "this 0 increaseRP me 2 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "this 0 increaseRP me 2 0"
     },
     {
         "name": "King Arthur",
@@ -379,10 +286,7 @@
         "move": "The King of all the Swordsmen. Loved by his subjects, and hated by his enemies. When you play this card, search your deck for up to 3 common or rare swordsman cards, and special play them. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "legendary swordsman unit fullart",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay searchCollection me deck common swordsman 0 onPlay searchCollection me deck rare swordsman 0 onPlay choose me me deck 3 0 1 onPlay moveCards me deck play 1"
     },
     {
         "name": "Sir Lancelot ",
@@ -391,10 +295,7 @@
         "move": "The King's Personal Protector. He is the 2nd strongest Swordsman. When you play this card, search your deck for 2 common swordsman cards, and special play them. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "rare swordsman unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay searchCollection me deck common swordsman 0 onPlay choose me me deck 2 0 1 onPlay moveCards me deck play 1"
     },
     {
         "name": "Achilles the mythical Swordsman ",
@@ -403,10 +304,7 @@
         "move": "The strongest swordsman in the kingdom. This card gains +5 RP when you play it.",
         "txtcolor": "",
         "cardType": "rare swordsman unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay this 0 onPlay increaseRP me 5 0"
     },
     {
         "name": "Sweaty Homunculus",
@@ -416,10 +314,7 @@
         "txtcolor": "",
         "cardType": "rare demon unit",
         "cardAction": "this 0 resetRP me 0",
-        "parseCost": "length discard",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "parseCost": "length discard"
     },
     {
         "name": "Baby Demon",
@@ -428,10 +323,7 @@
         "move": "Pesty little demon who loves pulling tricks on people. Once per turn, search your discard pile for a card of your choice, and add it to your hand.",
         "txtcolor": "",
         "cardType": "common demon unit",
-        "cardAction": "spyCollection me discard 0 0 choose me me discard 1 0 1 moveCards me discard hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me discard 0 0 choose me me discard 1 0 1 moveCards me discard hand 1"
     },
     {
         "name": "Jack the Ripper",
@@ -440,10 +332,7 @@
         "move": "His hunger for power is becoming known to more and more people. Gain +4 RP whenever this card destroy an opponent's card.",
         "txtcolor": "",
         "cardType": "rare demon unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onKill this 0 onKill increaseRP me 4 0"
     },
     {
         "name": "Flesh Blade",
@@ -452,10 +341,7 @@
         "move": "For some reason, gives the impression of a musician. When you play this card, discard the top card of your deck to gain +3RP.",
         "txtcolor": "",
         "cardType": "common demon unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay spyCollection me deck 1 0 onPlay moveCards me deck discard 0 onPlay this 1 onPlay increaseRP me 3 1"
     },
     {
         "name": "Lucifer's Servant",
@@ -464,10 +350,7 @@
         "move": "Hums constantly, so it's very annoying to fight with her. Discard the top 2 cards of your deck. This card gains +1 RP",
         "txtcolor": "",
         "cardType": "common demon unit",
-        "cardAction": "spyCollection me deck 3 0 moveCards me deck discard 0 this 1 increaseRP me 1 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me deck 3 0 moveCards me deck discard 0 this 1 increaseRP me 1 1"
     },
     {
         "name": "Messenger of Hades",
@@ -476,10 +359,7 @@
         "move": "Mail time! Search your deck for a common demon card, and place it into your hand. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "common demon unit",
-        "cardAction": "searchCollection me deck common demon 0 choose me me deck 1 0 1 moveCards me deck hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me deck common demon 0 choose me me deck 1 0 1 moveCards me deck hand 1"
     },
     {
         "name": "Skinny Jaycob",
@@ -488,10 +368,7 @@
         "move": "He's weak, but he can still breathe! Gain +1 breath",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "increaseBreath me 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "increaseBreath me 1"
     },
     {
         "name": "Jaycob's inner demon",
@@ -500,10 +377,7 @@
         "move": "Search your discard pile for a rare Jaycob card, and place it in your hand. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me discard rare Jaycob 0 choose me me discard 1 0 1 moveCards me discard hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me discard rare Jaycob 0 choose me me discard 1 0 1 moveCards me discard hand 1"
     },
     {
         "name": "Surprise Attack",
@@ -512,10 +386,7 @@
         "move": "Activate when your opponent special plays a unit card. Shuffle the card into their deck.",
         "txtcolor": "",
         "cardType": "response",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Demonic Possession",
@@ -524,10 +395,7 @@
         "move": "Target swordsman on your opponent's side of the field cannot attack or defend for one turn.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection you play any swordsman 0 attackCooldown you 1 0 defendCooldown you 1 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection you play any swordsman 0 attackCooldown you 1 0 defendCooldown you 1 0"
     },
     {
         "name": "Achilles's Shield ",
@@ -536,10 +404,7 @@
         "move": "Stop your opponent from performing any assaults to any of your cards for 2 turns.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection you play 0 0 attackCooldown you 2 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection you play 0 0 attackCooldown you 2 0"
     },
     {
         "name": "Total Annihilation",
@@ -548,10 +413,7 @@
         "move": "Flip a coin. If heads, every card on the field is destroyed. If tails the user of this card must discard 1 card from their hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "setRandomChance 2 randomChance 1 spyCollection you play 0 0 randomChance 1 spyCollection me play 0 0 randomChance 2 spyCollection me hand 0 0 randomChance 2 choose me me hand 1 0 1 moveCards me hand discard 1 moveCards you play discard 0 moveCards me play discard 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "setRandomChance 2 randomChance 1 spyCollection you play 0 0 randomChance 1 spyCollection me play 0 0 randomChance 2 spyCollection me hand 0 0 randomChance 2 choose me me hand 1 0 1 moveCards me hand discard 1 moveCards you play discard 0 moveCards me play discard 0"
     },
     {
         "name": "Kiss of Death",
@@ -560,10 +422,7 @@
         "move": "Destroy target card which has less than 10 RP.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "The flaming sword of Lucifer",
@@ -572,10 +431,7 @@
         "move": "Target demon gains +11 RP for the rest of the game.",
         "txtcolor": "",
         "cardType": "action fullart",
-        "cardAction": "searchCollection me play any demon 0 choose me me play 1 0 1 increaseRP me 15 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me play any demon 0 choose me me play 1 0 1 increaseRP me 15 1"
     },
     {
         "name": "Excalibur",
@@ -584,10 +440,7 @@
         "move": "Target rare or legendary swordsman gains +15 RP for the rest of the game.",
         "txtcolor": "",
         "cardType": "action fullart",
-        "cardAction": "searchCollection me play rare swordsman 0 searchCollection me play legendary swordsman 0 choose me me play 1 0 1 increaseRP me 15 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me play rare swordsman 0 searchCollection me play legendary swordsman 0 choose me me play 1 0 1 increaseRP me 15 1"
     },
     {
         "name": "Voc\u00c3\u00aa N\u00c3\u00a3o",
@@ -596,10 +449,7 @@
         "move": "Activate when your opponent activates a card. Negate the effect, and reverse it back to them.",
         "txtcolor": "",
         "cardType": "response",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Life's Greed",
@@ -608,10 +458,7 @@
         "move": "Draw 4 cards, reveal them to your opponent, and then add them to your hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me deck 4 0 reveal you me deck 0 moveCards me deck hand 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me deck 4 0 reveal you me deck 0 moveCards me deck hand 0"
     },
     {
         "name": "Tyranny",
@@ -620,10 +467,7 @@
         "move": "Draw 2 cards, reveal them to your opponent, and then add them to your hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me deck 2 0 reveal you me deck 0 moveCards me deck hand 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me deck 2 0 reveal you me deck 0 moveCards me deck hand 0"
     },
     {
         "name": "Dig a Grave",
@@ -632,10 +476,7 @@
         "move": "Search your discard pile for a card of your choice, and add it to your hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me discard 0 0 choose me me discard 1 0 1 reveal you me discard 1 moveCards me discard hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me discard 0 0 choose me me discard 1 0 1 reveal you me discard 1 moveCards me discard hand 1"
     },
     {
         "name": "Soul Snatcher",
@@ -644,10 +485,7 @@
         "move": "Search your discard pile for 3 cards of your choice, and add it to your hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me discard 0 0 choose me me discard 3 0 1 reveal you me discard 1 moveCards me discard hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me discard 0 0 choose me me discard 3 0 1 reveal you me discard 1 moveCards me discard hand 1"
     },
     {
         "name": "Book of Demons",
@@ -656,10 +494,7 @@
         "move": "Search your discard pile for a common demon card of your choice, and add it to your hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me discard common swordsman 0 choose me me discard 1 0 1 reveal you me discard 1 moveCards me discard hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me discard common swordsman 0 choose me me discard 1 0 1 reveal you me discard 1 moveCards me discard hand 1"
     },
     {
         "name": "The Book of Jaycob",
@@ -668,10 +503,7 @@
         "move": "Search your deck for a rare Jaycob card, and add it to your hand. Shuffle your deck after.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me deck rare Jaycob 0 choose me me deck 1 0 1 moveCards me deck hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me deck rare Jaycob 0 choose me me deck 1 0 1 moveCards me deck hand 1"
     },
     {
         "name": "Swords Man",
@@ -680,10 +512,7 @@
         "move": "A man who spent his life studying the art of the sword. This card gains +2 RP when you play it.",
         "txtcolor": "",
         "cardType": "common swordsman unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "onPlay this 0 onPlay increaseRP me 2 0"
     },
     {
         "name": "Swordsman's Final Shot",
@@ -692,10 +521,7 @@
         "move": "Activate only when your opponent's Unit is about to deal damage to you directly. Negate the attack but destroy one swordsman on your side of the field. Gain Health equal to it's original RP",
         "txtcolor": "",
         "cardType": "response",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Greedy Jacob",
@@ -704,10 +530,7 @@
         "move": "Steal 1 of your opponent's rare Jaycob cards and bring it to your side of the field.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Jacob's Revenge",
@@ -716,10 +539,7 @@
         "move": "His desire to become the one true Jacob is fulfilled! Destroy every rare Jaycob card on your opponent's side of the field.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection you play rare Jaycob 0 moveCards you play discard 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection you play rare Jaycob 0 moveCards you play discard 0"
     },
     {
         "name": "Charlotte the witch",
@@ -728,10 +548,7 @@
         "move": "A evil witch who assists the demon army. When called to the field add one Action card from your discard pile to your hand.",
         "txtcolor": "",
         "cardType": "common demon unit",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Malfunction",
@@ -740,10 +557,7 @@
         "move": "Activate when your opponent activates a unit card. Negate the effect, your opponent loses 2 health, and that card may no longer be activated for the rest of the game.",
         "txtcolor": "",
         "cardType": "response",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Aegis",
@@ -752,10 +566,7 @@
         "move": "Activate when an opposing unit attacks you. Stop the attack then set this card facedown again. This effect can only be used once per turn.",
         "txtcolor": "",
         "cardType": "response",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Piercing Power",
@@ -764,10 +575,7 @@
         "move": "Reset RP for target swordsman card on your side of the field. Its attacks can no longer be blocked by enemy units.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me play any any 0 choose me me play 1 0 1 reveal you me play 1 resetRP me 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me play any any 0 choose me me play 1 0 1 reveal you me play 1 resetRP me 1"
     },
     {
         "name": "Rust Cleaner",
@@ -776,10 +584,7 @@
         "move": "Reset RP for target swordsman card on your side of the field. Then increase its RP by 2.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me play any any 0 choose me me play 1 0 1 reveal you me play 1 resetRP me 1 increaseRP me 2 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me play any any 0 choose me me play 1 0 1 reveal you me play 1 resetRP me 1 increaseRP me 2 1"
     },
     {
         "name": "Banji's Scream",
@@ -788,10 +593,7 @@
         "move": "Destroy 1 card on your opponent's side of the field.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection you play any any 0 choose me you play 1 0 1 moveCards you play discard 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection you play any any 0 choose me you play 1 0 1 moveCards you play discard 1"
     },
     {
         "name": "Black Market",
@@ -800,10 +602,7 @@
         "move": "Pick one win condition card from your pile. This is now another way for you to win.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "spyCollection me goals 0 0 choose me me goals 1 0 1 moveCards me goals activeGoals 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "spyCollection me goals 0 0 choose me me goals 1 0 1 moveCards me goals activeGoals 1"
     },
     {
         "name": "Friends Close Enemies Closer",
@@ -812,10 +611,7 @@
         "move": "All player search their deck for a rare Jaycob card, and add it to their hand.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me deck rare Jaycob 0 choose me me deck 1 0 1 moveCards me deck hand 1 searchCollection you deck rare Jaycob 0 choose you you deck 1 0 1 moveCards you deck hand 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me deck rare Jaycob 0 choose me me deck 1 0 1 moveCards me deck hand 1 searchCollection you deck rare Jaycob 0 choose you you deck 1 0 1 moveCards you deck hand 1"
     },
     {
         "name": "Miyamoto Musashi",
@@ -824,10 +620,7 @@
         "move": "Spend 1 breath, then set this unit's RP to 2*X, where X is the number of units your opponent controls.",
         "txtcolor": "",
         "cardType": "rare swordsman unit",
-        "cardAction": "checkBreath me 1 this 0 setRP me 1 0 miyamotoMusashi me you play 0 miyamotoMusashi me you play 0 increaseRP me -1 0 checkBreath me 1 increaseBreath me -1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "checkBreath me 1 this 0 setRP me 1 0 miyamotoMusashi me you play 0 miyamotoMusashi me you play 0 increaseRP me -1 0 checkBreath me 1 increaseBreath me -1"
     },
     {
         "name": "Demon's Rebirth",
@@ -836,10 +629,7 @@
         "move": "Special call 2 Demon Unit cards from your discard pile.",
         "txtcolor": "",
         "cardType": "action",
-        "cardAction": "searchCollection me discard any demon 0 choose me me discard 2 0 1 moveCards me discard play 1",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me discard any demon 0 choose me me discard 2 0 1 moveCards me discard play 1"
     },
     {
         "name": "Full Counter",
@@ -848,10 +638,7 @@
         "move": "Activate when you would have taken direct damage from an opponent's card. Cancel the damage and reflect it back onto them.",
         "txtcolor": "",
         "cardType": "response",
-        "cardAction": "",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": ""
     },
     {
         "name": "Kchau",
@@ -860,9 +647,6 @@
         "move": "The Queen went too far. Search your deck for every swordsman card, and special play it.",
         "txtcolor": "#2A182A",
         "cardType": "action",
-        "cardAction": "searchCollection me deck any swordsman 0 moveCards me deck play 0",
-        "cardActionOnPlay": "",
-        "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardAction": "searchCollection me deck any swordsman 0 moveCards me deck play 0"
     }
 ]

@@ -5,7 +5,6 @@ import asyncio
 from socketio import AsyncServer
 from server_scripts.Manager import Manager
 from server_scripts.CardManager import CardManager
-from server_scripts.card_game import CardExecutor
 from server_scripts.card_game.Game import Game
 
 

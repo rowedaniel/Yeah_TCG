@@ -1,3 +1,6 @@
+from server_scripts.CardManager import CardManager
+from server_scripts.card_loader.loadCardStuff import CardLoader
+
 import random
 
 
@@ -16,6 +19,9 @@ conditionalCommands = (
                  )
 variableCommands = ('setRandomChance',
                     )
+OnStr = ('onPlay',
+         'onAttack',
+         'onKill')
 
 cmdTable = {
     'increaseBreath':(
@@ -299,66 +305,63 @@ cmdTable = {
     
             }
 
-async def execute_card_action(card, me, you):
-    c = card.data['cardAction'].rstrip().split(' ')
+
+async def execute_card_action(cardAction):
+    c = cardAction.rstrip().split(' ')
     i = 0
-    cmdStr = ''
+
+
+    commands = {'default':[]}
+    currentOnStr = 'default'
+
+    for s in OnStr:
+        commands[s] = []
+
+    
     currentCommand = ''
     skipCommand = False
     currentArgIndex = 0
-    memory = 0
-
-
-    await me.remove_card_tags()
-    await you.remove_card_tags()
-    if any([len(c.tags)>0 for _,c in await me.get_existing_cards(me.play)]):
-        print('tags not reset!!')
 
     
     while i < len(c):
-        print('new arg/command:', c[i])
+        
         # commands
         if c[i] in cmdTable:
             currentCommand = c[i]
-            cmdStr = cmdTable[c[i]][0]
+            commands[currentOnStr].append(c[i])
+            
         # args
         elif len(currentCommand) > 0 and \
            currentCommand in cmdTable and \
            currentArgIndex < cmdTable[currentCommand][1] and \
            cmdTable[currentCommand][currentArgIndex+2][0](c[i]):
-
-            cmdStr = cmdTable[currentCommand][currentArgIndex+2][1](
-                cmdStr,c[i])
             currentArgIndex += 1
+            
+            commands[currentOnStr].append(c[i])
+            
+        elif c[i] in OnStr:
+            currentOnStr = c[i]
+            
         # error
         else:
-            cmdStr = ''
             currentCommand = ''
+            currentOnStr = 'default'
             currentArgIndex = 0
-            print('failed command!')
+
 
         if len(currentCommand) > 0 and \
            currentCommand in cmdTable and \
            currentArgIndex >= cmdTable[currentCommand][1]:
-            if skipCommand:
-                skipCommand = False
-                print('skip')
-            elif currentCommand in conditionalCommands:
-                skipCommand = await eval(cmdStr)
-                if skipCommand:
-                    print('waiting to skip')
-            elif currentCommand in variableCommands:
-                memory = await eval(cmdStr)
-                print('memory is:', memory)
-            else:
-                print('running command:',cmdStr)
-                await eval(cmdStr)
-            cmdStr = ''
             currentCommand = ''
+            currentOnStr = 'default'
             currentArgIndex = 0
+
+            
+
+        
         i += 1
 
-
+    return commands
 
 
 
@@ -372,14 +375,11 @@ async def miyamoto_musashi(player1, player2, collection, tag):
 # conditional funcs
 
 async def check_random_chance(actual, success):
-    print('in check_random_chance, actual =',actual,
-          'success =',success,
-          'returning: ', actual == success)
+
     return actual == success
 
 async def get_random_number(possibilities):
     a = random.randint(1, possibilities)
-    print(a)
     return a
 
 
@@ -387,42 +387,21 @@ async def get_random_number(possibilities):
 
 
 
-
-
-
-
-
-
 async def main():
+    
+    
+    m = CardManager('asdf', 'server_data/cards')
+    cl = CardLoader('server_data/cards')
 
-    
-    class TestCard:
-        def __init__(self, cardAction):
-            self.data = {'cardAction':cardAction}
-        async def add_tag(self, tag):
-            pass
+    for c in m.cards:
+        action = await execute_card_action(c['cardAction'])
+        c['cardAction']         = ' '.join(action['default'])
+        c['cardActionOnPlay']   = ' '.join(action['onPlay'])
+        c['cardActionOnAttack'] = ' '.join(action['onAttack'])
+        c['cardActionOnKill']   = ' '.join(action['onKill'])
 
-    class TestPlayer:
-        def __init__(self):
-            self.play = []
-        async def remove_card_tags(self):
-            pass
-        async def increase_breath(self, amount):
-            pass
-        async def set_attack_cooldown(self, duration, tag):
-            pass
-    
-    testCards = [
-        TestCard('onPlay this 0 onPlay attackCooldown me -1 0 '+\
-                 'increaseBreath me 1'),
-        ]
-    p1 = TestPlayer()
-    p2 = TestPlayer()
-    for card in testCards:
-        await execute_card_action(card,
-                                     p1,
-                                     p2)
-    
+    cl.saveCards(m.cards)
+        
 
 if __name__ == '__main__':
     import asyncio
