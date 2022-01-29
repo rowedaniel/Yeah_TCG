@@ -1,6 +1,7 @@
 import random
 
 from server_scripts.card_game.Cards import *
+from server_scripts.card_game import CardExecutor
 
 class Player:
     __slots__ = ('game',
@@ -247,9 +248,9 @@ class Player:
             print(c.data['name'], 'was destroyed')
             await a.add_kill(c)
             await CardExecutor.execute_card_action(a,
+                                                   'cardActionOnKill',
                                                       opponent,
-                                                      self,
-                                                      2)
+                                                      self)
             await self.add_cards_to('discard',[c])
             self.play[i] = None
 
@@ -298,7 +299,8 @@ class Player:
                     # successful, just got cancled by response card
                     return True
                     
-            await CardExecutor.execute_card_action(c, self, opponent)
+            await CardExecutor.execute_card_action(c, 'cardAction',
+                                                   self, opponent)
             c.hasActivated = True
             return True
         return False
@@ -309,10 +311,9 @@ class Player:
         if i < len(self.play):
             c = self.play[i]
             opponent.attackers.append(c)
-            await CardExecutor.execute_card_action(c,
+            await CardExecutor.execute_card_action(c, 'cardActionOnAttack',
                                                       self,
-                                                      opponent,
-                                                      1)
+                                                      opponent)
             c.hasAttacked = True
             return True
         return False
@@ -436,7 +437,8 @@ class Player:
 
         if 'action' in c.data['cardType']:
             # it's an action card
-            await CardExecutor.execute_card_action(c, self, opponent)
+            await CardExecutor.execute_card_action(c, 'cardAction',
+                                                   self, opponent)
             await self.add_cards_to('discard',[c])
 
             del c
@@ -446,9 +448,9 @@ class Player:
             # onPlay stuff
             await self.add_cards_to('play',[c])
             await CardExecutor.execute_card_action(self.play[-1],
+                                                   'cardActionOnPlay',
                                                       self,
-                                                      opponent,
-                                                      0)
+                                                      opponent)
             
             return True
         elif 'response' in c.data['cardType']:

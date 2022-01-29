@@ -32,6 +32,7 @@ class CardManager(Manager):
             'cardActionAttack' : '',
             'cardActionKill' : '',
             'cardActionDeath' : '',
+        }
             
             
 

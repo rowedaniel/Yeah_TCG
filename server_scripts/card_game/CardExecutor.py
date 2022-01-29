@@ -299,8 +299,8 @@ cmdTable = {
     
             }
 
-async def execute_card_action(card, me, you):
-    c = card.data['cardAction'].rstrip().split(' ')
+async def execute_card_action(card, action, me, you):
+    c = card.data[action].rstrip().split(' ')
     i = 0
     cmdStr = ''
     currentCommand = ''

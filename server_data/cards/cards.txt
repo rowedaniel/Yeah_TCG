@@ -212,7 +212,7 @@
         "txtcolor": "",
         "cardType": "rare swordsman unit",
         "cardAction": "this 0 increaseRP me 1 0",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "this 0 activateCooldown me 2 0",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },
@@ -224,7 +224,7 @@
         "txtcolor": "",
         "cardType": "rare Jaycob unit fullart",
         "cardAction": "increaseBreath me 1",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "this 0 attackCooldown me -1 0",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },
@@ -232,11 +232,11 @@
         "name": "Buff Jaycob",
         "cost": "4",
         "img": "",
-        "move": "*This card cannot attack*     Once per turn, you may choose to gain +3 breath, then decrase this card's RP by 1.",
+        "move": "*This card cannot attack*     Once per turn, you may choose to gain +3 breath, then decrease this card's RP by 1.",
         "txtcolor": "",
         "cardType": "rare Jaycob unit fullart",
         "cardAction": "increaseBreath me 3 this 0 increaseRP me -1 0",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "this 0 attackCooldown me -1 0",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },
@@ -356,7 +356,7 @@
         "txtcolor": "",
         "cardType": "rare demon unit",
         "cardAction": "",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "this 0 increaseRP me 4 0",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },
@@ -380,7 +380,7 @@
         "txtcolor": "",
         "cardType": "legendary swordsman unit fullart",
         "cardAction": "",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "searchCollection me deck common swordsman 0 searchCollection me deck rare swordsman 0 choose me me deck 3 0 1 moveCards me deck play 1",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },
@@ -392,7 +392,7 @@
         "txtcolor": "",
         "cardType": "rare swordsman unit",
         "cardAction": "",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "searchCollection me deck common swordsman 0 choose me me deck 2 0 1 moveCards me deck play 1",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },
@@ -404,7 +404,7 @@
         "txtcolor": "",
         "cardType": "rare swordsman unit",
         "cardAction": "",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "this 0 increaseRP me 5 0",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },
@@ -443,7 +443,7 @@
         "cardAction": "",
         "cardActionOnPlay": "",
         "cardActionOnAttack": "",
-        "cardActionOnKill": ""
+        "cardActionOnKill": "this 0 increaseRP me 4 0"
     },
     {
         "name": "Flesh Blade",
@@ -453,7 +453,7 @@
         "txtcolor": "",
         "cardType": "common demon unit",
         "cardAction": "",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "spyCollection me deck 1 0 moveCards me deck discard 0 this 1 increaseRP me 3 1",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },
@@ -681,7 +681,7 @@
         "txtcolor": "",
         "cardType": "common swordsman unit",
         "cardAction": "",
-        "cardActionOnPlay": "",
+        "cardActionOnPlay": "this 0 increaseRP me 2 0",
         "cardActionOnAttack": "",
         "cardActionOnKill": ""
     },

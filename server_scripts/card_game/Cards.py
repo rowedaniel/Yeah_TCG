@@ -445,7 +445,7 @@ goalCards = {
     'Power of a Homeowner':PowerOfAHomeowner,
     'Pretty Good Attack':PrettyGoodAttack,
     'Not Too Bad Strength':NotTooBadStrength,
-    'The March of the Fairlyfly':TheMarchOfTheFairyfly,
+    'The March of the Fairyfly':TheMarchOfTheFairyfly,
     }
 async def make_goal_card(player, c):
     name = c.data['name']

@@ -307,6 +307,9 @@ class Game:
 
             # get card Order
             unattackedPlay = await p.get_unattacked_play_cards()
+
+            print('in attack phase, unattackedPlay is:', unattackedPlay)
+
             if len(unattackedPlay)==0:
                 print('Skipping attack phase, no play cards.')
                 return

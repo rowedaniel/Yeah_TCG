@@ -1,0 +1,16 @@
+
+body {
+	margin: 0;
+	text-align: center;
+	color: black;
+	background-color: #BBBBBF;
+}
+
+ul {
+	text-align: left;
+	left: 0;
+}
+
+.tab {
+	margin-left: 40px;
+}

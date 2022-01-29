@@ -87,27 +87,14 @@ div.menu:hover > div {
 
 
 
-a {
+div#documentOutline a {
 	color: #000000;
 	text-decoration:none;
 }
 
-p {
+div#documentOutline p {
 	margin: 0;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
-
-body {
-	margin: 0;
-	text-align: center;
-	color: black;
-}
-
-ul {
-	text-align: left;
-	left: 0;
-}
-
-.tab {
-	margin-left: 40px;
-}
