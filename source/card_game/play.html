@@ -1,0 +1,50 @@
+<link rel="stylesheet" type="text/css" href="/data/styles/cardGame/player.css" />
+	
+	<div id="deckformdiv" style="visibility: visible;">
+		<form name="cardForm" autocomplete="off" onsubmit="deckreq();return false;">
+		<p>Deck Name</p><input type="text" name="deckName">
+		<input type="submit" value="submit">
+		</form>
+	</div>
+	
+	<div id="gamediv" style="visibility: hidden">
+	
+		<div id="mainBackgroundDiv">
+			<div class="bottomLeft sidebar"><div id="player1"></div><div id="player2"></div></div>
+			<div class="bottomRight sidebar"><div id="player3"></div><div id="player4"></div></div>
+			<div class="bottom topbar" id="player5"></div>
+			<div class="bottomMid midbar" id="player6"></div>
+			<div class="topLeft sidebar"><div id="opponent4"></div><div id="opponent3"></div></div>
+			<div class="topRight sidebar"><div id="opponent2"></div><div id="opponent1"></div></div>
+			<div class="top topbar" id="opponent5"></div>
+			<div class="topMid midbar" id="opponent6"></div>
+			<div id="counterDivs">
+				<div class="midLeft counterDiv">you<p id="playerHealth">health: 40</p><p id="playerBreath">breath: 3</p></div>
+				<div class="midRight counterDiv">opponent<p id="opponentHealth">health: 40</p><p id="opponentBreath">breath: 3</p></div>
+			</div>
+		</div>
+		
+		
+		<div id="mainControlDiv">
+			<div id="controlText"></div>
+			<div id="control" class="control">
+			</div>
+			<div id="opponentCards" class="control"></div>
+			<button id="hideOpponentCardButton" class="uninteractable" onclick="cycleControl();return false;">show opponent cards</button>
+			<button id="submitButton" class="uninteractable" onclick="resGetCards();return false;">submit</button>
+		</div>
+		
+		
+
+		<button id="hideControlButton" onclick="toggleControl(this);return false;">hide control</button>
+		
+		
+		<div id="mainDisplayDiv"></div>
+	
+	</div>
+	
+	
+	<script src = "/socket.io/socket.io.js"></script>
+	<script src = "/data/scripts/cardGame/CardObjects.js"></script>
+	<script src = "/data/scripts/cardGame/GameUtils.js"></script>
+	<script src = "/data/scripts/cardGame/player.js"></script>

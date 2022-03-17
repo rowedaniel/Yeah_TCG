@@ -1,0 +1,499 @@
+﻿
+/* general styles */
+
+body {
+
+    /* optional. Consider removing this later. */
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+
+button {
+    display: inline-block;
+    background-color: #629D62;
+    border: none;
+    border-radius: 1vh;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    padding: 1vh 2vh;
+    font-size: 2vh;
+
+    transition: all 0.1s;
+}
+
+button:hover {
+    background-color: #B0D8B0;
+    color: #424242;
+}
+
+
+
+
+
+
+
+/* Control Div Stuff */
+
+
+div.control {
+    position: static;
+    margin-top: 8vh;
+    margin-left: 8vw;
+    margin-right: 8vw;
+    transition: all 0.2s;
+}
+
+div.control div.subControl {
+    position: static;
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+}
+
+div.control p.label{
+    position: absolute;
+    float: left;
+    margin-top: 8vh;
+    padding: 1vh;
+    font-size: 8vh;
+    transform: rotate(65deg);
+    z-index: 3;
+
+    pointer-events: none;
+
+
+    background-color: #DFA5A5;
+    border: 4px solid black;
+    border-radius: 20px;
+    color: #000000;
+
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+
+}
+
+div {
+    /*background-color: grey;*/
+}
+
+div.control div#chooseText {
+    /*background-color: red;*/
+    font-size: 8vh;
+    position: absolute;
+    height: 70vh;
+    left: 0;
+    right: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+div.control div#chooseText p {
+    transition: all 0.2s;
+    background-color: #A5A5DF;
+}
+
+div.control div#chooseText p:hover {
+    background-color: #A5DFA5;
+}
+
+div.control div#chooseText p.selected {
+    background-color: #DFA5A5;
+}
+
+div#opponentCards {
+    display: none;
+}
+
+
+
+
+div#controlText {
+    position: fixed;
+    z-index: 4;
+    top: 40px;
+    height: 8vh;
+    left: 0;
+    right: 0;
+    text-align: center;
+
+
+    transition: all 0.2s;
+    pointer-events: none;
+}
+
+div#controlText p {
+    font-size: 6vh;
+    background-color: #A5A5DF;
+    border: 4px solid black;
+    border-radius: 20px;
+    color: #000000;
+
+    position: fixed;
+    left: 10vw;
+    right: 10vw;
+
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+button#submitButton {
+    position: fixed;
+    bottom: 8vh;
+    right: 8vw;
+    transition: all 0.2s;
+}
+
+button#hideOpponentCardButton {
+    position: fixed;
+    bottom: 8vh;
+    left: 16vw;
+}
+
+
+
+
+
+
+
+
+
+/* Background Div Stuff */
+div.sidebar {
+    position: fixed;
+
+
+    width: 4vh;
+    height: 32vh;
+
+
+    transition: all 0.3s;
+}
+
+div.sidebar:hover {
+    width: 16vh;
+    height: 40vh;
+    overflow: visible;
+}
+
+
+div.topbar {
+    position: fixed;
+
+
+    left: 16vw;
+    right: 16vw;
+    height: 4vh;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    white-space: nowrap;
+
+    transition: all 0.3s;
+}
+
+div.topbar:hover {
+    height: 20vh;
+}
+
+div.midbar {
+    position: fixed;
+
+
+    left: 16vw;
+    right: 16vw;
+    height: 20vh;
+
+
+    white-space: nowrap;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+
+
+div.bottomLeft {
+    bottom: 0;
+    left: 0;
+    direction: rtl;
+}
+
+div.bottomRight {
+    bottom: 0;
+    right: 0;
+}
+
+div.topLeft {
+    top: 40px;
+    left: 0;
+    /*transform: scale(-1);*/
+    direction: rtl;
+}
+
+div.topRight {
+    top: 40px;
+    right: 0;
+    /*transform: scale(-1);
+    direction: rtl; */
+}
+
+div.bottom {
+    bottom: 0;
+}
+
+div.top {
+    top: 40px;
+}
+
+div.midLeft {
+    left: 3vh;
+    bottom: 40vh;
+}
+
+div.midRight {
+    right: 3vh;
+    top: 40vh;
+    /*transform: scale(-1);*/
+}
+
+div.topMid {
+    margin-top: 40px;
+    top: 20vh;
+    /*transform: scale(-1);*/
+}
+
+div.bottomMid {
+    bottom: 20vh;
+}
+
+
+div.sidebar > div {
+    height: 50%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+div.sidebar > div > div {
+    height: 93%;
+}
+
+div.topbar > div {
+    height: 20vh;
+}
+
+div#mainBackgroundDiv div#counterDivs {
+    opacity: 0;
+}
+
+div#mainBackgroundDiv div.counterDiv {
+    position: fixed;
+    padding: 1vh;
+    font-size: 2vh;
+    z-index: 10;
+
+    pointer-events: none;
+
+
+    background-color: #A5DFDF;
+    border: 2px solid black;
+    border-radius: 10px;
+    color: #000000;
+
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+
+
+
+
+/* disp stuff */
+
+.dispDiv {
+    height: 100%;
+    display: inline-block;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.dispDiv: hover {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+.dispDiv p {
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 20%;
+    font-size: 80px;
+    z-index: 1;
+
+    background-color: #A5DFA5;
+    border: 4px solid black;
+    border-radius: 20px;
+    color: #000000;
+
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+
+
+    opacity: 0%;
+    transition: all 0.3s;
+}
+
+.dispDiv p.counter {
+
+    left: 50%;
+    width: 3vh;
+    font-size: 3vh;
+
+    border: none;
+    border-radius: 100%;
+    opacity: 100%;
+}
+
+.dispDiv p.dispCounter {
+    left: 50%;
+    width: 20vh;
+    font-size: 20vh;
+}
+
+.dispCard {
+    width: auto;
+    height: 100%;
+
+    transition: all 0.3s;
+}
+
+.selected {
+}
+
+.selected img {
+    opacity: 50%;
+}
+
+.selected p {
+    opacity: 100%;
+}
+
+.uninteractable {
+    pointer-events: none;
+    opacity: 0;
+}
+
+
+div#mainDisplayDiv {
+    z-index: 11;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 40px;
+    bottom: 0;
+
+
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    /*
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;*/
+
+    pointer-events: none;
+    opacity: 0;
+}
+
+div#mainDisplayDiv > p {
+    font-size: 20vh;
+    background-color: #D98585;
+    border: 8px solid black;
+    border-radius: 8vh;
+    white-space: normal;
+}
+
+button#hideControlButton {
+    position: fixed;
+    bottom: 8vh;
+    left: 8vw;
+}
+
+
+
+
+
+
+
+
+
+/* animations */
+
+.slidein {
+    left: 2000px;
+    animation-name: slidein;
+    animation-duration: 0.5s;
+    animation-delay: 0.2s;
+    animation-fill-mode: forwards;
+    position: relative;
+}
+
+.fadein {
+    opacity: 0%;
+    animation-name: fadein;
+    animation-duration: 0.5s;
+    animation-delay: 0.3s;
+    animation-fill-mode: forwards;
+}
+
+.fadeinthenout {
+    opacity: 0%;
+    animation-name: fadeinthenout;
+    animation-duration: 3s;
+    animation-delay: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes slidein {
+    0% { left: 2000px; }
+    100% { left: 0; }
+}
+
+@keyframes fadein {
+    0% { opacity: 0%; }
+    100% { opacity: 100%; }
+}
+
+@keyframes fadeinthenout {
+    0% { opacity: 0%; }
+    20% { opacity: 100%; }
+    80% { opacity: 100%; }
+    100% { opacity: 30%; }
+}

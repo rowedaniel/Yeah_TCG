@@ -10,7 +10,11 @@ from server_scripts.card_game.Game import Game
 
 # TODO: change to CardgameManager
 class CardGamePlayer(Manager):
-    # TODO: write description (with blockquotes)
+    """
+        Manager for the card game player.
+        Handles all client/server communication for the card game itself
+        (note: does NOT handle making new cards, etc.
+    """
     # TODO: segregate this class--it should contain ONLY client communication
     #       stuff. Minimal internal processing.
 
@@ -36,7 +40,7 @@ class CardGamePlayer(Manager):
         self.cardManager = cardManager
         self.authTokens = {}
         self.getCardsRes = {}
-        # TODO: remove rooms, if they end up being unnececelery
+        # TODO: remove rooms, if they end up being unnecessary
         self.games = [Game(cardManager, self, i) for i in range(10)]
         self.players = {}
 

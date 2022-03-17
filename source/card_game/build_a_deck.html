@@ -1,0 +1,24 @@
+
+<link rel="stylesheet" type="text/css" href="/data/styles/cardGame/deckbuilder.css">
+
+<div id="carddiv" class="cardContainer"></div>
+<div>
+	<form name="cardForm" autocomplete="off" onsubmit="decksubmit();return false;">
+	<p>Deck Name</p><input type="text" name="deckName">
+	<input type="submit" value="submit">
+	</form>
+</div>	
+<div id="warningdiv" class="textContainer">
+	<p>Please Note:</p>
+	<p>No more than 3 of the same card allowed in a deck.</p>
+	<p>Decks must have exactly 3 goal cards attached</p>
+</div>
+<br><br>
+<div id="selectiondiv" class="leftAlign"></div>
+<div id="selectiongoaldiv" class="leftAlign"></div>
+
+
+
+<script src = "/socket.io/socket.io.js"></script>
+<script src = "/data/scripts/cardGame/CardObjects.js"></script>
+<script src = "/data/scripts/cardGame/deckbuilder.js"></script>

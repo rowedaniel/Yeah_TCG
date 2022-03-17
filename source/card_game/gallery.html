@@ -1,0 +1,27 @@
+
+<style>
+
+img {
+	position:relative;
+	animation-name: slide;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+	left: 2000px;
+	width: 242px;
+	height:auto;
+}
+
+@keyframes slide {
+	from {left:2000px;}
+	to   {left:0px;}
+}
+
+</style>
+	
+<div id="carddiv"></div>
+
+
+
+<script src = "/socket.io/socket.io.js"></script>
+<script src = "/data/scripts/cardGame/CardObjects.js"></script>
+<script src = "/data/scripts/cardGame/gallery.js"></script>

@@ -55,8 +55,10 @@ def get_menu_categories(basedir : str = SOURCE_DIR) -> dict:
     categories = {}
 
     for d in os.listdir(basedir):
-        currentdir = basedir + '/' + d
-
+        if d.startswith('.'):
+            continue
+        
+        currentdir = os.path.join(basedir, d)
 
         if os.path.isdir(currentdir):
             subcategories = get_menu_categories(currentdir)
@@ -70,6 +72,17 @@ def get_menu_categories(basedir : str = SOURCE_DIR) -> dict:
 
 
 
+def deparse_filename(name : str) -> str:
+    # first, set it to the name by itself
+    out = name.split('.')[0]
+
+    # next, do some preprocessing (title case, _ turns into a space, etc.)
+    out = out.title().replace('_', ' ')
+
+    return out
+    
+
+
 def build_menu_item(basedir : str,
                     name : str) -> str:
     """
@@ -79,8 +92,7 @@ def build_menu_item(basedir : str,
 
     link = convert_path(os.path.join(basedir, name))
     
-    # first, set it to the name by itself
-    out = name.split('.')[0]
+    out = deparse_filename(name)
 
     # then, encapsulate it in other stuff
     out = f"<p>{out}</p>"
@@ -116,8 +128,9 @@ def build_menu(categories : dict,
                              False)
 
             # encapsulate it in other stuff
+            menuName = deparse_filename(c)
             cat = f'<div>{cat}</div>'
-            cat = f'<div class="menu"><p>{c}</p>{cat}</div>'
+            cat = f'<div class="menu"><p>{menuName}</p>{cat}</div>'
 
         # weird html/css formatting stuff requires this
         if first:
@@ -181,7 +194,7 @@ def write_pages(categories : dict, menu : str, basedir : str = ''):
     for c in categories:
 
         # it's a file, so write it now
-        if categories[c] == {}:            
+        if categories[c] == {}:
             write_page(os.path.join(basedir,c), menu)
 
         else: 

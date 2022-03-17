@@ -1,0 +1,58 @@
+﻿div.cardContainer {
+    width: 100%;
+    height: auto;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+div.leftAlign {
+    text-align: left;
+}
+
+div.textContainer {
+    margin: auto;
+    width: auto;
+    display: inline-block;
+    padding: 10px;
+    border: 2px solid #1A1A1A;
+    background-color: #9999A0;
+}
+
+
+
+.slidein {
+    position: relative;
+    animation-name: slide;
+    animation-duration: 2s;
+    width: 242px;
+    height: auto;
+    transition: all .2s ease-in-out;
+}
+
+img:hover {
+    transform: scale(1.1);
+}
+
+@keyframes slide {
+    from {
+        left: 2000px;
+    }
+
+    to {
+        left: 0px;
+    }
+}
+
+@keyframes flashRed {
+    to {
+        border-color: #DD1A1A;
+        background-color: #A899A0
+    }
+}
+
+@keyframes flashGreen {
+    to {
+        border-color: #1ADD1A;
+        background-color: #99A8A0
+    }
+}
