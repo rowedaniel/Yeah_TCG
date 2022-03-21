@@ -184,6 +184,7 @@ div.sidebar {
 
 
     transition: all 0.3s;
+	
 }
 
 div.sidebar:hover {
@@ -500,4 +501,18 @@ button#hideControlButton {
     20% { opacity: 100%; }
     80% { opacity: 100%; }
     100% { opacity: 30%; }
+}
+
+
+
+
+/* Testing purposes only */
+div.sidebar {
+	background-color: #B0B8FF;
+}
+div.topbar {
+	background-color: #B0FFB8;
+}
+div.midbar {
+	background-color: #FFB0B8;
 }
