@@ -1,58 +1,73 @@
 <link rel="stylesheet" type="text/css" href="/data/styles/cardGame/card_experiment.css" />
 
-<div class="card fullart">
-	<img alt="background" src="/data/cards/cardtemplate.png"></img>
-	<img alt="Call of Hades" src="/data/callofhades.png"></img>
-	<div class="title">
-		<span class="name">Call of Hades</span>
-		<span class="type">action</span>
-		<span class="cost">RP: 0</span>
-	</div>
-	<div class="description">
-		<span class="lore">Pick up the phone!</span>
-		<br>
-		<span class="action">
-			Reveal up to 3 cards from your discard pile. 
-			Your opponent returns 2 to your discard pile. The third is added to your hand.
-		</span>
-	</div>
-	<img alt="outline" src="/data/cards/cardtemplate_outline_fullart.png"></img>
-</div>
 
-<div class="card fullart">
-	<img alt="background" src="/data/cards/cardtemplate.png"></img>
-	<div class="title">
-		<span class="name">Chad Squire</span>
-		<span class="type">common swordsman unit</span>
-		<span class="cost">RP: 3</span>
-		<img class="mainimg" alt="Chad Squire" src="/data/old/chadsquire.png"></img>
-	</div>
-	<div class="description">
-		<span class="lore">Your basic swordsman-in-training.</span>
-		<br>
-		<span class="action">
-			Once per turn, draw a card.
-		</span>
-	</div>
-	<img alt="outline" src="/data/cards/cardtemplate_outline_fullart.png"></img>
-</div>
+<script>
 
+function makeCard(img, name, unittype, cost, lore, action, fullart) {
+	let card = document.createElement("div");
+	
+	// figure out outline type
+	let outline_type = "action";
+	if(fullart) {
+		outline_type = "fullart";
+	} else {
+		let unittype_list = unittype.split(" ");
+		let last_unittype_item = unittype_list[unittype_list.length-1];
+		outline_type = last_unittype_item;
+	}
+	
+	
+	card.innerHTML = `
+		<img alt="background" src="/data/cards/cardtemplate.png">
+		<div class="mainimg">
+			<img alt="${name}" src="/data/cards/${img}.png">
+		</div>
+		<div class="title">
+			<span class="name">${name}</span>
+			<div>
+				<span class="type">${unittype}</span>
+				<span class="cost">RP: ${cost}</span>
+			</div>
+		</div>
+		<div class="description">
+			<p class="lore">${lore}</p>
+			<p class="action">${action}</p>
+		</div>
+		<img alt="outline" src="/data/cards/template/${outline_type}_outline.png">
+	`;
+	card.classList.add("card");
+	if(fullart) {
+		card.classList.add("fullart");
+	}
+	
+	document.body.appendChild(card);
+}
 
+window.addEventListener("DOMContentLoaded", function(event) {
+	makeCard("dragonhades_highres",
+			 "Dragon King Hades",
+			 "rare demon unit",
+			 "5",
+			 "The lord of the... what did he do again? Not sure.",
+			 "On play, gain +4 RP.",
+			 false
+			);
+	makeCard("Jaycob_highres",
+			 "Breath User Jaycob",
+			 "rare Jaycob unit",
+			 "2",
+			 "He's finally learned to breathe!",
+			 "This card cannot attack. Once per turn, gain +1 breath.",
+			 true
+			);
+	makeCard("chadsquire_highres",
+			 "Chad Squire",
+			 "common swordsman unit",
+			 "3",
+			 "Basic, common, regular swordsman-in-training",
+			 "Once per turn, draw a card.",
+			 true
+			);
+});
 
-<div class="card">
-	<img alt="background" src="/data/cards/cardtemplate.png"></img>
-	<img alt="Chad Squire" src="/data/old/dragonhades.png"></img>
-	<div class="title">
-		<span class="name">Chad Squire</span>
-		<span class="type">common swordsman unit</span>
-		<span class="cost">RP: 3</span>
-	</div>
-	<div class="description">
-		<span class="lore">Your basic swordsman-in-training.</span>
-		<br>
-		<span class="action">
-			Once per turn, draw a card.
-		</span>
-	</div>
-	<img alt="outline" src="/data/cards/unit_outline.png"></img>
-</div>
+</script>
