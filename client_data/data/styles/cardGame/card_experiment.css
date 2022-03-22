@@ -1,0 +1,57 @@
+
+.card {
+	position: relative;
+	display: inline-block;
+	width : 606px;
+	height : 890px;
+	font-size: 30px;
+	overflow: hidden;
+}
+
+.card > img {
+	position: absolute;
+	left : 0;
+	top: 0;
+	height: 100%;
+}
+
+.card img.mainimg {
+	position: absolute;
+	left : 0;
+	top: 0;
+	height: 100%;
+}
+
+
+.card img.mainimg {
+
+.card .title {
+	position: absolute;
+	left: 120px;
+	right : 120px;
+	top: 80px;
+	text-shadow: 1.5px 0px #989;
+}
+
+.card .title p {
+	margin :0;
+}
+
+.card .title .name {
+	font-size: 60px;
+}
+
+.card .title .type {
+	float: left;
+}
+
+.card .title .cost {
+	float: right;
+}
+
+.card .description {
+	position: absolute;
+	left : 120px;
+	right : 120px;
+	bottom: 100px;
+}
