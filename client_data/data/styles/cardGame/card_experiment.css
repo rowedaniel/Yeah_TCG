@@ -47,18 +47,23 @@
 
 .card .title .name {
 	font-size: 60px;
-	text-shadow: 2px 0px #989;
+	/* text-shadow: 2px 0px #989; */
+}
+
+.card .title div {
+	position: relative;
+	top: 6px;
 }
 
 .card .title .type {
 	float: left;
 	font-size: 25px;
-	text-shadow: 1px 0px #989;
+	/* text-shadow: 1px 0px #989; */
 }
 
 .card .title .cost {
 	float: right;
-	text-shadow: 1px 0px #989;
+	/* text-shadow: 1px 0px #989; */
 }
 
 .card .description {
@@ -75,6 +80,10 @@
 	bottom: 110px;
 }
 
+.card .description .lore {
+	font-style: italic;
+}
+
 /* fullart card setup */
 
 
@@ -89,6 +98,7 @@
 	left: 120px;
 	right : 120px;
 	top: 80px;
+	line-height: 0.8;
 }
 
 .card.fullart .description {
@@ -96,4 +106,5 @@
 	right: 110px;
 	top: 590px;
 	bottom: 80px;
+	color: white;
 }

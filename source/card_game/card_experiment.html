@@ -22,18 +22,18 @@ function makeCard(img, name, unittype, cost, lore, action, fullart) {
 		<div class="mainimg">
 			<img alt="${name}" src="/data/cards/${img}.png">
 		</div>
+		<img alt="outline" src="/data/cards/template/${outline_type}_outline.png">
 		<div class="title">
 			<span class="name">${name}</span>
 			<div>
 				<span class="type">${unittype}</span>
-				<span class="cost">RP: ${cost}</span>
+				<span class="cost">${cost}</span>
 			</div>
 		</div>
 		<div class="description">
 			<p class="lore">${lore}</p>
 			<p class="action">${action}</p>
 		</div>
-		<img alt="outline" src="/data/cards/template/${outline_type}_outline.png">
 	`;
 	card.classList.add("card");
 	if(fullart) {
@@ -46,7 +46,7 @@ function makeCard(img, name, unittype, cost, lore, action, fullart) {
 window.addEventListener("DOMContentLoaded", function(event) {
 	makeCard("dragonhades_highres",
 			 "Dragon King Hades",
-			 "rare demon unit",
+			 "Rare Demon Unit",
 			 "5",
 			 "The lord of the... what did he do again? Not sure.",
 			 "On play, gain +4 RP.",
@@ -67,6 +67,14 @@ window.addEventListener("DOMContentLoaded", function(event) {
 			 "Basic, common, regular swordsman-in-training",
 			 "Once per turn, draw a card.",
 			 true
+			);
+	makeCard("unused/baseballlad_original",
+			 "Soul Bond",
+			 "response",
+			 "0",
+			 "Forever Entwined",
+			 "When one of your units dies during defense phase, destroy the attacker as well.",
+			 false
 			);
 });
 
